@@ -1,5 +1,5 @@
 import React from 'react'
-import { ScrollView, Image, View, Text, StyleSheet, TouchableOpacity, LayoutAnimation, AsyncStorage } from 'react-native'
+import { ScrollView, Image, View, Text,StatusBar, StyleSheet, TouchableOpacity, LayoutAnimation, AsyncStorage, Modal, Button } from 'react-native'
 import { Ionicons } from '@expo/vector-icons'
 
 import * as firebase from 'firebase'
@@ -7,6 +7,21 @@ import * as firebase from 'firebase'
 
 //VISTA HOME PRINCIPAL
 export default class HomeScreen extends React.Component {
+  
+  static navigationOptions = {
+    headerShown: false
+  }
+
+  state = {
+    modal:false
+  }
+
+  handleModal = () => {
+    this.setState({
+      modal: !this.state.modal ? true : false
+    })
+  }
+
   state = {
     email: "",
     displayName: ""
@@ -28,7 +43,7 @@ export default class HomeScreen extends React.Component {
       Nino: ""
     }
     try {
-      AsyncStorage.getItem('database_ninoinfo').then((value) => {
+      AsyncStorage.getItem('database_agregarnino1').then((value) => {
         this.setState({
           Nino: JSON.parse(value)
         })
@@ -47,7 +62,7 @@ export default class HomeScreen extends React.Component {
 
             <View>
               <Text
-                style={{ textAlign: 'center', backgroundColor: '#05A4AC', padding: 6, color: '#fff', textTransform: 'uppercase' }}
+                style={{ fontSize: 16, textAlign: 'center', backgroundColor: '#1D96A3', padding: 6, color: '#fff', textTransform: 'uppercase' }}
               >{dataNino.name} </Text>
             </View>
 
@@ -61,7 +76,7 @@ export default class HomeScreen extends React.Component {
                 />
               </View>
               <View
-              style={{padding:10}}
+                style={{ padding: 10 }}
               >
                 <Text>{dataNino.escolaridade} </Text>
                 <Text>{dataNino.sangre} </Text>
@@ -72,9 +87,15 @@ export default class HomeScreen extends React.Component {
 
             </View>
             <View>
-              <Text 
-              style={{textAlign:'center', padding:6}}
-              > + Presiona aqui para ver mas  </Text>
+              <TouchableOpacity
+                onPress={() => this.props.navigation.navigate('Nino')}
+              >
+                <Text
+                  style={{ textAlign: 'center', padding: 6, fontSize: 16, color: '#C4C4C4' }}
+                > + Presiona aqui para ver mas  </Text>
+              </TouchableOpacity>
+
+
             </View>
           </View>
         )
@@ -87,24 +108,52 @@ export default class HomeScreen extends React.Component {
     LayoutAnimation.easeInEaseOut();
 
     return (
-      <View style={styles.container}>
 
 
 
-        <ScrollView
-        >
-          <Text style={{ marginTop: 80 }}>
-            Bienvenida {this.state.email} !{'\n'}
+
+      <ScrollView
+        style={styles.container}
+      >
+                <StatusBar barStyle='light-content' ></StatusBar>
+
+
+        <Text style={{ marginTop: 60, left: 30, fontSize: 16 }}>
+          Bienvenida {this.state.email} !{'\n'}
           Estamos felices de verte por aquí
           </Text>
-          <View style={styles.container}>
-            {this.parseData()}
-          </View>
-        </ScrollView>
+        <View style={styles.containerCards}>
+          {this.parseData()}
+        </View>
+        <View style={styles.infoCard}>
+        <TouchableOpacity
+                onPress={() => this.props.navigation.navigate('AgregarNino')}
+              >
+                <Text
+                  style={{ textAlign: 'center', padding:20, fontSize: 16, color: '#C4C4C4' }}
+                > +  Agregue los datos de su niño/niña </Text>
+              </TouchableOpacity>
+        </View>
+
+        <Button
+        title="abrir modal prueba"
+        onPress={this.handleModal}
+        />
+        <Modal
+        visible={false}
+        >
+        <View
+        style={{marginTop:50}}>
+        <Text>Hola jeje</Text>
+        </View>
+
+        </Modal>
+
+      </ScrollView>
 
 
 
-      </View>
+
     );
   }
 }
@@ -112,17 +161,17 @@ export default class HomeScreen extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 30,
   },
   infoCard: {
-    marginBottom: 5,
+    marginBottom: 24,
     borderWidth: 1,
     borderColor: '#05A4AC',
-    borderRadius: 4
+    borderRadius: 4,
+    width: 300,
+    left: 30,
   },
-  cardContainer: {
-    top: 100,
-    height: 800,
-  },
+  containerCards: {
+    marginTop: 30,
+  }
 
 });

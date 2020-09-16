@@ -35,3 +35,4 @@ onPress ={ () => this.props.navigation.goBack() }
 >
 <Ionicons name='ios-arrow-round-back' size={32} color='#FFF'  ></Ionicons>
 </TouchableOpacity>
+

@@ -5,7 +5,7 @@ import DatePicker from 'react-native-datepicker'
 
 
 //FORMULARIO AGREGAR NIÑO
-export default class PostScreen extends React.Component {
+export default class AgregarNinoScreen extends React.Component {
 
   static navigationOptions = {
     headerShown: false
@@ -48,15 +48,15 @@ export default class PostScreen extends React.Component {
       }
       arrayDataNino.push(dataNino);
       try {
-        AsyncStorage.getItem('database_ninoInfo').then((value) => {
+        AsyncStorage.getItem('database_agregarnino1').then((value) => {
           if (value !== null) {
             const d = JSON.parse(value);
             d.push(dataNino)
-            AsyncStorage.setItem('database_ninoInfo', JSON.stringify(d)).then(() => {
+            AsyncStorage.setItem('database_agregarnino1', JSON.stringify(d)).then(() => {
               this.props.navigation.navigate('App')
             })
           } else {
-            AsyncStorage.setItem('database_ninoInfo', JSON.stringify(arrayDataNino)).then(() => {
+            AsyncStorage.setItem('database_agregarnino1', JSON.stringify(arrayDataNino)).then(() => {
               this.props.navigation.navigate('App')
             })
           }

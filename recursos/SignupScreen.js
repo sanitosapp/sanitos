@@ -37,14 +37,10 @@ export default class SignupScreen extends React.Component {
                 
                 <StatusBar barStyle='light-content' ></StatusBar>
 
-                <Image 
-                source={require('../recursos/imagenes/logoSanitos.png')} 
-                style={{width:85, height:85, marginTop:59 }}
-                />
 
               
 
-                <View style={{ top: 20, alignItems: 'center', width: '100%'}} >
+                <View >
                     <Text style={styles.greeting}>{'Regístrese'}</Text>
                 </View>
 
@@ -56,7 +52,7 @@ export default class SignupScreen extends React.Component {
                     {this.state.errorMessage && <Text style={styles.error}>{this.state.errorMessage}</Text> }
                 </View>
 
-                <View>
+                <View style={styles.form}>
 
                     <View>
                         <TextInput 
@@ -99,11 +95,20 @@ export default class SignupScreen extends React.Component {
                 </TouchableOpacity>
 
                 <TouchableOpacity 
-                style={{alignSelf:'center', marginTop: 32}}
+                style={styles.buttonFb}
+                onPress={this.loginWithFacebook}
+                >
+                    <Text 
+                    style={{ color:'#ffffff', fontWeight:'500'}}
+                    >Ingresar con Facebook</Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity 
+                style={{alignSelf:'center',position:'absolute',top: 564}}
                 onPress={() => this.props.navigation.navigate('Login')}
                 >
-                    <Text style={{ color:'#414959', fontSize:13}}>
-                      Ya tienes cuenta? <Text style={{fontWeight:'500', color: '#E9446A'}}>Inicia sesión</Text>
+                    <Text style={{ color:'#414959', fontSize:14}}>
+                      Ya tienes cuenta? <Text style={{fontWeight:'500', color: '#05A4AC'}}>Inicia sesión</Text>
                     </Text>
                 </TouchableOpacity>
             </View>
@@ -118,10 +123,11 @@ const styles = StyleSheet.create({
       padding:30
     },
     greeting: {
-      marginTop: 18,
+      marginTop: 84,
       fontSize: 20,
       fontWeight: '400',
-      textAlign: 'center'
+      textAlign: 'center',
+      color: '#424242'
     },
     errorMessage: {
       color: '#E9446A',
@@ -143,17 +149,18 @@ const styles = StyleSheet.create({
     input: {
       marginTop:18,
       borderWidth:1,
-      borderColor: '#8A8F9E',
+      borderRadius:4,
+      borderColor: '#C4C4C4',
       height: 40,
       fontSize: 16,
       color: '#161F3D',
       padding:10,
     },
     button: {
-      marginHorizontal: 30,
+      marginTop:18,
       backgroundColor: '#E9446A',
       borderRadius: 4,
-      height: 52,
+      height: 40,
       alignItems: 'center',
       justifyContent: 'center'
     },
@@ -176,6 +183,17 @@ const styles = StyleSheet.create({
       marginTop: 20,
       justifyContent: 'center',
       alignItems: 'center'
+    },
+    buttonFb:{
+      marginTop:18,
+      backgroundColor: '#3C609F',
+      borderRadius: 4,
+      height: 40,
+      alignItems: 'center',
+      justifyContent: 'center'
+    },
+    form:{
+      marginTop: 70,
     }
   });
   

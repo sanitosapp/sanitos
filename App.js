@@ -7,6 +7,7 @@ import {Ionicons} from '@expo/vector-icons'
 
 
 import LoadingScreen from './recursos/LoadingScreen'
+import LoginRegisterScreen from './recursos/LoginRegisterScreen'
 import LoginScreen from './recursos/LoginScreen'
 import SignupScreen from './recursos/SignupScreen'
 
@@ -18,6 +19,7 @@ import PostScreen from './recursos/PostScreen'
 import PerfilNinoScreen from './recursos/PerfilNinoScreen'
 import HomeScreen from './recursos/HomeScreen'
 import ProfileScreen from './recursos/ProfileScreen'
+import AgregarNinoScreen from './recursos/AgregarNinoScreen'
 
 import * as Facebook from 'expo-facebook'
 
@@ -69,6 +71,7 @@ const AppTabNavigator = createBottomTabNavigator (
 );
 
 const AuthStack = createStackNavigator ({
+  LoginRegister: LoginRegisterScreen,
   Login: LoginScreen,
   Register: SignupScreen,
   Nino: PerfilNinoScreen,
@@ -76,12 +79,15 @@ const AuthStack = createStackNavigator ({
   Vacunas: VacunasScreen,
   VacunasInfo: VacunasInfoScreen,
   Peso: PesoScreen,
-  Estatura: EstaturaScreen
+  Estatura: EstaturaScreen,
+  AgregarNino: AgregarNinoScreen,
+  App: AppTabNavigator,
 })
 
 export default createAppContainer(
   createSwitchNavigator(
     {
+      
       Loading: LoadingScreen,
       App: AppTabNavigator,
       Auth: AuthStack

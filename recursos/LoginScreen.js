@@ -4,6 +4,7 @@ import { View, Text, StyleSheet, TextInput, TouchableOpacity, Image, StatusBar, 
 
 
 import * as firebase from 'firebase'
+import { color } from 'react-native-reanimated';
 
 //VISTA LOGIN
 export default class LoginScreen extends React.Component {
@@ -56,10 +57,6 @@ export default class LoginScreen extends React.Component {
             <View style={styles.container}>
                 <StatusBar barStyle='light-content' ></StatusBar>
                
-                <Image 
-                source={require('../recursos/imagenes/logoSanitos.png')} 
-                style={{width:85, height:85,marginTop:59}}
-                />
 
                 <Text style={styles.greeting}>
                   {'Inicie sesión'}
@@ -93,7 +90,7 @@ export default class LoginScreen extends React.Component {
                 <TouchableOpacity 
                 onPress={() => this.props.navigation.navigate('')}
                 >
-                    <Text style={{marginTop:12 ,color:'#EC2D74', fontSize:14, textAlign:'right'}}>
+                    <Text style={{marginTop:12 ,color:'#05A4AC', fontSize:14, textAlign:'right'}}>
                       ¿Olvido su contraseña? 
                     </Text>
                 </TouchableOpacity>
@@ -117,11 +114,11 @@ export default class LoginScreen extends React.Component {
                 </TouchableOpacity>
 
                 <TouchableOpacity 
-                style={{alignSelf:'center', marginTop: 30}}
+                style={{alignSelf:'center',position:'absolute',top: 564}}
                 onPress={() => this.props.navigation.navigate('Register')}
                 >
                     <Text style={{ color:'#414959', fontSize:14}}>
-                      ¿No tiene cuenta? <Text style={{fontWeight:'500', color: '#E9446A'}}>Registrese aquí</Text>
+                      ¿No tiene cuenta? <Text style={{fontWeight:'500', color: '#05A4AC'}}>Registrese aquí</Text>
                     </Text>
                 </TouchableOpacity>
             </View>
@@ -136,10 +133,11 @@ const styles = StyleSheet.create({
       padding:30
     },
     greeting: {
-      marginTop: 18,
+      marginTop: 84,
       fontSize: 20,
       fontWeight: '400',
-      textAlign: 'center'
+      textAlign: 'center',
+      color: '#424242'
     },
     errorMessage: {
       color: '#E9446A',
@@ -161,7 +159,8 @@ const styles = StyleSheet.create({
     input: {
       marginTop:18,
       borderWidth:1,
-      borderColor: '#8A8F9E',
+      borderRadius:4,
+      borderColor: '#C4C4C4',
       height: 40,
       fontSize: 16,
       color: '#161F3D',
@@ -182,6 +181,9 @@ const styles = StyleSheet.create({
       height: 40,
       alignItems: 'center',
       justifyContent: 'center'
+    },
+    form:{
+      marginTop: 100,
     }
   });
   

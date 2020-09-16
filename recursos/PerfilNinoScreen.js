@@ -1,5 +1,5 @@
 import React from 'react'
-import { ScrollView,Image, View, Text, StyleSheet, TouchableOpacity, LayoutAnimation, AsyncStorage, StatusBar } from 'react-native'
+import { ScrollView, Image, View, Text, StyleSheet, TouchableOpacity, LayoutAnimation, AsyncStorage, StatusBar } from 'react-native'
 import { Ionicons } from '@expo/vector-icons'
 
 import * as firebase from 'firebase'
@@ -8,9 +8,7 @@ import * as firebase from 'firebase'
 //VISTA HOME PRINCIPAL
 export default class PerfilNinoScreen extends React.Component {
 
-  static navigationOptions = {
-    headerShown: false
-  };
+
 
   constructor() {
     super()
@@ -18,17 +16,17 @@ export default class PerfilNinoScreen extends React.Component {
       Nino: ""
     }
     try {
-      AsyncStorage.getItem('database_ninoinfo').then((value) => {
+      AsyncStorage.getItem('database_ninoinfo1').then((value) => {
         this.setState({
-          Nino:JSON.parse(value) 
+          Nino: JSON.parse(value)
         })
       })
-    } catch(err) {
+    } catch (err) {
       console.log(err)
     }
   }
-  parseData(){
-    if(this.state.Nino){
+  parseData() {
+    if (this.state.Nino) {
       return this.state.Nino.map((dataNino, i) => {
         return (
           <View
@@ -52,7 +50,7 @@ export default class PerfilNinoScreen extends React.Component {
                 />
               </View>
               <View
-              style={{padding:10}}
+                style={{ padding: 10 }}
               >
                 <Text>{dataNino.escolaridade} </Text>
                 <Text>{dataNino.sangre} </Text>
@@ -62,13 +60,9 @@ export default class PerfilNinoScreen extends React.Component {
 
 
             </View>
-            <View>
-              <Text 
-              style={{textAlign:'center', padding:6}}
-              > + Presiona aqui para ver mas  </Text>
-            </View>
+
           </View>
-          
+
         )
       })
     }
@@ -80,34 +74,124 @@ export default class PerfilNinoScreen extends React.Component {
 
     return (
 
-        <ScrollView style={styles.container}>
-          <StatusBar barStyle='light-content' ></StatusBar>
+      <ScrollView
+        style={styles.container}
+      >
+
+
+        <StatusBar barStyle='light-content' ></StatusBar>
+
+
+        <Text style={{ marginTop: 60, left: 30, fontSize: 16 }}>
+          Bienvenida {this.state.email} !{'\n'}
+  Estamos felices de verte por aquí
+  </Text>
+        <View style={styles.containerCards}>
           {this.parseData()}
+        </View>
+
+        <View>
+
+          <View
+            style={{ flexDirection: 'row' }}
+          >
+            <View>
+
+              <Image
+                resizeMode='contain'
+                source={require('../recursos/imagenes/peso.png')}
+                style={{ width: 50, height: 50, marginTop: 40, alignSelf: 'center' }}
+              />
+              <TouchableOpacity
+                style={styles.back}
+                onPress={() => this.props.navigation.navigate('Peso')}
+              >
+                <Text
+                  style={{ display: 'flex', alignItems: 'flex-start', textAlign: 'center' }}
+                >Peso</Text>
+              </TouchableOpacity>
+            </View>
+
+            <View>
+              <Image
+                resizeMode='contain'
+                source={require('../recursos/imagenes/estatura.png')}
+                style={{ width: 50, height: 50, marginTop: 40, alignSelf: 'center' }}
+              />
+              <TouchableOpacity
+                style={styles.back}
+                onPress={() => this.props.navigation.navigate('Vacunas')}
+              >
+                <Text
+                  style={{ display: 'flex', alignItems: 'flex-start', textAlign: 'center' }}
+                >Estatura</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+
+          <View
+            style={{ flexDirection: 'row' }}
+          >
+            <View>
+              <Image
+                resizeMode='contain'
+                source={require('../recursos/imagenes/estatura.png')}
+                style={{ width: 50, height: 50, marginTop: 40, alignSelf: 'center' }}
+              />
+              <Text
+                style={{ display: 'flex', alignItems: 'flex-start', textAlign: 'center' }}
+              >Estadistica</Text>
+            </View>
 
 
-        </ScrollView>
+            <View>
+              <Image
+                resizeMode='contain'
+                source={require('../recursos/imagenes/vacunas.png')}
+                style={{ width: 50, height: 50, marginTop: 40, alignSelf: 'center' }}
+              />
+              <TouchableOpacity
+                style={styles.back}
+                onPress={() => this.props.navigation.navigate('Vacunas')}
+              >
+                <Text
+                  style={{ display: 'flex', alignItems: 'flex-start', textAlign: 'center' }}
+                >Vacunas</Text>
+              </TouchableOpacity>
+            </View>
+            </View>
 
 
-      
+          </View>
+
+
+
+        
+      </ScrollView>
+
+
+
 
     );
   }
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
+          container: {
+          flex: 1,
     padding: 30,
   },
   infoCard: {
-    marginBottom: 24,
+          marginBottom: 24,
     borderWidth: 1,
     borderColor: '#05A4AC',
-    borderRadius: 4
+    borderRadius: 4,
+    width: 300,
+    left: 30,
   },
-  cardContainer: {
-    top: 100,
-    height: 850,
-  },
+  containerCards: {
+          marginTop: 30,
+  }
+
 
 });

@@ -26,17 +26,32 @@ export default class ProfileScreen extends React.Component {
     return (
       <View style={styles.container}>
 
-        <Text style={{ position: 'absolute', left: 30, top: 80, color: '#414959', fontSize: 16, textTransform: 'uppercase' }}>
+        <Text style={{ marginTop: 60, textAlign: 'center', color: '#424242', fontSize: 16}}>
           Mi perfil</Text>
-        <TextInput
-          style={styles.input}
-        >Hola {this.state.email}! </TextInput>
+
+        <View
+        style={{marginTop:32}}
+        >
+          <TextInput
+            style={styles.input}
+            
+          >Hola! </TextInput>
+          <TextInput
+            style={styles.input}
+          >Hola {this.state.email}! </TextInput>
+          <TextInput
+            style={styles.input}
+          >Hola! </TextInput>
+
+        </View>
+
 
         <TouchableOpacity
           style={styles.button2}
           onPress={this.signOutUser}
+          
         >
-          <Text style={{ color: '#414959', fontSize: 13 }}>
+          <Text style={{ color: '#fff', fontSize: 16 }}>
             Editar
                       </Text>
         </TouchableOpacity>
@@ -45,7 +60,7 @@ export default class ProfileScreen extends React.Component {
           style={styles.button}
           onPress={this.signOutUser}
         >
-          <Text style={{ color: '#414959', fontSize: 13 }}>
+          <Text style={{color: '#fff', fontSize: 16 }}>
             Salir
                       </Text>
         </TouchableOpacity>
@@ -57,36 +72,38 @@ export default class ProfileScreen extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 20,
   },
   input: {
-
-    top: 142,
-    borderColor: '#ccc',
+    marginBottom: 18,
+    left:30,
+    borderColor: '#C4C4C4',
     borderWidth: 1,
     borderRadius: 4,
     height: 40,
-    fontSize: 15,
-    color: '#161F3D',
+    width:300,
+    fontSize: 16,
+    color: '#C4C4C4',
     padding: 10,
   },
   button: {
-
-    top: 500,
+    position:'absolute',
+    top:522,
+    left:30,
     backgroundColor: '#E9446A',
     borderRadius: 4,
-    height: 52,
-    width: 300,
+    height: 40,
+    width:300,
     alignItems: 'center',
     justifyContent: 'center'
   },
   button2: {
-
-    top: 442,
+    position:'absolute',
+    top:464,
+    left:30,
     backgroundColor: '#E9446A',
     borderRadius: 4,
-    height: 52,
-    width: 300,
+    height: 40,
+    width:300,
     alignItems: 'center',
     justifyContent: 'center'
   },
