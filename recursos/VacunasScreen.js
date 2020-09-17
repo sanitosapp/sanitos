@@ -1,111 +1,95 @@
 import React from 'react'
-import { Image, ListUserItem, View, StyleSheet, TouchableOpacity, FlatList, LayoutAnimation } from 'react-native'
-import { Ionicons } from '@expo/vector-icons'
+import { Image, ListUserItem, StatusBar, View, StyleSheet, TouchableOpacity, FlatList, LayoutAnimation } from 'react-native'
+import { MaterialIcons,Feather } from '@expo/vector-icons'
 import { ButtonGroup, Divider, Button, Text } from 'react-native-elements'
+
 
 import * as firebase from 'firebase'
 
 //VISTA HOME PRINCIPAL
 export default class VacunasScreen extends React.Component {
 
-  state = {
-    email: "",
-    displayName: ""
+  static navigationOptions = {
+    headerShown: false
   }
 
-  state = {
-    nino: ""
+  buttonPressed() {
+    return(
+      <View
+            style={styles.infoCard}>
+
+
+
+            <View
+              style={{ padding: 10, flexDirection: 'row', alignContent:'center', alignItems:'center', justifyContent:'space-between' }}
+            >
+              <Text>Neumococo</Text>
+              <TouchableOpacity
+                onPress={() => this.props.navigation.navigate('Nino')}
+              >
+                <MaterialIcons
+                  name='add'
+                  size={20}
+                  color='black'
+                />
+              </TouchableOpacity>
+            </View>
+
+          </View>
+    )
   }
-
-  state = {
-    sexo: ""
-  }
-
-  componentDidMount() {
-    const { email, displayName } = firebase.auth().currentUser;
-
-    this.setState({ email, displayName });
-  }
-
-  signOutUser = () => {
-    firebase.auth().signOut();
-  };
-
-  constructor() {
-    super()
-    this.state = {
-      selectedIndex: 2,
-      loading: false
-    }
-    this.updateIndex = this.updateIndex.bind(this)
-  }
-
-  updateIndex(selectedIndex) {
-    this.setState({ selectedIndex })
-    this.fetchAllUsers(selectedIndex)
-    this.fetchFemale(selectedIndex)
-    this.fetchMale(selectedIndex)
-  }
-
-
-  componentWillMount() {
-    let i = 0
-    this.props.fetchList(i)
-    this.props.fetchProfileData()
-  }
-
-  fetchAllUsers(index) {
-    if (index === 0) {
-      this.props.fetchList(index)
-    }
-  }
-
-  fetchFemale(index) {
-    if (index === 1) {
-      this.props.fetchList(index)
-    }
-  }
-
-  fetchMale(index) {
-    if (index === 2) {
-      this.props.fetchList(index)
-    }
-  }
-
-  renderItem ({item}) {
-    return <ListUserItem user={item}/>
-  }
-
-
 
 
 
   render() {
 
-    const buttons = ['Vacuna pendiente', 'Vacuna aplicada', 'Todas']
-    const { selectedIndex } = this.state
-
 
     LayoutAnimation.easeInEaseOut();
     return (
       <View style={styles.container}>
-        <View>
-          <ButtonGroup
-            onPress={this.updateIndex.bind(this)}
-            selectedIndex={selectedIndex}
-            buttons={buttons}
-            containerStyle={{ height: 40, width: 'auto', backgroundColor: '#FFF' }}
-            selectedButtonStyle={{ backgroundColor: '#EC2D74' }}
-            textStyle={{ textAlign: 'center', fontSize: 16 }}
-          />
+        <StatusBar barStyle='light-content' ></StatusBar>
+        <TouchableOpacity
+          onPress={() => this.props.navigation.navigate('Nino')}
+        >
+          <Text style={{ marginTop: 40, textAlign: 'left', color: '#424242', fontSize: 16, left: 30 }}>
+            {'< Infomación < Vacunas'} </Text>
+
+        </TouchableOpacity>
+
+        <View
+          style={{ flexDirection: 'row', alignContent: 'space-between', alignItems: 'center', marginTop: 40 }}
+        >
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => this.props.navigation.navigate('Nino')}
+          >
+            <Text
+              style={{ textAlign: 'center', padding: 6, fontSize: 16, color: '#fff' }}
+            > Vacuna pendiente</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => this.props.navigation.navigate('Nino')}
+
+          >
+            <Text
+              style={{ textAlign: 'center', padding: 6, fontSize: 16, color: '#fff' }}
+            > Vacuna aplicada</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => this.buttonPressed()}
+          >
+            <Text
+              style={{ textAlign: 'center', padding: 6, fontSize: 16, color: '#fff' }}
+            > Todas</Text>
+          </TouchableOpacity>
         </View>
 
         <View>
-          <FlatList
-            data={this.props.users}
-            renderItem={this.renderItem}
-          />
+
         </View>
+
 
       </View>
     );

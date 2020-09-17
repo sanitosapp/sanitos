@@ -8,7 +8,9 @@ import * as firebase from 'firebase'
 //VISTA HOME PRINCIPAL
 export default class PerfilNinoScreen extends React.Component {
 
-
+  static navigationOptions = {
+    headerShown: false
+  }
 
   constructor() {
     super()
@@ -93,35 +95,37 @@ export default class PerfilNinoScreen extends React.Component {
         <View>
 
           <View
-            style={{ flexDirection: 'row' }}
+            style={{ flexDirection: 'row', alignContent: 'space-between' }}
           >
-            <View>
+            <View
+              style={styles.containerIconos}
+            >
 
-              <Image
-                resizeMode='contain'
-                source={require('../recursos/imagenes/peso.png')}
-                style={{ width: 50, height: 50, marginTop: 40, alignSelf: 'center' }}
-              />
+
               <TouchableOpacity
-                style={styles.back}
                 onPress={() => this.props.navigation.navigate('Peso')}
-              >
+              ><Image
+                  resizeMode='contain'
+                  source={require('../recursos/imagenes/peso.png')}
+                  style={{ width: 50, height: 50, alignSelf: 'center' }}
+                />
                 <Text
-                  style={{ display: 'flex', alignItems: 'flex-start', textAlign: 'center' }}
+                  style={{ display: 'flex', alignItems: 'flex-start', textAlign: 'center', marginTop: 10 }}
                 >Peso</Text>
               </TouchableOpacity>
             </View>
 
-            <View>
-              <Image
-                resizeMode='contain'
-                source={require('../recursos/imagenes/estatura.png')}
-                style={{ width: 50, height: 50, marginTop: 40, alignSelf: 'center' }}
-              />
+            <View
+              style={styles.containerIconos}
+            >
+
               <TouchableOpacity
-                style={styles.back}
-                onPress={() => this.props.navigation.navigate('Vacunas')}
-              >
+                onPress={() => this.props.navigation.navigate('Estatura')}
+              ><Image
+                  resizeMode='contain'
+                  source={require('../recursos/imagenes/estatura.png')}
+                  style={{ width: 50, height: 50, marginTop: 40, alignSelf: 'center' }}
+                />
                 <Text
                   style={{ display: 'flex', alignItems: 'flex-start', textAlign: 'center' }}
                 >Estatura</Text>
@@ -132,42 +136,54 @@ export default class PerfilNinoScreen extends React.Component {
           <View
             style={{ flexDirection: 'row' }}
           >
-            <View>
-              <Image
-                resizeMode='contain'
-                source={require('../recursos/imagenes/estatura.png')}
-                style={{ width: 50, height: 50, marginTop: 40, alignSelf: 'center' }}
-              />
-              <Text
-                style={{ display: 'flex', alignItems: 'flex-start', textAlign: 'center' }}
-              >Estadistica</Text>
+            <View
+              style={styles.containerIconos}
+            >
+
+              <TouchableOpacity
+
+                onPress={() => this.props.navigation.navigate('Vacunas')}
+
+              >
+                <Image
+                  resizeMode='contain'
+                  source={require('../recursos/imagenes/estatura.png')}
+                  style={{ width: 50, height: 50, marginTop: 40, alignSelf: 'center' }}
+                />
+                <Text
+                  style={{ display: 'flex', alignItems: 'flex-start', textAlign: 'center' }}
+                >Estadistica</Text>
+
+              </TouchableOpacity>
             </View>
 
 
-            <View>
-              <Image
-                resizeMode='contain'
-                source={require('../recursos/imagenes/vacunas.png')}
-                style={{ width: 50, height: 50, marginTop: 40, alignSelf: 'center' }}
-              />
+            <View
+              style={styles.containerIconos}
+            >
+
               <TouchableOpacity
-                style={styles.back}
                 onPress={() => this.props.navigation.navigate('Vacunas')}
               >
+                <Image
+                  resizeMode='contain'
+                  source={require('../recursos/imagenes/vacunas.png')}
+                  style={{ width: 50, height: 50, marginTop: 40, alignSelf: 'center' }}
+                />
                 <Text
                   style={{ display: 'flex', alignItems: 'flex-start', textAlign: 'center' }}
                 >Vacunas</Text>
               </TouchableOpacity>
             </View>
-            </View>
-
-
           </View>
 
 
+        </View >
 
-        
-      </ScrollView>
+
+
+
+      </ScrollView >
 
 
 
@@ -177,12 +193,12 @@ export default class PerfilNinoScreen extends React.Component {
 }
 
 const styles = StyleSheet.create({
-          container: {
-          flex: 1,
+  container: {
+    flex: 1,
     padding: 30,
   },
   infoCard: {
-          marginBottom: 24,
+    marginBottom: 24,
     borderWidth: 1,
     borderColor: '#05A4AC',
     borderRadius: 4,
@@ -190,7 +206,17 @@ const styles = StyleSheet.create({
     left: 30,
   },
   containerCards: {
-          marginTop: 30,
+    marginTop: 30,
+  },
+  containerIconos: {
+    backgroundColor: '#fff',
+    borderColor: '#05A4AC',
+    borderWidth: 2,
+    borderRadius: 4,
+    width: 106,
+    height: 106,
+    alignContent: 'center',
+    justifyContent: 'center'
   }
 
 

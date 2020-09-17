@@ -12,23 +12,27 @@ export default class PostScreen extends React.Component {
   };
 
   state = {
-    name: ""
+    hijo: ""
   }
 
   state = {
-    escolaridade: ""
-  };
+    peso: ""
+  }
 
   state = {
-    sangre: ""
-  };
+    estatura: ""
+  }
 
   state = {
     data: ""
-  };
+  }
 
-  changeName(name) {
-    this.setState({ name })
+  changePeso(peso) {
+    this.setState({ peso })
+  }
+
+  changeEstatura(estatura) {
+    this.setState({ estatura })
   }
 
   changeDate = (valor) => {
@@ -38,26 +42,26 @@ export default class PostScreen extends React.Component {
   }
 
   buttonPressed() {
-    const arrayDataNino = [];
-    if (this.state.name && this.state.escolaridade && this.state.sangre && this.state.data) {
-      const dataNino = {
-        name: this.state.name,
-        escolaridade: this.state.escolaridade,
-        sangre: this.state.sangre,
+    const arrayDataMedidas = [];
+    if (this.state.peso && this.state.hijo && this.state.estatura && this.state.data) {
+      const dataMedidas = {
+        peso: this.state.peso,
+        hijo: this.state.hijo,
+        estatura: this.state.estatura,
         data: this.state.data
       }
-      arrayDataNino.push(dataNino);
+      arrayDataMedidas.push(dataMedidas);
       try {
-        AsyncStorage.getItem('database_ninoInfo').then((value) => {
+        AsyncStorage.getItem('database_medidasInfo').then((value) => {
           if (value !== null) {
             const d = JSON.parse(value);
-            d.push(dataNino)
-            AsyncStorage.setItem('database_ninoInfo', JSON.stringify(d)).then(() => {
-              this.props.navigation.navigate('App')
+            d.push(dataMedidas)
+            AsyncStorage.setItem('database_medidasInfo', JSON.stringify(d)).then(() => {
+              this.props.navigation.navigate('Peso')
             })
           } else {
-            AsyncStorage.setItem('database_ninoInfo', JSON.stringify(arrayDataNino)).then(() => {
-              this.props.navigation.navigate('App')
+            AsyncStorage.setItem('database_medidasInfo', JSON.stringify(arrayDataMedidas)).then(() => {
+              this.props.navigation.navigate('Peso')
             })
           }
         })
@@ -78,66 +82,53 @@ export default class PostScreen extends React.Component {
           <View>
             <Text
               style={styles.title1}
-            >Agregar niña/a</Text>
+            >Agregar medidas</Text>
+          </View>
+
+
+
+
+
+          <View>
+
+            <Picker
+              style={styles.pickerComponent}
+              selectedValue={this.state.hijo}
+              onValueChange={
+                (itemValor, itemIndex) =>
+                  this.setState({
+                    hijo: itemValor
+                  })
+              }
+
+            >
+              <Picker.Item label='Selecciona hija/o' value='' />
+              <Picker.Item label='Juana' value='Juana' />
+              <Picker.Item label='Martin' value='Martin' />
+
+            </Picker>
           </View>
 
           <View>
 
             <TextInput
               style={styles.input}
-              placeholder='Nombre'
+              placeholder='Peso'
               autoCapitalize='none'
-              onChangeText={(name) => this.changeName(name)}
-              value={this.state.name}
+              onChangeText={(peso) => this.changePeso(peso)}
+              value={this.state.peso}
             ></TextInput>
           </View>
 
-
-
           <View>
 
-            <Picker
-              style={styles.pickerComponent}
-              selectedValue={this.state.escolaridade}
-              onValueChange={
-                (itemValor, itemIndex) =>
-                  this.setState({
-                    escolaridade: itemValor
-                  })
-              }
-
-            >
-              <Picker.Item label='Sexo' value='' />
-              <Picker.Item label='Niña' value='Niña' />
-              <Picker.Item label='Niño' value='Niño' />
-
-            </Picker>
-          </View>
-
-          <View>
-
-            <Picker
-              style={styles.pickerComponent}
-              selectedValue={this.state.sangre}
-              onValueChange={
-                (itemValor, itemIndex) =>
-                  this.setState({
-                    sangre: itemValor
-                  })
-              }
-            >
-              <Picker.Item label='Tipo de sangre' value='' />
-              <Picker.Item label='A positivo' value='A positivo' />
-              <Picker.Item label='A negativo' value='A negativo' />
-              <Picker.Item label='B positivo' value='B positivo' />
-              <Picker.Item label='B negativo' value='B negativo' />
-              <Picker.Item label='O negativo' value='O negativo' />
-              <Picker.Item label='O negativo' value='O negativo' />
-              <Picker.Item label='AB positivo' value='AB positivo' />
-              <Picker.Item label='AB negativo' value='AB negativo' />
-
-
-            </Picker>
+            <TextInput
+              style={styles.input}
+              placeholder='Estatura'
+              autoCapitalize='none'
+              onChangeText={(estatura) => this.changeEstatura(estatura)}
+              value={this.state.estatura}
+            ></TextInput>
           </View>
 
           <View>
@@ -181,7 +172,7 @@ export default class PostScreen extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding:30
+    padding: 30
   },
   title1: {
     textAlign: 'center',

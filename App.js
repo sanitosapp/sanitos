@@ -74,14 +74,16 @@ const AuthStack = createStackNavigator ({
   LoginRegister: LoginRegisterScreen,
   Login: LoginScreen,
   Register: SignupScreen,
+  Home: HomeScreen,  
+  App: AppTabNavigator,
   Nino: PerfilNinoScreen,
-  Home: HomeScreen,
+ 
   Vacunas: VacunasScreen,
   VacunasInfo: VacunasInfoScreen,
   Peso: PesoScreen,
   Estatura: EstaturaScreen,
   AgregarNino: AgregarNinoScreen,
-  App: AppTabNavigator,
+
 })
 
 export default createAppContainer(
