@@ -115,7 +115,7 @@ export default class PesoScreen extends React.Component {
               style={{ padding: 10, flexDirection: 'row', alignContent:'center', alignItems:'center', justifyContent:'space-between' }}
             >
               <Text>{dataNino.data} </Text>
-              <Text>{dataNino.peso} kg </Text>
+              <Text>{dataNino.peso} cm</Text>
               <TouchableOpacity
                 onPress={() => this.props.navigation.navigate('Nino')}
               >
@@ -150,7 +150,7 @@ export default class PesoScreen extends React.Component {
         onPress={() => this.props.navigation.navigate('Nino')}
         >
           <Text style={{ marginTop: 40, textAlign: 'left', color: '#424242', fontSize: 16, left: 30 }}>
-            {'< Infomación < Peso'} </Text>
+            {'< Infomación < Estatura'} </Text>
 
         </TouchableOpacity>
 
@@ -164,7 +164,7 @@ export default class PesoScreen extends React.Component {
           >Fecha</Text>
           <Text
             style={{ color: '#fff' }}
-          >Peso</Text>
+          >Estatura</Text>
         </View>
 
         <View
@@ -210,14 +210,14 @@ export default class PesoScreen extends React.Component {
                   <View>
                     <Text
                       style={styles.title1}
-                    >Agregar peso</Text>
+                    >Agregar estatura</Text>
                   </View>
 
                   <View>
 
                     <TextInput
                       style={styles.input}
-                      placeholder='Peso'
+                      placeholder='Estatura'
                       autoCapitalize='none'
                       onChangeText={(peso) => this.changePeso(peso)}
                       value={this.state.peso}
@@ -268,6 +268,8 @@ export default class PesoScreen extends React.Component {
                       style={{ color: '#ffffff', fontWeight: '500' }}
                     >Agregar</Text>
                   </TouchableOpacity>
+                    
+
                   <View>
 
                   </View>
