@@ -1,6 +1,7 @@
 import React from 'react'
-import { View, Alert, Text, StyleSheet, TextInput, TouchableOpacity, Image, StatusBar, Picker, AsyncStorage } from 'react-native'
+import { View, Alert, Text, StyleSheet, TextInput, TouchableOpacity, Image, StatusBar,  AsyncStorage } from 'react-native'
 import DatePicker from 'react-native-datepicker'
+import {Picker} from '@react-native-community/picker'
 
 
 
@@ -109,7 +110,9 @@ export default class PostScreen extends React.Component {
             </Picker>
           </View>
 
-          <View>
+          <View
+            style={{ marginTop: 20 }}
+          >
 
             <TextInput
               style={styles.input}
@@ -120,7 +123,9 @@ export default class PostScreen extends React.Component {
             ></TextInput>
           </View>
 
-          <View>
+          <View
+            style={{ marginTop: 20 }}
+          >
 
             <TextInput
               style={styles.input}
@@ -238,25 +243,18 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center'
   },
-  avatar: {
-    width: 100,
-    height: 100,
-    borderRadius: 50,
-    backgroundColor: '#E1E2E6',
-    marginTop: 48,
-    justifyContent: 'center',
-    alignItems: 'center'
-  },
+
   pickerComponent: {
     color: '#8A8F9E',
     fontSize: 10,
     textTransform: 'uppercase',
-    borderBottomColor: '#8A8F9E',
-    borderBottomWidth: StyleSheet.hairlineWidth,
+    borderWidth: 1,
+    borderColor: '#000',
     marginTop: 20
   },
   dateComponent: {
     width: 'auto',
-    marginTop: 20
+    marginTop: 20,
+    borderRadius:4,
   }
 })

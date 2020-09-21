@@ -172,7 +172,7 @@ export default class PerfilNinoScreen extends React.Component {
                 />
                 <Text
                   style={{ display: 'flex', alignItems: 'flex-start', textAlign: 'center' }}
-                >Vacunas</Text>
+                >Vacunass</Text>
               </TouchableOpacity>
             </View>
           </View>

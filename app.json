@@ -23,12 +23,13 @@
       "package": "com.sanitos.sanitos",
       "versionCode": 1
     },
+    
     "web": {
       "favicon": "./assets/favicon.png"
     },
     "facebookScheme": "fb313331253421224",
     "facebookAppId": "313331253421224",
     "facebookDisplayName": "Sanitos",
-    "facebookAutoInitEnabled": false
+    "facebookAutoInitEnabled": true
   }
 }
