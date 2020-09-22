@@ -1,7 +1,8 @@
 import React from 'react'
-import { Picker, Alert, TextInput, TouchableWithoutFeedback, ScrollView, Image, View, Text, StatusBar, StyleSheet, TouchableOpacity, LayoutAnimation, AsyncStorage, Modal, Button } from 'react-native'
+import {Alert, Picker, TextInput, TouchableWithoutFeedback, ScrollView, Image, View, Text, StatusBar, StyleSheet, TouchableOpacity, LayoutAnimation, AsyncStorage, Modal, Button } from 'react-native'
 import DatePicker from 'react-native-datepicker'
 import { MaterialIcons } from '@expo/vector-icons'
+
 
 import * as firebase from 'firebase'
 

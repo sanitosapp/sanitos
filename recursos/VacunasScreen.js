@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
-import { TouchableWithoutFeedback, TextInput, Modal, SafeAreaView, Text, Dimensions, Image, ListUserItem, StatusBar, View, StyleSheet, TouchableOpacity, FlatList, LayoutAnimation } from 'react-native'
+import { TouchableWithoutFeedback, Picker, TextInput, Modal, SafeAreaView, Text, Dimensions, Image, ListUserItem, StatusBar, View, StyleSheet, TouchableOpacity, FlatList, LayoutAnimation } from 'react-native'
 import DatePicker from 'react-native-datepicker'
 import { MaterialIcons, Feather } from '@expo/vector-icons'
-import {Picker} from '@react-native-community/picker'
+import DateTimePicker from 'react-native-modal-datetime-picker';
 
 
 
@@ -16,107 +16,121 @@ export default class VacunasScreen extends React.Component {
     headerShown: false
   }
 
+  state = {
+    isDateTimePickerVisible: true,
+  };
+
+  _showDateTimePicker = () => this.setState({ isDateTimePickerVisible: true });
+
+  _hideDateTimePicker = () => this.setState({ isDateTimePickerVisible: false });
+
+  _handleDatePicked = (date) => {
+    console.log('A date has been picked: ', date);
+    this._hideDateTimePicker();
+  };
+
+
   constructor() {
     super();
     this.state = {
       data: [
         {
-          dosis: 'Única',
+          dosis: 'Única dosis',
           vacuna: 'BCG',
           estado: ''
         },
         {
-          dosis: 'Única',
+          dosis: 'Única dosis',
           vacuna: 'Hepatitis B',
           estado: ''
         },
         {
-          dosis: '1ra',
+          dosis: '1ra dosis',
           vacuna: 'Pentavalente',
           estado: ''
         },
         {
-          dosis: '1ra',
+          dosis: '1ra dosis',
           vacuna: 'Polio inyección',
           estado: ''
         },
         {
-          dosis: '1ra',
+          dosis: '1ra dosis',
           vacuna: 'Rotavirus',
           estado: ''
         },
         {
-          dosis: '1ra',
+          dosis: '1ra dosis',
           vacuna: 'Neumococo',
           estado: ''
         },
         {
-          dosis: '2da',
+          dosis: '2da dosis',
           vacuna: 'Pentavalente',
           estado: ''
         },
         {
-          dosis: '2da',
+          dosis: '2da dosis',
           vacuna: 'Polio inyección',
           estado: ''
         },
         {
-          dosis: '2da',
+          dosis: '2da dosis',
           vacuna: 'Rotavirus',
           estado: ''
         },
         {
-          dosis: '2da',
+          dosis: '2da dosis',
           vacuna: 'Neumococo',
           estado: ''
         },
         {
-          dosis: '3ra',
+          dosis: '3ra dosis',
           vacuna: 'Pentavalente',
           estado: ''
         },
         {
-          dosis: '3ra',
+          dosis: '3ra dosis',
           vacuna: 'Polio oral',
           estado: ''
         },
         {
-          dosis: '1ra',
+          dosis: '1ra dosis',
           vacuna: 'Influenza',
           estado: ''
         },
         {
-          dosis: '2da',
+          dosis: '2da dosis',
           vacuna: 'Influenza estacional',
           estado: ''
         },
         {
-          dosis: '3ra',
+          dosis: '3ra dosis',
           vacuna: 'Neumococo',
           estado: ''
         },
         {
-          dosis: '1ra',
+          dosis: '1ra dosis',
           vacuna: 'SPR',
           estado: ''
         },
         {
-          dosis: '1ra',
+          dosis: '1ra dosis',
           vacuna: 'Varicela',
           estado: ''
         },
         {
-          dosis: '2da',
+          dosis: '2da dosis',
           vacuna: 'Influenza',
           estado: ''
         },
         {
-          dosis: 'Única',
+          dosis: 'Única dosis',
           vacuna: 'Fiebre amarilla',
           estado: ''
         },
         {
-          dosis: '2da',
+          dosis: '2da dosis',
           vacuna: 'SRP',
           estado: ''
         },
@@ -146,7 +160,7 @@ export default class VacunasScreen extends React.Component {
         },
       ],
     };
-  }
+  };
   /* 
     filterVacuna() {
       const newdata = this.state.data.filter((item) => {
@@ -199,6 +213,8 @@ export default class VacunasScreen extends React.Component {
   }
 
   render() {
+    const { date, open } = this.state;
+    const value = date ? date.toLocaleString() : '';
 
     const { isVisible } = this.state;
 
@@ -214,7 +230,7 @@ export default class VacunasScreen extends React.Component {
         </TouchableOpacity>
 
         <View
-          style={{ flexDirection: 'row', justifyContent: 'space-evenly', marginTop:20 }}
+          style={{ flexDirection: 'row', justifyContent: 'space-evenly', marginTop: 20 }}
         >
 
           <TouchableOpacity
@@ -248,10 +264,14 @@ export default class VacunasScreen extends React.Component {
           data={this.state.data}
           renderItem={({ item }) =>
             <View
-              style={styles.infoCard}            
-              >
-              <Text>{item.dosis}{item.refuerzo} </Text>
-              <Text>{item.vacuna} </Text>
+              style={styles.infoCard}
+            >
+              <Text
+              style={{borderRightWidth:1, borderRightColor:'#1C94A4', width:140,height:40, textAlign:'center',justifyContent:'center'}}
+              >{item.dosis}{item.refuerzo} </Text>
+              <Text
+              style={{borderRightWidth:1, borderRightColor:'#1C94A4', width:113,height:40, textAlign:'center'}}
+              >{item.vacuna} </Text>
               <TouchableOpacity
                 onPress={this.modalHandler}
               >
@@ -266,7 +286,7 @@ export default class VacunasScreen extends React.Component {
         />
 
         <Modal
-          visible={isVisible}
+          visible={false}
           transparent={false}
           animationType='fade'
         >
@@ -287,7 +307,18 @@ export default class VacunasScreen extends React.Component {
                 </MaterialIcons>
 
                 <View style={styles.form}>
-                  <View>
+                  <View
+                    style={{
+                      marginTop: 20,
+                      borderWidth: 1,
+                      borderColor: '#C4C4C4',
+                      width: 270,
+                      height: 40,
+                      borderRadius: 4,
+                      padding: 0,
+                      color: '#C4C4C4'
+                    }}
+                  >
 
                     <Picker
                       style={styles.pickerComponent}
@@ -315,6 +346,28 @@ export default class VacunasScreen extends React.Component {
                       onDateChange={this.changeDate}
                     />
                   </View>
+
+                  <TouchableOpacity 
+                  style={{
+                    marginTop: 20,
+                    borderWidth: 1,
+                    borderColor: '#C4C4C4',
+                    width: 270,
+                    height: 40,
+                    borderRadius: 4,
+                    padding: 10,
+                    color: '#C4C4C4'
+                  }}
+                  onPress={this._showDateTimePicker}>
+                    <Text
+                    style={{textAlign:'left',color:'#C4C4C4',fontSize:16}}
+                    >Cumpleaños</Text>
+                  </TouchableOpacity>
+                  <DateTimePicker
+                    isVisible={this.state.isDateTimePickerVisible}
+                    onConfirm={this._handleDatePicked}
+                    onCancel={this._hideDateTimePicker}
+                  />
 
 
 
@@ -412,23 +465,25 @@ const styles = StyleSheet.create({
     backgroundColor: '#E6838D'
   },
   infoCard: {
-    flexDirection:'row',
+    flexDirection: 'row',
     marginTop: 24,
     borderWidth: 1,
     borderColor: '#05A4AC',
     borderRadius: 4,
     width: 300,
+    height:40,
     left: 30,
+    justifyContent:'center',
+    alignItems:'center'
   },
   pickerComponent: {
-    marginBottom: 18,
-    borderColor: '#000',
-    borderWidth: 1,
-    borderRadius: 4,
     height: 40,
     width: 270,
-    fontSize: 30,
+    fontSize: 16,
     color: '#C4C4C4',
-    padding: 10,
+
+  },
+  dateComponent: {
+    borderRadius: 4
   }
 });

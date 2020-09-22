@@ -1,7 +1,7 @@
 import React from 'react'
-import { View, Alert, Text, StyleSheet, TextInput, TouchableOpacity, Image, StatusBar,  AsyncStorage } from 'react-native'
+import { View, Picker,Alert, Text, StyleSheet, TextInput, TouchableOpacity, Image, StatusBar,  AsyncStorage } from 'react-native'
 import DatePicker from 'react-native-datepicker'
-import {Picker} from '@react-native-community/picker'
+
 
 
 
@@ -90,7 +90,17 @@ export default class PostScreen extends React.Component {
 
 
 
-          <View>
+          <View
+          style={{
+            marginTop: 20,
+            borderWidth: 1,
+            borderColor: '#C4C4C4',
+            width: 300,
+            height: 40,
+            borderRadius: 4,
+            color: '#C4C4C4'
+          }}
+          >
 
             <Picker
               style={styles.pickerComponent}
@@ -117,6 +127,9 @@ export default class PostScreen extends React.Component {
             <TextInput
               style={styles.input}
               placeholder='Peso'
+              keyboardType='decimal-pad'
+              returnKeyType='next'
+              maxLength= {6}
               autoCapitalize='none'
               onChangeText={(peso) => this.changePeso(peso)}
               value={this.state.peso}
@@ -130,6 +143,9 @@ export default class PostScreen extends React.Component {
             <TextInput
               style={styles.input}
               placeholder='Estatura'
+              keyboardType='decimal-pad'
+              returnKeyType='next'
+              maxLength= {6}
               autoCapitalize='none'
               onChangeText={(estatura) => this.changeEstatura(estatura)}
               value={this.state.estatura}
@@ -138,6 +154,10 @@ export default class PostScreen extends React.Component {
 
           <View>
             <DatePicker
+              
+              androidMode='spinner'
+              placeholder='Fecha'
+              mode='date'
               format="DD/MM/YYYY"
               style={styles.dateComponent}
               date={this.state.data}
@@ -224,7 +244,7 @@ const styles = StyleSheet.create({
   },
   button: {
     position: 'absolute',
-    top: 500,
+    top: 480,
     backgroundColor: '#E9446A',
     borderRadius: 4,
     height: 40,
@@ -245,12 +265,9 @@ const styles = StyleSheet.create({
   },
 
   pickerComponent: {
-    color: '#8A8F9E',
-    fontSize: 10,
-    textTransform: 'uppercase',
-    borderWidth: 1,
-    borderColor: '#000',
-    marginTop: 20
+    color: '#C4C4C4',
+    width:300,
+    height:40,
   },
   dateComponent: {
     width: 'auto',

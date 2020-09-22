@@ -12,6 +12,24 @@ export default class PerfilNinoScreen extends React.Component {
     headerShown: false
   }
 
+  
+  state = {
+    name: ""
+  }
+
+  state = {
+    escolaridade: ""
+  };
+
+  state = {
+    sangre: ""
+  };
+
+  state = {
+    data: ""
+  };
+
+
   constructor() {
     super()
     this.state = {
@@ -82,12 +100,6 @@ export default class PerfilNinoScreen extends React.Component {
 
 
         <StatusBar barStyle='light-content' ></StatusBar>
-
-
-        <Text style={{ marginTop: 60, left: 30, fontSize: 16 }}>
-          Bienvenida {this.state.email} !{'\n'}
-  Estamos felices de verte por aquí
-  </Text>
         <View style={styles.containerCards}>
           {this.parseData()}
         </View>
@@ -95,7 +107,7 @@ export default class PerfilNinoScreen extends React.Component {
         <View>
 
           <View
-            style={{ flexDirection: 'row', alignContent: 'space-between' }}
+            style={{ flexDirection: 'row', justifyContent:'space-around', marginTop:22}}
           >
             <View
               style={styles.containerIconos}
@@ -110,8 +122,8 @@ export default class PerfilNinoScreen extends React.Component {
                   style={{ width: 50, height: 50, alignSelf: 'center' }}
                 />
                 <Text
-                  style={{ display: 'flex', alignItems: 'flex-start', textAlign: 'center', marginTop: 10 }}
-                >Peso</Text>
+                  style={{ display: 'flex', alignItems: 'flex-start', textAlign: 'center', marginTop: 10, color:'#1D96A3' }}
+                  >Peso</Text>
               </TouchableOpacity>
             </View>
 
@@ -124,17 +136,17 @@ export default class PerfilNinoScreen extends React.Component {
               ><Image
                   resizeMode='contain'
                   source={require('../recursos/imagenes/estatura.png')}
-                  style={{ width: 50, height: 50, marginTop: 40, alignSelf: 'center' }}
+                  style={{ width: 50, height: 50, alignSelf: 'center' }}
                 />
                 <Text
-                  style={{ display: 'flex', alignItems: 'flex-start', textAlign: 'center' }}
-                >Estatura</Text>
+                  style={{ display: 'flex', alignItems: 'flex-start', textAlign: 'center', marginTop: 10, color:'#1D96A3' }}
+                  >Estatura</Text>
               </TouchableOpacity>
             </View>
           </View>
 
           <View
-            style={{ flexDirection: 'row' }}
+            style={{ flexDirection: 'row', justifyContent:'space-around',marginTop:22 }}
           >
             <View
               style={styles.containerIconos}
@@ -147,12 +159,12 @@ export default class PerfilNinoScreen extends React.Component {
               >
                 <Image
                   resizeMode='contain'
-                  source={require('../recursos/imagenes/estatura.png')}
-                  style={{ width: 50, height: 50, marginTop: 40, alignSelf: 'center' }}
+                  source={require('../recursos/imagenes/crecimiento.png')}
+                  style={{ width: 50, height: 50, alignSelf: 'center' }}
                 />
                 <Text
-                  style={{ display: 'flex', alignItems: 'flex-start', textAlign: 'center' }}
-                >Estadistica</Text>
+                  style={{ display: 'flex', alignItems: 'flex-start', textAlign: 'center', marginTop: 10, color:'#1D96A3' }}
+                  >Estadistica</Text>
 
               </TouchableOpacity>
             </View>
@@ -168,11 +180,11 @@ export default class PerfilNinoScreen extends React.Component {
                 <Image
                   resizeMode='contain'
                   source={require('../recursos/imagenes/vacunas.png')}
-                  style={{ width: 50, height: 50, marginTop: 40, alignSelf: 'center' }}
+                  style={{ width: 50, height: 50,  alignSelf: 'center' }}
                 />
                 <Text
-                  style={{ display: 'flex', alignItems: 'flex-start', textAlign: 'center' }}
-                >Vacunass</Text>
+                  style={{ display: 'flex', alignItems: 'flex-start', textAlign: 'center', marginTop: 10, color:'#1D96A3' }}
+                  >Vacunas</Text>
               </TouchableOpacity>
             </View>
           </View>
