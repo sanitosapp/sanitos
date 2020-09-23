@@ -37,126 +37,126 @@ export default class VacunasScreen extends React.Component {
         {
           dosis: 'Única dosis',
           vacuna: 'BCG',
-          estado: ''
+          estado: 'false'
         },
         {
           dosis: 'Única dosis',
           vacuna: 'Hepatitis B',
-          estado: ''
+          estado: 'false'
         },
         {
           dosis: '1ra dosis',
           vacuna: 'Pentavalente',
-          estado: ''
+          estado: 'false'
         },
         {
           dosis: '1ra dosis',
           vacuna: 'Polio inyección',
-          estado: ''
+          estado: 'false'
         },
         {
           dosis: '1ra dosis',
           vacuna: 'Rotavirus',
-          estado: ''
+          estado: 'false'
         },
         {
           dosis: '1ra dosis',
           vacuna: 'Neumococo',
-          estado: ''
+          estado: 'false'
         },
         {
           dosis: '2da dosis',
           vacuna: 'Pentavalente',
-          estado: ''
+          estado: 'false'
         },
         {
           dosis: '2da dosis',
           vacuna: 'Polio inyección',
-          estado: ''
+          estado: 'false'
         },
         {
           dosis: '2da dosis',
           vacuna: 'Rotavirus',
-          estado: ''
+          estado: 'false'
         },
         {
           dosis: '2da dosis',
           vacuna: 'Neumococo',
-          estado: ''
+          estado: 'false'
         },
         {
           dosis: '3ra dosis',
           vacuna: 'Pentavalente',
-          estado: ''
+          estado: 'false'
         },
         {
           dosis: '3ra dosis',
           vacuna: 'Polio oral',
-          estado: ''
+          estado: 'false'
         },
         {
           dosis: '1ra dosis',
           vacuna: 'Influenza',
-          estado: ''
+          estado: 'false'
         },
         {
           dosis: '2da dosis',
           vacuna: 'Influenza estacional',
-          estado: ''
+          estado: 'false'
         },
         {
           dosis: '3ra dosis',
           vacuna: 'Neumococo',
-          estado: ''
+          estado: 'false'
         },
         {
           dosis: '1ra dosis',
           vacuna: 'SPR',
-          estado: ''
+          estado: 'false'
         },
         {
           dosis: '1ra dosis',
           vacuna: 'Varicela',
-          estado: ''
+          estado: 'false'
         },
         {
           dosis: '2da dosis',
           vacuna: 'Influenza',
-          estado: ''
+          estado: 'false'
         },
         {
           dosis: 'Única dosis',
           vacuna: 'Fiebre amarilla',
-          estado: ''
+          estado: 'false'
         },
         {
           dosis: '2da dosis',
           vacuna: 'SRP',
-          estado: ''
+          estado: 'false'
         },
         {
           dosis: '',
           vacuna: 'DTP',
           refuerzo: '1er refuerzo',
-          estado: ''
+          estado: 'false'
         },
         {
           dosis: '',
           vacuna: 'Polio oral',
           refuerzo: '1er refuerzo',
-          estado: ''
+          estado: 'false'
         },
         {
           dosis: '',
           vacuna: 'DTP',
           refuerzo: '2do refuerzo',
-          estado: ''
+          estado: 'false'
         },
         {
           dosis: '',
           vacuna: 'Polio oral',
           refuerzo: 'Refuerzo',
-          estado: ''
+          estado: 'false'
         },
       ],
     };
@@ -204,19 +204,33 @@ export default class VacunasScreen extends React.Component {
     peso: ""
   }
 
-  state = {
-    isVisible: false
-  }
+  
+  
+  
 
-  modalHandler = () => {
-    this.setState({ isVisible: !this.state.isVisible })
+  state = {
+    modalVisible: false,
+    dosis: '',
+    vacuna: '',
+    refuerzo: '',
+    estado: 'false'
+  };
+
+  setModalVisible = (visible,item) => {
+    this.setState({ 
+      modalVisible: visible,
+      dosis: item.dosis,
+      vacuna: item.vacuna,
+      refuerzo: item.refuerzo,
+      estado: item.estado
+    });
   }
 
   render() {
     const { date, open } = this.state;
     const value = date ? date.toLocaleString() : '';
 
-    const { isVisible } = this.state;
+    
 
     return (
       <SafeAreaView style={styles.container}>
@@ -267,13 +281,17 @@ export default class VacunasScreen extends React.Component {
               style={styles.infoCard}
             >
               <Text
-              style={{borderRightWidth:1, borderRightColor:'#1C94A4', width:140,height:40, textAlign:'center',justifyContent:'center'}}
+                style={{ borderRightWidth: 1, borderRightColor: '#1C94A4', width: 140, height: 40, textAlign: 'center', justifyContent: 'center' }}
               >{item.dosis}{item.refuerzo} </Text>
               <Text
-              style={{borderRightWidth:1, borderRightColor:'#1C94A4', width:113,height:40, textAlign:'center'}}
+                style={{ borderRightWidth: 1, borderRightColor: '#1C94A4', width: 113, height: 40, textAlign: 'center' }}
               >{item.vacuna} </Text>
               <TouchableOpacity
-                onPress={this.modalHandler}
+                onPress={() => {
+                 
+                  this.setModalVisible(!this.state.modalVisible,item);
+
+                }}
               >
                 <MaterialIcons
                   name='add'
@@ -286,68 +304,69 @@ export default class VacunasScreen extends React.Component {
         />
 
         <Modal
-          visible={false}
-          transparent={false}
-          animationType='fade'
+          animationType="slide"
+          transparent={true}
+          visible={this.state.modalVisible}
         >
-          <TouchableOpacity
-            onPress={() => this.modalHandler()}
-            style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
+          <View
+            style={styles.centeredViews}
           >
-            <TouchableWithoutFeedback>
-
-              <View
-                style={{ height: 266, width: 300, backgroundColor: 'grey', padding: 10, borderRadius: 4 }}
+            <View style={styles.modalView}>
+              <MaterialIcons
+                name='close'
+                size={24}
+                onPress={() => {
+                  this.setModalVisible(!this.state.modalVisible,{ modalVisible: false,
+                    dosis: '',
+                    vacuna: '',
+                    refuerzo: '',
+                    estado: 'false'});
+                }}
               >
-                <MaterialIcons
-                  name='close'
-                  size={24}
-                  onPress={() => this.modalHandler()}
+              </MaterialIcons>
+
+              <View style={styles.form}>
+                <View
+                  style={{
+                    marginTop: 20,
+                    borderWidth: 1,
+                    borderColor: '#C4C4C4',
+                    width: 270,
+                    height: 40,
+                    borderRadius: 4,
+                    padding: 0,
+                    color: '#C4C4C4'
+                  }}
                 >
-                </MaterialIcons>
+                  <Text>{"Vacuna:"+this.state.vacuna}</Text>
+                  <Picker
+                    style={styles.pickerComponent}
+                    selectedValue={this.state.estado}
+                    onValueChange={
+                      (itemValor, itemIndex) =>
+                        this.setState({
+                          hijo: itemValor
+                        })
+                    }
 
-                <View style={styles.form}>
-                  <View
-                    style={{
-                      marginTop: 20,
-                      borderWidth: 1,
-                      borderColor: '#C4C4C4',
-                      width: 270,
-                      height: 40,
-                      borderRadius: 4,
-                      padding: 0,
-                      color: '#C4C4C4'
-                    }}
                   >
+                    <Picker.Item label='Estado' value='0' />
+                    <Picker.Item label='Aplicada' value={'true'} />
+                    <Picker.Item label='Pendiente' value={'false'} />
 
-                    <Picker
-                      style={styles.pickerComponent}
-                      selectedValue={this.state.hijo}
-                      onValueChange={
-                        (itemValor, itemIndex) =>
-                          this.setState({
-                            hijo: itemValor
-                          })
-                      }
+                  </Picker>
+                </View>
 
-                    >
-                      <Picker.Item label='Estado' value='' />
-                      <Picker.Item label='Aplicada' value={true} />
-                      <Picker.Item label='Pendiente' value={false} />
+                <View>
+                  <DatePicker
+                    format="DD/MM/YYYY"
+                    style={styles.dateComponent}
+                    date={this.state.data}
+                    onDateChange={this.changeDate}
+                  />
+                </View>
 
-                    </Picker>
-                  </View>
-
-                  <View>
-                    <DatePicker
-                      format="DD/MM/YYYY"
-                      style={styles.dateComponent}
-                      date={this.state.data}
-                      onDateChange={this.changeDate}
-                    />
-                  </View>
-
-                  <TouchableOpacity 
+                <TouchableOpacity
                   style={{
                     marginTop: 20,
                     borderWidth: 1,
@@ -359,44 +378,39 @@ export default class VacunasScreen extends React.Component {
                     color: '#C4C4C4'
                   }}
                   onPress={this._showDateTimePicker}>
-                    <Text
-                    style={{textAlign:'left',color:'#C4C4C4',fontSize:16}}
-                    >Cumpleaños</Text>
-                  </TouchableOpacity>
-                  <DateTimePicker
-                    isVisible={this.state.isDateTimePickerVisible}
-                    onConfirm={this._handleDatePicked}
-                    onCancel={this._hideDateTimePicker}
-                  />
+                  <Text
+                    style={{ textAlign: 'left', color: '#C4C4C4', fontSize: 16 }}
+                  >Cumpleaños</Text>
+                </TouchableOpacity>
+                <DateTimePicker
+                  isVisible={this.state.isDateTimePickerVisible}
+                  onConfirm={this._handleDatePicked}
+                  onCancel={this._hideDateTimePicker}
+                />
 
-
-
-
-
-                  <TouchableOpacity
-                    style={styles.buttonModal}
-                    onPress={() => this.modalHandler()}
-                  >
-                    <Text
-                      style={{ color: '#ffffff', fontWeight: '500' }}
-                    >Agregar</Text>
-                  </TouchableOpacity>
-                  <View>
-
-                  </View>
-
-
-
-
-
-
+                <TouchableOpacity
+                  style={styles.buttonModal}
+                  onPress={() => {
+                    this.setModalVisible(!this.state.modalVisible);
+                  }}
+                >
+                  <Text
+                    style={{ color: '#ffffff', fontWeight: '500' }}
+                  >Agregar</Text>
+                </TouchableOpacity>
+                <View>
 
                 </View>
+
+
+
+
+
+
+
               </View>
-
-
-            </TouchableWithoutFeedback>
-          </TouchableOpacity>
+            </View>
+          </View>
         </Modal >
 
 
@@ -471,10 +485,10 @@ const styles = StyleSheet.create({
     borderColor: '#05A4AC',
     borderRadius: 4,
     width: 300,
-    height:40,
+    height: 40,
     left: 30,
-    justifyContent:'center',
-    alignItems:'center'
+    justifyContent: 'center',
+    alignItems: 'center'
   },
   pickerComponent: {
     height: 40,
@@ -485,5 +499,28 @@ const styles = StyleSheet.create({
   },
   dateComponent: {
     borderRadius: 4
-  }
+  },
+  centeredViews: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: 'rgba(212, 228, 231, 0.5)',
+  },
+  modalView: {
+    margin: 20,
+    width: 300,
+    height: 350,
+    backgroundColor: 'white',
+    borderRadius: 4,
+    padding: 35,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5
+  },
 });

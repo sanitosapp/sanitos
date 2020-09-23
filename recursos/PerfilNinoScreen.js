@@ -9,7 +9,7 @@ import * as firebase from 'firebase'
 export default class PerfilNinoScreen extends React.Component {
 
   static navigationOptions = {
-    headerShown: false
+    headerShown: true
   }
 
   
@@ -99,7 +99,6 @@ export default class PerfilNinoScreen extends React.Component {
       >
 
 
-        <StatusBar barStyle='light-content' ></StatusBar>
         <View style={styles.containerCards}>
           {this.parseData()}
         </View>

@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, Text, StyleSheet, TextInput, TouchableOpacity, Image, StatusBar, LayoutAnimation } from 'react-native'
+import { View, Text, Button,StyleSheet, TextInput, TouchableOpacity, Image, StatusBar, LayoutAnimation } from 'react-native'
 
 import * as firebase from 'firebase'
 import * as Facebook from 'expo-facebook'
@@ -88,11 +88,6 @@ export default class LoginScreen extends React.Component {
             style={{ color: '#ffffff', fontWeight: '500' }}
           >Ingresar</Text>
         </TouchableOpacity>
-        <Button 
-          style={styles.button}
-          onPress={this.handleLogin}
-          title='Ingresar'
-        />
 
 
 
