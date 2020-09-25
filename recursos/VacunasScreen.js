@@ -64,6 +64,7 @@ export default class VacunasScreen extends React.Component {
           vacuna: 'Neumococo',
           estado: 'false'
         },
+       
         {
           dosis: '2da dosis',
           vacuna: 'Pentavalente',
@@ -74,6 +75,7 @@ export default class VacunasScreen extends React.Component {
           vacuna: 'Polio inyección',
           estado: 'false'
         },
+        
         {
           dosis: '2da dosis',
           vacuna: 'Rotavirus',
