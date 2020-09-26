@@ -17,6 +17,8 @@ import {
   YellowBox,
 } from "react-native";
 import DatePicker from "react-native-datepicker";
+import moment from "moment";
+import "moment/locale/es";
 import { MaterialIcons } from "@expo/vector-icons";
 import { firebase } from "./utils/firebase";
 
@@ -29,7 +31,7 @@ const HomeScreen = (props) => {
   const [escolaridade, setEscolaridade] = useState("");
   const [sangre, setSangre] = useState("");
   const [data, setData] = useState("");
-  const [nino, setNino] = useState("");
+  const [childUsers, setChildUsers] = useState([]);
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
@@ -42,9 +44,21 @@ const HomeScreen = (props) => {
   }, []);
 
   const getData = async (uid) => {
-    const querySnapshot = firebase.firestore().collection("usuarios").doc(uid);
-    const user = await querySnapshot.get();
-    console.log("user desde la data", user.data());
+    const querySnapshot = firebase.firestore().collection("usuarios").doc(uid).collection('childUsers');
+    const childUsers = await querySnapshot.get();
+    const children = []
+    childUsers.forEach((doc) => {
+      const {birthday} = doc.data()
+      const formatoFecha = moment(birthday.toDate()).format('LL')
+      children.push({
+        ...doc.data(), 
+        birthday:formatoFecha,
+        id:doc.id
+      })
+    })
+    if (children.length>0){
+      setChildUsers(children)
+    }
   };
   const changeName = (name) => {
     setName(name);
@@ -73,7 +87,10 @@ const HomeScreen = (props) => {
         Estamos felices de verte por aquí
       </Text>
       <View style={styles.containerCards}>
-        <View style={styles.infoCard}>
+        {childUsers.map((doc) =>{
+          const {name, birthday, bloodType, gender} = doc;
+          return (
+            <View style={styles.infoCard}>
           <View>
             <Text
               style={{
@@ -85,7 +102,7 @@ const HomeScreen = (props) => {
                 textTransform: "uppercase",
               }}
             >
-              JOrge
+              {name}
             </Text>
           </View>
 
@@ -97,9 +114,9 @@ const HomeScreen = (props) => {
               />
             </View>
             <View style={{ padding: 10 }}>
-              <Text>hola </Text>
-              <Text>hola</Text>
-              <Text>hola </Text>
+              <Text>{birthday} </Text>
+              <Text>{bloodType}</Text>
+              <Text>{gender} </Text>
             </View>
           </View>
           <View>
@@ -118,6 +135,9 @@ const HomeScreen = (props) => {
             </TouchableOpacity>
           </View>
         </View>
+          )
+        })}
+        
 
         <View style={styles.infoCard}>
           <TouchableOpacity onPress={() => modalHandler()}>
