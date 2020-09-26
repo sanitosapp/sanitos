@@ -9,7 +9,6 @@ import {
 } from "react-native";
 import AwesomeAlert from "react-native-awesome-alerts";
 import { firebase } from "./utils/firebase";
-import styles from "./styles/stylesSignupScreen";
 
 const SignupScreen = (props) => {
   const [name, setName] = useState("");
