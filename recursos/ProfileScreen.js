@@ -9,6 +9,8 @@ import {
   Alert,
 } from "react-native";
 import { firebase } from "./utils/firebase";
+import styles from "./styles/stylesProfileScreen";
+
 //VISTA PERFIL USUARIO
 
 export default class ProfileScreen extends React.Component {
@@ -53,17 +55,12 @@ export default class ProfileScreen extends React.Component {
     return (
       <View style={styles.container}>
         <Text
-          style={{
-            marginTop: 60,
-            textAlign: "center",
-            color: "#424242",
-            fontSize: 16,
-          }}
+          style={styles.titleProfile}
         >
           Mi perfil
         </Text>
 
-        <View style={{ marginTop: 32 }}>
+        <View style={styles.marginContainer}>
           <TextInput style={styles.input}>Hola! </TextInput>
           <TextInput style={styles.input}>Hola </TextInput>
           <TextInput style={styles.input}>Hola! </TextInput>
@@ -94,53 +91,13 @@ export default class ProfileScreen extends React.Component {
           style={styles.button2}
           onPress={this.onChangePasswordPress}
         >
-          <Text style={{ color: "#fff", fontSize: 16 }}>Editar</Text>
+          <Text style={styles.buttonText}>Editar</Text>
         </TouchableOpacity>
 
         <TouchableOpacity style={styles.button} onPress={this.signOutUser}>
-          <Text style={{ color: "#fff", fontSize: 16 }}>Salir</Text>
+          <Text style={styles.buttonText}>Salir</Text>
         </TouchableOpacity>
       </View>
     );
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  input: {
-    marginBottom: 18,
-    left: 30,
-    borderColor: "#C4C4C4",
-    borderWidth: 1,
-    borderRadius: 4,
-    height: 40,
-    width: 300,
-    fontSize: 16,
-    color: "#C4C4C4",
-    padding: 10,
-  },
-  button: {
-    position: "absolute",
-    top: 522,
-    left: 30,
-    backgroundColor: "#E9446A",
-    borderRadius: 4,
-    height: 40,
-    width: 300,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  button2: {
-    position: "absolute",
-    top: 464,
-    left: 30,
-    backgroundColor: "#E9446A",
-    borderRadius: 4,
-    height: 40,
-    width: 300,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-});

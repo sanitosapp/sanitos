@@ -21,6 +21,8 @@ import moment from "moment";
 import "moment/locale/es";
 import { MaterialIcons } from "@expo/vector-icons";
 import { firebase } from "./utils/firebase";
+import styles from "./styles/stylesHomeScreen";
+
 
 //VISTA HOME PRINCIPAL
 const HomeScreen = (props) => {
@@ -82,7 +84,7 @@ const HomeScreen = (props) => {
     <ScrollView style={styles.container}>
       <StatusBar barStyle="light-content"></StatusBar>
 
-      <Text style={{ marginTop: 60, left: 30, fontSize: 16 }}>
+      <Text style={styles.textWelcome}>
         Bienvenida {email} !{"\n"}
         Estamos felices de verte por aquí
       </Text>
@@ -93,41 +95,30 @@ const HomeScreen = (props) => {
             <View style={styles.infoCard}>
           <View>
             <Text
-              style={{
-                fontSize: 16,
-                textAlign: "center",
-                backgroundColor: "#1D96A3",
-                padding: 6,
-                color: "#fff",
-                textTransform: "uppercase",
-              }}
+              style={styles.textName}
             >
               {name}
             </Text>
           </View>
 
-          <View style={{ flexDirection: "row" }}>
+          <View style={styles.rowCard}>
             <View>
               <Image
                 source={require("../recursos/imagenes/logoSanitos.png")}
                 style={{ width: 70, height: 70 }}
               />
             </View>
-            <View style={{ padding: 10 }}>
-              <Text>{birthday} </Text>
-              <Text>{bloodType}</Text>
-              <Text>{gender} </Text>
+            <View style={styles.paddingCard}>
+            <Text>Nombre: {name} </Text>
+              <Text>Edad: {birthday} </Text>
+              <Text>Tipo de sangre: {bloodType}</Text>
+              <Text>Sexo: {gender} </Text>
             </View>
           </View>
           <View>
             <TouchableOpacity onPress={() => props.navigation.navigate("Nino")}>
               <Text
-                style={{
-                  textAlign: "center",
-                  padding: 6,
-                  fontSize: 16,
-                  color: "#C4C4C4",
-                }}
+                style={styles.textCard}
               >
                 {" "}
                 + Presiona aqui para ver mas{" "}
@@ -142,12 +133,7 @@ const HomeScreen = (props) => {
         <View style={styles.infoCard}>
           <TouchableOpacity onPress={() => modalHandler()}>
             <Text
-              style={{
-                textAlign: "center",
-                padding: 20,
-                fontSize: 16,
-                color: "#C4C4C4",
-              }}
+              style={styles.textAgregar}
             >
               {" "}
               + Agregue los datos de su niño/niña{" "}
@@ -159,17 +145,11 @@ const HomeScreen = (props) => {
       <Modal visible={false} transparent={true} animationType="fade">
         <TouchableOpacity
           onPress={() => modalHandler()}
-          style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
+          style={styles.modalStyle}
         >
           <TouchableWithoutFeedback>
             <View
-              style={{
-                height: "80%",
-                width: "80%",
-                backgroundColor: "grey",
-                padding: 10,
-                borderRadius: 4,
-              }}
+              style={styles.modalContainer}
             >
               <MaterialIcons
                 name="close"
@@ -252,30 +232,5 @@ const HomeScreen = (props) => {
     </ScrollView>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  infoCard: {
-    marginBottom: 24,
-    borderWidth: 1,
-    borderColor: "#05A4AC",
-    borderRadius: 4,
-    width: "85%",
-  },
-  containerCards: {
-    marginTop: 30,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  button: {
-    backgroundColor: "#E9446A",
-    borderRadius: 4,
-
-    alignItems: "center",
-    justifyContent: "center",
-  },
-});
 
 export default HomeScreen;
