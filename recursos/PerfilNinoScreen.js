@@ -9,6 +9,8 @@ import {
   LayoutAnimation,
   AsyncStorage,
 } from "react-native";
+import styles from "./styles/stylesPerfilNinoScreen";
+
 
 //VISTA HOME PRINCIPAL
 export default class PerfilNinoScreen extends React.Component {
@@ -98,11 +100,7 @@ export default class PerfilNinoScreen extends React.Component {
 
         <View>
           <View
-            style={{
-              flexDirection: "row",
-              justifyContent: "space-around",
-              marginTop: 22,
-            }}
+            style={styles.boxIconos}
           >
             <View style={styles.containerIconos}>
               <TouchableOpacity
@@ -111,16 +109,10 @@ export default class PerfilNinoScreen extends React.Component {
                 <Image
                   resizeMode="contain"
                   source={require("../recursos/imagenes/peso.png")}
-                  style={{ width: 50, height: 50, alignSelf: "center" }}
+                  style={styles.iconCenter}
                 />
                 <Text
-                  style={{
-                    display: "flex",
-                    alignItems: "flex-start",
-                    textAlign: "center",
-                    marginTop: 10,
-                    color: "#1D96A3",
-                  }}
+                  style={styles.textIcon}
                 >
                   Peso
                 </Text>
@@ -134,16 +126,10 @@ export default class PerfilNinoScreen extends React.Component {
                 <Image
                   resizeMode="contain"
                   source={require("../recursos/imagenes/estatura.png")}
-                  style={{ width: 50, height: 50, alignSelf: "center" }}
+                  style={styles.iconCenter}
                 />
                 <Text
-                  style={{
-                    display: "flex",
-                    alignItems: "flex-start",
-                    textAlign: "center",
-                    marginTop: 10,
-                    color: "#1D96A3",
-                  }}
+                  style={styles.textIcon}
                 >
                   Estatura
                 </Text>
@@ -152,11 +138,7 @@ export default class PerfilNinoScreen extends React.Component {
           </View>
 
           <View
-            style={{
-              flexDirection: "row",
-              justifyContent: "space-around",
-              marginTop: 22,
-            }}
+            style={styles.containerIcon2}
           >
             <View style={styles.containerIconos}>
               <TouchableOpacity
@@ -165,16 +147,10 @@ export default class PerfilNinoScreen extends React.Component {
                 <Image
                   resizeMode="contain"
                   source={require("../recursos/imagenes/crecimiento.png")}
-                  style={{ width: 50, height: 50, alignSelf: "center" }}
+                  style={styles.iconCenter}
                 />
                 <Text
-                  style={{
-                    display: "flex",
-                    alignItems: "flex-start",
-                    textAlign: "center",
-                    marginTop: 10,
-                    color: "#1D96A3",
-                  }}
+                  style={styles.textIcon}
                 >
                   Estadistica
                 </Text>
@@ -188,16 +164,10 @@ export default class PerfilNinoScreen extends React.Component {
                 <Image
                   resizeMode="contain"
                   source={require("../recursos/imagenes/vacunas.png")}
-                  style={{ width: 50, height: 50, alignSelf: "center" }}
+                  style={styles.iconCenter}
                 />
                 <Text
-                  style={{
-                    display: "flex",
-                    alignItems: "flex-start",
-                    textAlign: "center",
-                    marginTop: 10,
-                    color: "#1D96A3",
-                  }}
+                  style={styles.textIcon}
                 >
                   Vacunas
                 </Text>
@@ -209,31 +179,3 @@ export default class PerfilNinoScreen extends React.Component {
     );
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 30,
-  },
-  infoCard: {
-    marginBottom: 24,
-    borderWidth: 1,
-    borderColor: "#05A4AC",
-    borderRadius: 4,
-    width: 300,
-    left: 30,
-  },
-  containerCards: {
-    marginTop: 30,
-  },
-  containerIconos: {
-    backgroundColor: "#fff",
-    borderColor: "#05A4AC",
-    borderWidth: 2,
-    borderRadius: 4,
-    width: 106,
-    height: 106,
-    alignContent: "center",
-    justifyContent: "center",
-  },
-});
