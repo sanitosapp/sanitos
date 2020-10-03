@@ -10,10 +10,14 @@ import {
 import AwesomeAlert from "react-native-awesome-alerts";
 import { firebase } from "./utils/firebase";
 import styles from "./styles/stylesLoginScreen";
+import { AuthContext } from "./rutas/Context"
+
 //VISTA LOGIN
 
-const LoginScreen = (props) => {
+const LoginScreen = ({navigation}) => {
   LayoutAnimation.easeInEaseOut();
+
+  const { Login } = React.useContext(AuthContext);
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -60,11 +64,11 @@ const LoginScreen = (props) => {
           />
         </View>
       </View>
-      <TouchableOpacity onPress={() => props.navigation.navigate("")}>
+      <TouchableOpacity onPress={() => navigation.push("")}>
         <Text style={styles.textRecoverpassword}>¿Olvido su contraseña?</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity style={styles.button} onPress={() => handleLogin()}>
+      <TouchableOpacity style={styles.button} onPress={() => Login()}>
         <Text style={styles.textbutton}>Ingresar</Text>
       </TouchableOpacity>
 
@@ -74,7 +78,7 @@ const LoginScreen = (props) => {
 
       <TouchableOpacity
         style={styles.buttonRegister}
-        onPress={() => props.navigation.navigate("Register")}
+        onPress={() => navigation.push("Register")}
       >
         <Text style={{ color: "#414959", fontSize: 14 }}>
           ¿No tiene cuenta?{" "}
@@ -84,11 +88,11 @@ const LoginScreen = (props) => {
         </Text>
       </TouchableOpacity>
 
-      <AwesomeAlert
+      {/* <AwesomeAlert
         show={showAlert}
         showProgress={false}
         title="Importante"
-        message="debe ingresar su correo y contraseña"
+        message="Debe ingresar su correo y contraseña"
         closeOnTouchOutside={true}
         closeOnHardwareBackPress={false}
         showCancelButton={false}
@@ -102,7 +106,7 @@ const LoginScreen = (props) => {
         onConfirmPressed={() => {
           setShowAlert(false);
         }}
-      />
+      /> */}
     </View>
   );
 };

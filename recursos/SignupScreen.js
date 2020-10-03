@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import {
   View,
   Text,
-  StyleSheet,
   TextInput,
   TouchableOpacity,
   StatusBar,
@@ -12,7 +11,7 @@ import { firebase } from "./utils/firebase";
 import styles from "./styles/stylesSignupScreen";
 
 
-const SignupScreen = (props) => {
+const SignupScreen = ({navigation}) => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -91,7 +90,7 @@ const SignupScreen = (props) => {
 
       <TouchableOpacity
         style={styles.touchContainer}
-        onPress={() => props.navigation.navigate("Login")}
+        onPress={() => navigation.push("Login")}
       >
         <Text style={styles.textButton}>
           Ya tienes cuenta?{" "}

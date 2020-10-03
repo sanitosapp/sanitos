@@ -4,7 +4,6 @@ import {
   Modal,
   SafeAreaView,
   Text,
-  Dimensions,
   StatusBar,
   View,
   StyleSheet,

@@ -1,8 +1,19 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import {
+  ScrollView,
+  Image,
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  LayoutAnimation,
+  AsyncStorage,
+} from "react-native";
 /*import logoSanitos from './recursos/imagenes/logoSanitos.png';*/
-import { createAppContainer, createSwitchNavigator } from "react-navigation";
-import { createStackNavigator } from "react-navigation-stack";
-import { createBottomTabNavigator } from "react-navigation-tabs";
+import { createSwitchNavigator, TabRouter } from "react-navigation";
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Ionicons } from "@expo/vector-icons";
 
 import LoadingScreen from "./recursos/LoadingScreen";
@@ -10,17 +21,15 @@ import LoginRegisterScreen from "./recursos/LoginRegisterScreen";
 import LoginScreen from "./recursos/LoginScreen";
 import SignupScreen from "./recursos/SignupScreen";
 import VacunasScreen from "./recursos/VacunasScreen";
-import VacunasInfoScreen from "./recursos/VacunasInfoScreen";
 import EstaturaScreen from "./recursos/EstaturaScreen";
 import PesoScreen from "./recursos/PesoScreen";
 import PostScreen from "./recursos/PostScreen";
 import PerfilNinoScreen from "./recursos/PerfilNinoScreen";
 import HomeScreen from "./recursos/HomeScreen";
 import ProfileScreen from "./recursos/ProfileScreen";
-import AgregarNinoScreen from "./recursos/AgregarNinoScreen";
-import ForgotPasswordScreen from "./recursos/ForgotPasswordScreen";
+import { AuthContext } from "./rutas/Context"
 
-const AppTabNavigator = createBottomTabNavigator(
+/* const AppTabNavigator = createBottomTabNavigator(
   {
     Home: {
       screen: HomeScreen,
@@ -67,24 +76,118 @@ const AppTabNavigator = createBottomTabNavigator(
       showLabel: false,
     },
   }
-);
+); */
 
-const AuthStack = createStackNavigator({
+/* const AuthStack = createStackNavigator({
+  App: AppTabNavigator,
   LoginRegister: LoginRegisterScreen,
   Login: LoginScreen,
   Register: SignupScreen,
   Home: HomeScreen,
-  App: AppTabNavigator,
   Nino: PerfilNinoScreen,
-  ForgotPassword: ForgotPasswordScreen,
   Vacunas: VacunasScreen,
-  VacunasInfo: VacunasInfoScreen,
   Peso: PesoScreen,
   Estatura: EstaturaScreen,
-  AgregarNino: AgregarNinoScreen,
-});
+}); */
 
-export default createAppContainer(
+
+const AuthStack = createStackNavigator();
+const Tabs = createBottomTabNavigator();
+const HomeStack = createStackNavigator();
+const PostStack = createStackNavigator();
+const ProfileStack = createStackNavigator();
+/* const AppTabNavigator = () => {
+  return (
+    <Tab.Navigator>
+      <Tab.Screen name="Profile" component={Profile} />
+      <Tab.Screen name="Post" component={Post} />
+      <Tab.Screen name="Home" component={Home} />
+    </Tab.Navigator>
+  )
+}
+ */
+
+const HomeStackScreen = () => {
+  return (
+    <HomeStack.Navigator>
+      <HomeStack.Screen name="Home" component={HomeScreen} />
+      {/* <HomeStack.Screen name="Nino" component={PerfilNinoScreen} /> */}
+    </HomeStack.Navigator>
+  );
+}
+
+const ProfileStackScreen = () => {
+  return (
+    <ProfileStack.Navigator>
+      <ProfileStack.Screen name="Profile" component={ProfileScreen} />
+    </ProfileStack.Navigator>
+  );
+}
+
+const PostStackScreen = () => {
+  return (
+    <PostStack.Navigator>
+      <PostStack.Screen name="Post" component={PostScreen} />
+    </PostStack.Navigator>
+  );
+}
+
+const App = () => {
+  const [isLoading, setIsLoading] = React.useState(true);
+  const [userToken, setUserToken] = React.useState(null);
+
+  const authContext = React.useMemo(() => {
+    return {
+      Login: () => {
+        setIsLoading(false);
+        setUserToken('asd');
+      },
+      Register: () => {
+        setIsLoading(false);
+        setUserToken('asd');
+      },
+      singOut: () => {
+        setIsLoading(false);
+        setUserToken(null);
+      },
+    }
+  }, [])
+
+  React.useEffect(() => {
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 1000)
+  }, []);
+
+  if (isLoading) {
+    return <LoadingScreen />
+  }
+  return (
+    <AuthContext.Provider value={authContext}>
+      <NavigationContainer>
+        {userToken ? (
+          <Tabs.Navigator>
+            <Tabs.Screen name="Home" component={HomeStackScreen} />
+            <Tabs.Screen name="Post" component={PostStackScreen} />
+            <Tabs.Screen name="Profile" component={ProfileStackScreen} />
+          </Tabs.Navigator>
+        ) : (
+            <AuthStack.Navigator >
+              <AuthStack.Screen name="LoginRegister" component={LoginRegisterScreen} options={{ headerShown: false }} />
+              <AuthStack.Screen name="Login" component={LoginScreen} options={{ headerShown: false }} />
+              <AuthStack.Screen name="Register" component={SignupScreen} options={{ headerShown: false }} />
+            </AuthStack.Navigator>
+          )}
+      </NavigationContainer>
+    </AuthContext.Provider>
+  );
+}
+
+
+
+export default App;
+
+/* export default NavigationContainer(
   createSwitchNavigator(
     {
       Loading: LoadingScreen,
@@ -95,4 +198,4 @@ export default createAppContainer(
       initialRouteName: "Loading",
     }
   )
-);
+); */

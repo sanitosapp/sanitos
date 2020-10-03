@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
   Alert,
   Picker,
@@ -13,6 +13,7 @@ import {
   LayoutAnimation,
   AsyncStorage,
   Modal,
+  YellowBox,
 } from "react-native";
 import DatePicker from "react-native-datepicker";
 import { MaterialIcons, Feather } from "@expo/vector-icons";
@@ -21,30 +22,76 @@ import styles from "./styles/stylesPesoScreen";
 
 
 //VISTA HOME PRINCIPAL
-export default class PesoScreen extends React.Component {
-  static navigationOptions = {
-    headerShown: false,
-  };
+const PesoScreen = ({route, navigation}) => {
+  LayoutAnimation.easeInEaseOut();
 
-  state = {
-    peso: "",
-  };
+  const [peso, setPeso] = useState("");
+  const [pesoId, setPesoId] = useState([]);
+  const [data, setData] = useState("");
+  const [email, setEmail] = useState("");
+  const [displayName, setDisplayName] = useState("");
+  const [name, setName] = useState("");
+  const [childUsers, setChildUsers] = useState([]);
+  const [modalVisible, setModalVisible] = useState(false);
 
-  state = {
-    data: "",
-  };
-
-  changePeso(peso) {
-    this.setState({ peso });
+  const changePeso = (peso) => {
+    setPeso(peso);
   }
 
-  changeDate = (valor) => {
-    this.setState({
-      data: valor,
-    });
+  const changeDate = (valor) => {
+    setData(valor);
   };
 
-  buttonPressed() {
+  const { childId } = route.params;
+
+  useEffect(() => {
+    YellowBox.ignoreWarnings(["Setting a timer"]);
+    const { email, displayName, uid } = firebase.auth().currentUser;
+    console.log(uid);
+    setDisplayName(displayName);
+    getData(uid);
+    setEmail(email);
+  }, []);
+
+  const getData = async (uid) => {
+    const querySnapshot = firebase.firestore().collection("usuarios").doc(uid).collection('childUsers');
+    const childUsers = await querySnapshot.get();
+    const children = []
+    childUsers.forEach((doc) => {
+      const { birthday } = doc.data()
+      const formatoFecha = moment(birthday.toDate()).format('LL')
+      children.push({
+        ...doc.data(),
+        birthday: formatoFecha,
+        id: doc.id
+      })
+    });
+    if (children.length > 0) {
+
+      setChildUsers(children)
+    }
+  };
+
+  const pesos = async (childId) => {
+    const arrayPeso = [];
+    const querySnapshot = firebase
+      .firestore()
+      .collection("categories")
+      .doc("peso")
+      .collection("records")
+      .where("userId", "==", uid)
+      .where("childId", "==", id);
+    const pesoId = await querySnapshot.get();
+    pesoId.forEach((doc) => {
+      arrayPeso.push({ id: doc.id, ...doc.data() });
+    });
+    if (arrayPeso.length > 0) {
+      setPesoId(arrayPeso)
+      console.log("arrayPeso", arrayPeso);
+    }
+  };
+
+  /* const buttonPressed = () => {
     const arrayDataNino = [];
     if (this.state.peso && this.state.data) {
       const dataNino = {
@@ -77,166 +124,102 @@ export default class PesoScreen extends React.Component {
     } else {
       Alert.alert("Falta completar un campo");
     }
-  }
+  } */
 
-  state = {
-    isVisible: false,
-  };
-
-  modalHandler = () => {
-    this.setState({ isVisible: !this.state.isVisible });
-  };
-
-  state = {
-    email: "",
-    displayName: "",
-  };
-
-
-  constructor() {
-    super();
-    this.state = {
-      Nino: "",
-    };
-    try {
-      AsyncStorage.getItem("database_peso").then((value) => {
-        this.setState({
-          Nino: JSON.parse(value),
-        });
-      });
-    } catch (err) {
-      console.log(err);
-    }
-  }
-  parseData() {
-    if (this.state.Nino) {
-      return this.state.Nino.map((dataNino, i) => {
-        return (
-          <View style={styles.infoCard} key={i}>
-            <View
-              style={{
-                padding: 10,
-                flexDirection: "row",
-                alignContent: "center",
-                alignItems: "center",
-                justifyContent: "space-between",
-              }}
-            >
-              <Text>{dataNino.data} </Text>
-              <Text>{dataNino.peso} kg </Text>
-              <TouchableOpacity
-                onPress={() => this.props.navigation.navigate("Nino")}
-              >
-                <Feather name="edit" size={20} color="black" />
-              </TouchableOpacity>
-            </View>
-          </View>
-        );
-      });
-    }
-  }
-
-  render() {
-    const { isVisible } = this.state;
-    LayoutAnimation.easeInEaseOut();
-
-    return (
-      <ScrollView style={styles.container}>
-        <StatusBar barStyle="light-content"></StatusBar>
-        <TouchableOpacity
-          onPress={() => this.props.navigation.navigate("Nino")}
+  return (
+    <ScrollView style={styles.container}>
+      <StatusBar barStyle="light-content"></StatusBar>
+      <TouchableOpacity
+        onPress={() => props.navigation.navigate("Nino")}
+      >
+        <Text
+          style={styles.breadCrumb}
         >
-          <Text
-            style={styles.breadCrumb}
-          >
-            {"< Infomación < Peso"}{" "}
-          </Text>
-        </TouchableOpacity>
+          {"< Infomación < Peso"}{" "}
+        </Text>
+      </TouchableOpacity>
 
-        <View
-          style={styles.boxTitle}
-        >
-          <Text style={styles.textWhite}>Fecha</Text>
-          <Text style={styles.textWhite}>Peso</Text>
-        </View>
+      <View
+        style={styles.boxTitle}
+      >
+        <Text style={styles.textWhite}>Fecha</Text>
+        <Text style={styles.textWhite}>Peso</Text>
+      </View>
 
-        <View style={styles.containerCards}>{this.parseData()}</View>
-        <View>
-          <TouchableOpacity style={styles.button} onPress={this.modalHandler}>
-            <Text style={styles.textButton}>
-              {" "}
+      <View style={styles.containerCards}>
+        {pesoId.map((doc) => {
+            const { date, weight, id } = doc;
+            return (
+              <View>
+                <Text>{date}{weight}{id} </Text>
+              </View>
+            )
+          }
+        )}
+      </View>
+
+      <View>
+
+      <Text>childId:{JSON.stringify(childId)} </Text>
+
+        <TouchableOpacity style={styles.button} onPress={() => { setModalVisible(true) }}>
+          <Text style={styles.textButton}>
+            {" "}
               + Agregue nueva medida
             </Text>
-          </TouchableOpacity>
-        </View>
+        </TouchableOpacity>
+      </View>
 
-        <Modal visible={isVisible} transparent={true} animationType="fade">
-              <View
-                style={styles.boxModal}
-              >
-                <MaterialIcons
-                  name="close"
-                  size={24}
-                  onPress={() => this.modalHandler()}
-                ></MaterialIcons>
+      <Modal visible={modalVisible} transparent={true} animationType="fade">
+        <View style={styles.centeredViews}>
+          <View
+            style={styles.modalView}
+          >
+            <MaterialIcons
+              name="close"
+              size={24}
+              onPress={() => { setModalVisible(!modalVisible) }}
+            ></MaterialIcons>
 
-                <View style={styles.form}>
-                  <View>
-                    <Text style={styles.title1}>Agregar peso</Text>
-                  </View>
-
-                  <View>
-                    <TextInput
-                      style={styles.input}
-                      placeholder="Peso"
-                      autoCapitalize="none"
-                      onChangeText={(peso) => this.changePeso(peso)}
-                      value={this.state.peso}
-                    ></TextInput>
-                  </View>
-
-                  {/* <View>
-
-                    <Picker
-                      style={styles.pickerComponent}
-                      selectedValue={this.state.hijo}
-                      onValueChange={
-                        (itemValor, itemIndex) =>
-                          this.setState({
-                            hijo: itemValor
-                          })
-                      }
-
-                    >
-                      <Picker.Item label='Sexo' value='' />
-                      <Picker.Item label='Niña' value='Niña' />
-                      <Picker.Item label='Niño' value='Niño' />
-
-                    </Picker>
-                  </View> */}
-
-                  <View>
-                    <DatePicker
-                      format="DD/MM/YYYY"
-                      style={styles.dateComponent}
-                      date={this.state.data}
-                      onDateChange={this.changeDate}
-                    />
-                  </View>
-
-                  <TouchableOpacity
-                    style={styles.button}
-                    onPress={() => this.modalHandler()}
-                  >
-                    <Text style={{ color: "#ffffff", fontWeight: "500" }}>
-                      Agregar
-                    </Text>
-                  </TouchableOpacity>
-                  <View></View>
-                </View>
+            <View style={styles.form}>
+              <View>
+                <Text style={styles.title1}>Agregar peso</Text>
               </View>
-        </Modal>
-      </ScrollView>
-    );
-  }
+
+              <View>
+                <TextInput
+                  style={styles.input}
+                  placeholder="Peso"
+                  autoCapitalize="none"
+                  onChangeText={(peso) => changePeso(peso)}
+                  value={peso}
+                ></TextInput>
+              </View>
+
+              <View>
+                <DatePicker
+                  format="DD/MM/YYYY"
+                  style={styles.dateComponent}
+                  date={data}
+                  onDateChange={() => changeDate()}
+                />
+              </View>
+
+              <TouchableOpacity
+                style={styles.button}
+                onPress={() => modalHandler()}
+              >
+                <Text style={{ color: "#ffffff", fontWeight: "500" }}>
+                  Agregar
+                    </Text>
+              </TouchableOpacity>
+              <View></View>
+            </View>
+          </View>
+        </View>
+      </Modal>
+    </ScrollView>
+  );
 }
+
+export default PesoScreen;
