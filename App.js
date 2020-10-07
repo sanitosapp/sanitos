@@ -10,15 +10,12 @@ import LoginRegisterScreen from "./recursos/LoginRegisterScreen";
 import LoginScreen from "./recursos/LoginScreen";
 import SignupScreen from "./recursos/SignupScreen";
 import VacunasScreen from "./recursos/VacunasScreen";
-import VacunasInfoScreen from "./recursos/VacunasInfoScreen";
 import EstaturaScreen from "./recursos/EstaturaScreen";
 import PesoScreen from "./recursos/PesoScreen";
 import PostScreen from "./recursos/PostScreen";
 import PerfilNinoScreen from "./recursos/PerfilNinoScreen";
 import HomeScreen from "./recursos/HomeScreen";
 import ProfileScreen from "./recursos/ProfileScreen";
-import AgregarNinoScreen from "./recursos/AgregarNinoScreen";
-import ForgotPasswordScreen from "./recursos/ForgotPasswordScreen";
 
 const AppTabNavigator = createBottomTabNavigator(
   {
@@ -76,12 +73,9 @@ const AuthStack = createStackNavigator({
   Home: HomeScreen,
   App: AppTabNavigator,
   Nino: PerfilNinoScreen,
-  ForgotPassword: ForgotPasswordScreen,
   Vacunas: VacunasScreen,
-  VacunasInfo: VacunasInfoScreen,
   Peso: PesoScreen,
   Estatura: EstaturaScreen,
-  AgregarNino: AgregarNinoScreen,
 });
 
 export default createAppContainer(
