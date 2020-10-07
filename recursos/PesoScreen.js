@@ -16,13 +16,14 @@ import {
   YellowBox,
 } from "react-native";
 import DatePicker from "react-native-datepicker";
+import moment from "moment";
 import { MaterialIcons, Feather } from "@expo/vector-icons";
 import { firebase } from "./utils/firebase";
 import styles from "./styles/stylesPesoScreen";
 
 
 //VISTA HOME PRINCIPAL
-const PesoScreen = ({route, navigation}) => {
+const PesoScreen = ({ route, navigation }) => {
   LayoutAnimation.easeInEaseOut();
 
   const [peso, setPeso] = useState("");
@@ -34,6 +35,8 @@ const PesoScreen = ({route, navigation}) => {
   const [childUsers, setChildUsers] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
 
+  const { idPeso } = route.params;
+
   const changePeso = (peso) => {
     setPeso(peso);
   }
@@ -42,14 +45,13 @@ const PesoScreen = ({route, navigation}) => {
     setData(valor);
   };
 
-  const { childId } = route.params;
-
   useEffect(() => {
     YellowBox.ignoreWarnings(["Setting a timer"]);
     const { email, displayName, uid } = firebase.auth().currentUser;
     console.log(uid);
     setDisplayName(displayName);
     getData(uid);
+    pesos(idPeso);
     setEmail(email);
   }, []);
 
@@ -72,7 +74,7 @@ const PesoScreen = ({route, navigation}) => {
     }
   };
 
-  const pesos = async (childId) => {
+  const pesos = async (idPeso) => {
     const arrayPeso = [];
     const querySnapshot = firebase
       .firestore()
@@ -80,7 +82,7 @@ const PesoScreen = ({route, navigation}) => {
       .doc("peso")
       .collection("records")
       .where("userId", "==", uid)
-      .where("childId", "==", id);
+      .where("childId", "==", idPeso);
     const pesoId = await querySnapshot.get();
     pesoId.forEach((doc) => {
       arrayPeso.push({ id: doc.id, ...doc.data() });
@@ -146,11 +148,14 @@ const PesoScreen = ({route, navigation}) => {
         <Text style={styles.textWhite}>Peso</Text>
       </View>
 
+      <Text>idPeso: {JSON.stringify(idPeso)}</Text>
+
       <View style={styles.containerCards}>
         {pesoId.map((doc) => {
             const { date, weight, id } = doc;
             return (
               <View>
+              
                 <Text>{date}{weight}{id} </Text>
               </View>
             )
@@ -159,8 +164,6 @@ const PesoScreen = ({route, navigation}) => {
       </View>
 
       <View>
-
-      <Text>childId:{JSON.stringify(childId)} </Text>
 
         <TouchableOpacity style={styles.button} onPress={() => { setModalVisible(true) }}>
           <Text style={styles.textButton}>

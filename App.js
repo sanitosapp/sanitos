@@ -10,11 +10,14 @@ import {
   AsyncStorage,
 } from "react-native";
 /*import logoSanitos from './recursos/imagenes/logoSanitos.png';*/
-import { createSwitchNavigator, TabRouter } from "react-navigation";
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Ionicons } from "@expo/vector-icons";
+
+import AuthNavigator from './recursos/navigation/AuthNavigator';
+
+//import firebase from "./recursos/utils";
 
 import LoadingScreen from "./recursos/LoadingScreen";
 import LoginRegisterScreen from "./recursos/LoginRegisterScreen";
@@ -27,7 +30,6 @@ import PostScreen from "./recursos/PostScreen";
 import PerfilNinoScreen from "./recursos/PerfilNinoScreen";
 import HomeScreen from "./recursos/HomeScreen";
 import ProfileScreen from "./recursos/ProfileScreen";
-import { AuthContext } from "./rutas/Context"
 
 /* const AppTabNavigator = createBottomTabNavigator(
   {
@@ -107,16 +109,16 @@ const ProfileStack = createStackNavigator();
 }
  */
 
-const HomeStackScreen = () => {
+{/*const HomeStackScreen = () => {
   return (
     <HomeStack.Navigator>
       <HomeStack.Screen name="Home" component={HomeScreen} />
-      {/* <HomeStack.Screen name="Nino" component={PerfilNinoScreen} /> */}
+       <HomeStack.Screen name="Nino" component={PerfilNinoScreen} /> 
     </HomeStack.Navigator>
   );
-}
+}*/}
 
-const ProfileStackScreen = () => {
+/* const ProfileStackScreen = () => {
   return (
     <ProfileStack.Navigator>
       <ProfileStack.Screen name="Profile" component={ProfileScreen} />
@@ -185,17 +187,12 @@ const App = () => {
 
 
 
-export default App;
+export default App; */
 
-/* export default NavigationContainer(
-  createSwitchNavigator(
-    {
-      Loading: LoadingScreen,
-      App: AppTabNavigator,
-      Auth: AuthStack,
-    },
-    {
-      initialRouteName: "Loading",
-    }
-  )
-); */
+const App = () => {
+  return (
+    <AuthNavigator />
+  ); 
+};
+
+export default App;

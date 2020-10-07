@@ -10,26 +10,30 @@ import {
 import AwesomeAlert from "react-native-awesome-alerts";
 import { firebase } from "./utils/firebase";
 import styles from "./styles/stylesLoginScreen";
-import { AuthContext } from "./rutas/Context"
+import LoadingScreen from "./LoadingScreen"
 
 //VISTA LOGIN
 
 const LoginScreen = ({navigation}) => {
   LayoutAnimation.easeInEaseOut();
 
-  const { Login } = React.useContext(AuthContext);
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState(null);
   const [showAlert, setShowAlert] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleLogin = () => {
     if (email !== "" && password !== "") {
+      setIsLoading(true);
       firebase
         .auth()
         .signInWithEmailAndPassword(email, password)
-        .catch((error) => setErrorMessage(error.message));
+        .catch((error) => {
+          isLoading(false);
+          setErrorMessage(error.message)
+        });
     } else {
       setShowAlert(true);
     }
@@ -68,7 +72,7 @@ const LoginScreen = ({navigation}) => {
         <Text style={styles.textRecoverpassword}>¿Olvido su contraseña?</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity style={styles.button} onPress={() => Login()}>
+      <TouchableOpacity style={styles.button} onPress={() => handleLogin()}>
         <Text style={styles.textbutton}>Ingresar</Text>
       </TouchableOpacity>
 

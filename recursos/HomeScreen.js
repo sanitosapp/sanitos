@@ -140,7 +140,7 @@ import styles from "./styles/stylesHomeScreen";
               </View>
               <View>
                 <TouchableOpacity onPress={()=>{navigation.navigate('Nino',{
-                  childId:id,
+                  id:childUsers,
                 })}}>
                   <Text
                     style={styles.textCard}
