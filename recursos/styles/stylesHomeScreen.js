@@ -23,6 +23,14 @@ const styles = StyleSheet.create({
         alignItems: "center",
         justifyContent: "center",
     },
+    buttonModal: {
+        backgroundColor: "#E9446A",
+        borderRadius: 4,
+        height:35,
+        alignItems: "center",
+        justifyContent: "center",
+        marginTop:20,
+    },
     textWelcome: { 
         marginTop: 60, 
         left: 30, 
@@ -66,7 +74,41 @@ const styles = StyleSheet.create({
         padding: 10,
         borderRadius: 4,
     },
-    
+    form: {
+
+    },
+    centeredViews: {
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
+        backgroundColor: "rgba(212, 228, 231, 0.5)",
+    },
+    modalView: {
+      margin: 20,
+      width: 300,
+      height: 350,
+      backgroundColor: "white",
+      borderRadius: 4,
+      padding: 30,
+
+      shadowColor: "#000",
+      shadowOffset: {
+        width: 0,
+        height: 2,
+      },
+      shadowOpacity: 0.25,
+      shadowRadius: 3.84,
+      elevation: 5,
+    },
+    title1:{
+        fontSize:16,
+        textAlign:'center',
+        textTransform:'uppercase',
+        marginVertical:10,
+    },
+    iconBox:{
+        marginLeft:220
+    },
 
 });
 

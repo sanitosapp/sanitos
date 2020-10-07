@@ -1,249 +1,179 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
   Picker,
   Alert,
   TextInput,
-  TouchableWithoutFeedback,
   ScrollView,
-  Image,
   View,
   Text,
   StatusBar,
   StyleSheet,
   TouchableOpacity,
   LayoutAnimation,
-  AsyncStorage,
   Modal,
   Button,
+  YellowBox,
 } from "react-native";
 import DatePicker from "react-native-datepicker";
+import moment from "moment";
+import "moment/locale/es";
 import { MaterialIcons, Feather } from "@expo/vector-icons";
 import { firebase } from "./utils/firebase";
 import styles from "./styles/stylesEstaturaScreen";
 
 
 //VISTA HOME PRINCIPAL
-export default class PesoScreen extends React.Component {
-  static navigationOptions = {
-    headerShown: false,
-  };
+const EstaturaScreen = ({ route, navigation }) => {
+  LayoutAnimation.easeInEaseOut();
 
-  state = {
-    peso: "",
-  };
+  const [estatura, setEstatura] = useState([]);
+  const [data, setData] = useState("");
+  const [estatura1, setEstatura1] = useState({});
+  const [estaturaRegister, setEstaturaRegister] = useState([]);
+  const [email, setEmail] = useState("");
+  const [displayName, setDisplayName] = useState("");
+  const [name, setName] = useState("");
+  const [childUsers, setChildUsers] = useState([]);
+  const [modalVisible, setModalVisible] = useState(false);
 
-  state = {
-    data: "",
-  };
-
-  changePeso(peso) {
-    this.setState({ peso });
+  const changeEstatura = (estatura) => {
+    setEstatura(estatura);
   }
 
-  changeDate = (valor) => {
-    this.setState({
-      data: valor,
+  const changeDate = (valor) => {
+    setData(valor);
+  };
+
+  useEffect(() => {
+    YellowBox.ignoreWarnings(["Setting a timer"]);
+    const { idPesos } = route.params;
+    const { uid } = firebase.auth().currentUser;
+    setEstatura1(idPesos);
+    estaturas(uid, idPesos.id);
+  }, []);
+
+  const estaturas = async (uid, childId) => {
+    const arrayEstatura = [];
+    const querySnapshot = firebase
+      .firestore()
+      .collection("categories")
+      .doc("estatura")
+      .collection("records")
+      .where("userId", "==", uid)
+      .where("childId", "==", childId);
+    const estaturaId = await querySnapshot.get();
+    estaturaId.forEach((doc) => {
+      const { date } = doc.data()
+      const formatoFecha = moment(date.toDate()).format('LL')
+      arrayEstatura.push({
+        ...doc.data(),
+        date: formatoFecha,
+        id: doc.id
+      })
     });
-  };
-
-  buttonPressed() {
-    const arrayDataNino = [];
-    if (this.state.peso && this.state.data) {
-      const dataNino = {
-        peso: this.state.peso,
-        data: this.state.data,
-      };
-      arrayDataNino.push(dataNino);
-      try {
-        AsyncStorage.getItem("database_peso").then((value) => {
-          if (value !== null) {
-            const d = JSON.parse(value);
-            d.push(dataNino);
-            AsyncStorage.setItem("database_peso", JSON.stringify(d)).then(
-              () => {
-                this.modalHandler();
-              }
-            );
-          } else {
-            AsyncStorage.setItem(
-              "database_peso",
-              JSON.stringify(arrayDataNino)
-            ).then(() => {
-              this.modalHandler();
-            });
-          }
-        });
-      } catch (err) {
-        console.log(err);
-      }
-    } else {
-      Alert.alert("Falta completar un campo");
+    if (arrayEstatura.length > 0) {
+      setEstaturaRegister(arrayEstatura)
+      console.log("arrayestatura", arrayEstatura);
     }
-  }
-
-  state = {
-    isVisible: false,
   };
 
-  modalHandler = () => {
-    this.setState({ isVisible: !this.state.isVisible });
-  };
+  return (
+    <ScrollView style={styles.container}>
+      <StatusBar barStyle="light-content"></StatusBar>
+      <TouchableOpacity
+        onPress={() => navigation.navigate("Nino")}
+      >
+        <Text
+          style={styles.breadcrumb}
+        >
+          {"< Infomación < Estatura"}{" "}
+        </Text>
+      </TouchableOpacity>
 
-  state = {
-    email: "",
-    displayName: "",
-  };
+      <View
+        style={styles.containerFeEs}
+      >
+        <Text style={styles.whiteColor}>Fecha</Text>
+        <Text style={styles.whiteColor}>Estatura</Text>
+      </View>
 
-  componentDidMount() {
-    const { email, displayName } = firebase.auth().currentUser;
+      <View style={styles.containerCards}>
+        {estaturaRegister.map((doc) => {
+          const { date, height, id } = doc;
+          return (
+            <View style={styles.infoCard}>
 
-    this.setState({ email, displayName });
-  }
-
-  signOutUser = () => {
-    firebase.auth().signOut();
-  };
-
-  constructor() {
-    super();
-    this.state = {
-      Nino: "",
-    };
-    try {
-      AsyncStorage.getItem("database_peso").then((value) => {
-        this.setState({
-          Nino: JSON.parse(value),
-        });
-      });
-    } catch (err) {
-      console.log(err);
-    }
-  }
-  parseData() {
-    if (this.state.Nino) {
-      return this.state.Nino.map((dataNino, i) => {
-        return (
-          <View style={styles.infoCard} key={i}>
-            <View
-              style={styles.cardTitle}
-            >
-              <Text>{dataNino.data} </Text>
-              <Text>{dataNino.peso} cm</Text>
-              <TouchableOpacity
-                onPress={() => this.props.navigation.navigate("Nino")}
-              >
-                <Feather name="edit" size={20} color="black" />
-              </TouchableOpacity>
+              <Text style={styles.estatura}>{date}</Text>
+              <Text style={styles.estatura}>{height} </Text>
             </View>
-          </View>
-        );
-      });
-    }
-  }
+          )
+        }
+        )}
+      </View>
 
-  render() {
-    const { isVisible } = this.state;
-    LayoutAnimation.easeInEaseOut();
-
-    return (
-      <ScrollView style={styles.container}>
-        <StatusBar barStyle="light-content"></StatusBar>
-        <TouchableOpacity
-          onPress={() => this.props.navigation.navigate("Nino")}
-        >
-          <Text
-            style={styles.breadcrumb}
-          >
-            {"< Infomación < Estatura"}{" "}
-          </Text>
-        </TouchableOpacity>
-
-        <View
-          style={styles.containerFeEs}
-        >
-          <Text style={styles.whiteColor}>Fecha</Text>
-          <Text style={styles.whiteColor}>Estatura</Text>
-        </View>
-
-        <View style={styles.containerCards}>{this.parseData()}</View>
-        <View>
-          <TouchableOpacity style={styles.button} onPress={this.modalHandler}>
-            <Text style={styles.textButton}>
-              {" "}
+      <View>
+        <TouchableOpacity style={styles.button} onPress={() => { setModalVisible(true) }}>
+          <Text style={styles.textButton}>
+            {" "}
               + Agregue nueva medida
             </Text>
-          </TouchableOpacity>
-        </View>
+        </TouchableOpacity>
+      </View>
 
-        <Modal visible={isVisible} transparent={true} animationType="fade">
-              <View
-                style={styles.modalBox}
-              >
-                <MaterialIcons
-                  name="close"
-                  size={24}
-                  onPress={() => this.modalHandler()}
-                ></MaterialIcons>
+      <Modal visible={modalVisible} transparent={true} animationType="fade">
+        <View
+          style={styles.centeredViews}
+        >
+          <View style={styles.modalView}>
+            <MaterialIcons
+              name="close"
+              size={24}
+              onPress={() => { setModalVisible(!modalVisible) }}
+            ></MaterialIcons>
 
-                <View style={styles.form}>
-                  <View>
-                    <Text style={styles.title1}>Agregar estatura</Text>
-                  </View>
-
-                  <View>
-                    <TextInput
-                      style={styles.input}
-                      placeholder="Estatura"
-                      autoCapitalize="none"
-                      onChangeText={(peso) => this.changePeso(peso)}
-                      value={this.state.peso}
-                    ></TextInput>
-                  </View>
-
-                  {/* <View>
-
-                    <Picker
-                      style={styles.pickerComponent}
-                      selectedValue={this.state.hijo}
-                      onValueChange={
-                        (itemValor, itemIndex) =>
-                          this.setState({
-                            hijo: itemValor
-                          })
-                      }
-
-                    >
-                      <Picker.Item label='Sexo' value='' />
-                      <Picker.Item label='Niña' value='Niña' />
-                      <Picker.Item label='Niño' value='Niño' />
-
-                    </Picker>
-                  </View> */}
-
-                  <View>
-                    <DatePicker
-                      format="DD/MM/YYYY"
-                      style={styles.dateComponent}
-                      date={this.state.data}
-                      onDateChange={this.changeDate}
-                    />
-                  </View>
-
-                  <TouchableOpacity
-                    style={styles.button}
-                    onPress={() => this.modalHandler()}
-                  >
-                    <Text style={styles.textAgregar}>
-                      Agregar
-                    </Text>
-                  </TouchableOpacity>
-
-                  <View></View>
-                </View>
+            <View style={styles.form}>
+              <View>
+                <Text style={styles.title1}>Agregar estatura</Text>
               </View>
-        </Modal>
-      </ScrollView>
-    );
-  }
-}
+
+              <View
+              style={styles.formBox}
+              >
+                <TextInput
+                  style={styles.input}
+                  placeholder="Estatura"
+                  autoCapitalize="none"
+                  onChangeText={(estatura) => changeEstatura(estatura)}
+                  value={estatura}
+                ></TextInput>
+              </View>
+
+              <View>
+                <DatePicker
+                  format="DD/MM/YYYY"
+                  style={styles.dateComponent}
+                  date={data}
+                  onDateChange={() => changeDate()}
+                />
+              </View>
+
+              <TouchableOpacity
+                style={styles.button}
+                onPress={() => modalHandler()}
+              >
+                <Text style={styles.textAgregar}>
+                  Agregar
+                    </Text>
+              </TouchableOpacity>
+
+              <View></View>
+            </View>
+          </View>
+        </View>
+      </Modal>
+    </ScrollView>
+  );
+};
+
+export default EstaturaScreen;
 

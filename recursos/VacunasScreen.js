@@ -1,174 +1,82 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
   Picker,
   Modal,
   SafeAreaView,
+  ScrollView,
   Text,
-  Dimensions,
   StatusBar,
   View,
   StyleSheet,
   TouchableOpacity,
   FlatList,
+  YellowBox,
 } from "react-native";
 import DatePicker from "react-native-datepicker";
 import { MaterialIcons } from "@expo/vector-icons";
+import moment from "moment";
+import "moment/locale/es";
+import { firebase } from "./utils/firebase";
 import DateTimePicker from "react-native-modal-datetime-picker";
 import styles from "./styles/stylesVacunasScreen";
 
 
 //VISTA HOME PRINCIPAL
-export default class VacunasScreen extends React.Component {
-  static navigationOptions = {
-    headerShown: false,
+const VacunasScreen = ({ route, navigation }) => {
+
+  const [vacuna, setVacuna] = useState([]);
+  const [vacunaEstado, setVacunaEstado] = useState([]);
+  const [data, setData] = useState("");
+  const [estado, setEstado] = useState("");
+  const [modalVisible, setModalVisible] = useState(false);
+
+  const changeEstado = (estado) => {
+    setEstado(estado);
   };
 
-  state = {
-    isDateTimePickerVisible: true,
+  const changeDate = (valor) => {
+    setData(valor);
   };
 
-  _showDateTimePicker = () => this.setState({ isDateTimePickerVisible: true });
+const aplicadas = () => {
+  
+}
 
-  _hideDateTimePicker = () => this.setState({ isDateTimePickerVisible: false });
+  useEffect(() => {
+    YellowBox.ignoreWarnings(["Setting a timer"]);
+    const { idPesos } = route.params;
+    const { uid } = firebase.auth().currentUser;
+    setVacuna(idPesos);
+    vacunas(uid, idPesos.id);
+  }, []);
 
-  _handleDatePicked = (date) => {
-    console.log("A date has been picked: ", date);
-    this._hideDateTimePicker();
+  const vacunas = async (uid, childId) => {
+    console.log('id', uid);
+    console.log('idchi', childId);
+    const arrayVacunas = [];
+    const querySnapshot = firebase
+      .firestore()
+      .collection("categories")
+      .doc("krx7j8IsEC50wHiDNjw0")
+      .collection("records")
+    //.where("userId", "==", uid)
+    //.where("childId", "==", childId);
+    const vacunaId = await querySnapshot.get();
+    vacunaId.forEach((doc) => {
+      //const { date } = doc.data()
+      //const formatoFecha = moment(date.toDate()).format('LL')
+      arrayVacunas.push({
+        ...doc.data(),
+        //date: formatoFecha,
+        id: doc.id
+      })
+    });
+    if (arrayVacunas.length > 0) {
+      setVacunaEstado(arrayVacunas)
+      console.log("arrayVacunas", arrayVacunas);
+    }
   };
 
-  constructor() {
-    super();
-    this.state = {
-      data: [
-        {
-          dosis: "Única dosis",
-          vacuna: "BCG",
-          estado: "false",
-        },
-        {
-          dosis: "Única dosis",
-          vacuna: "Hepatitis B",
-          estado: "false",
-        },
-        {
-          dosis: "1ra dosis",
-          vacuna: "Pentavalente",
-          estado: "false",
-        },
-        {
-          dosis: "1ra dosis",
-          vacuna: "Polio inyección",
-          estado: "false",
-        },
-        {
-          dosis: "1ra dosis",
-          vacuna: "Rotavirus",
-          estado: "false",
-        },
-        {
-          dosis: "1ra dosis",
-          vacuna: "Neumococo",
-          estado: "false",
-        },
-
-        {
-          dosis: "2da dosis",
-          vacuna: "Pentavalente",
-          estado: "false",
-        },
-        {
-          dosis: "2da dosis",
-          vacuna: "Polio inyección",
-          estado: "false",
-        },
-
-        {
-          dosis: "2da dosis",
-          vacuna: "Rotavirus",
-          estado: "false",
-        },
-        {
-          dosis: "2da dosis",
-          vacuna: "Neumococo",
-          estado: "false",
-        },
-        {
-          dosis: "3ra dosis",
-          vacuna: "Pentavalente",
-          estado: "false",
-        },
-        {
-          dosis: "3ra dosis",
-          vacuna: "Polio oral",
-          estado: "false",
-        },
-        {
-          dosis: "1ra dosis",
-          vacuna: "Influenza",
-          estado: "false",
-        },
-        {
-          dosis: "2da dosis",
-          vacuna: "Influenza estacional",
-          estado: "false",
-        },
-        {
-          dosis: "3ra dosis",
-          vacuna: "Neumococo",
-          estado: "false",
-        },
-        {
-          dosis: "1ra dosis",
-          vacuna: "SPR",
-          estado: "false",
-        },
-        {
-          dosis: "1ra dosis",
-          vacuna: "Varicela",
-          estado: "false",
-        },
-        {
-          dosis: "2da dosis",
-          vacuna: "Influenza",
-          estado: "false",
-        },
-        {
-          dosis: "Única dosis",
-          vacuna: "Fiebre amarilla",
-          estado: "false",
-        },
-        {
-          dosis: "2da dosis",
-          vacuna: "SRP",
-          estado: "false",
-        },
-        {
-          dosis: "",
-          vacuna: "DTP",
-          refuerzo: "1er refuerzo",
-          estado: "false",
-        },
-        {
-          dosis: "",
-          vacuna: "Polio oral",
-          refuerzo: "1er refuerzo",
-          estado: "false",
-        },
-        {
-          dosis: "",
-          vacuna: "DTP",
-          refuerzo: "2do refuerzo",
-          estado: "false",
-        },
-        {
-          dosis: "",
-          vacuna: "Polio oral",
-          refuerzo: "Refuerzo",
-          estado: "false",
-        },
-      ],
-    };
-  }
   /* 
     filterVacuna() {
       const newdata = this.state.data.filter((item) => {
@@ -179,202 +87,113 @@ export default class VacunasScreen extends React.Component {
       });
     } */
 
-  /*  buttonPressed() {
-     return (
-       <View
-         style={styles.infoCard}>
- 
- 
- 
-         <View
-           style={{ padding: 10, flexDirection: 'row', alignContent: 'center', alignItems: 'center', justifyContent: 'space-between' }}
-         >
-           <Text>Neumococo</Text>
-           <TouchableOpacity
-             onPress={() => this.props.navigation.navigate('Nino')}
-           >
-             <MaterialIcons
-               name='add'
-               size={20}
-               color='black'
-             />
-           </TouchableOpacity>
-         </View>
- 
-       </View>
-     )
-   } */
-
-  state = {
-    data: "",
-  };
-  state = {
-    peso: "",
-  };
-
-  state = {
-    modalVisible: false,
-    dosis: "",
-    vacuna: "",
-    refuerzo: "",
-    estado: "false",
-  };
-
-  setModalVisible = (visible, item) => {
-    this.setState({
-      modalVisible: visible,
-      dosis: item.dosis,
-      vacuna: item.vacuna,
-      refuerzo: item.refuerzo,
-      estado: item.estado,
-    });
-  };
-
-  render() {
-    const { date, open } = this.state;
-    const value = date ? date.toLocaleString() : "";
-
-    return (
-      <SafeAreaView style={styles.container}>
-        <StatusBar barStyle="light-content"></StatusBar>
-        <TouchableOpacity
-          onPress={() => this.props.navigation.navigate("Nino")}
+  return (
+    <ScrollView style={styles.container}>
+      <StatusBar barStyle="light-content"></StatusBar>
+      <TouchableOpacity
+        onPress={() => navigation.navigate("Nino")}
+      >
+        <Text
+          style={styles.breadCrumb}
         >
-          <Text
-            style={styles.breadCrumb}
-          >
-            {"< Infomación < Vacunas"}{" "}
-          </Text>
+          {"< Infomación < Vacunas"}{" "}
+        </Text>
+      </TouchableOpacity>
+
+      <View
+        style={styles.buttonBox}
+      >
+        <TouchableOpacity style={styles.button}>
+          <Text style={styles.title}>Vacunas pendientes</Text>
         </TouchableOpacity>
 
-        <View
-          style={styles.buttonBox}
-        >
-          <TouchableOpacity style={styles.button}>
-            <Text style={styles.title}>Vacunas pendientes</Text>
-          </TouchableOpacity>
+        <TouchableOpacity style={styles.button}>
+          <Text style={styles.title}>Vacunas aplicadas</Text>
+        </TouchableOpacity>
 
-          <TouchableOpacity style={styles.button}>
-            <Text style={styles.title}>Vacunas aplicadas</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity style={styles.button}>
-            <Text style={styles.title}>Todas</Text>
-          </TouchableOpacity>
-        </View>
-
-        <FlatList
-          data={this.state.data}
-          renderItem={({ item }) => (
+        <TouchableOpacity style={styles.button}>
+          <Text style={styles.title}>Todas</Text>
+        </TouchableOpacity>
+      </View>
+      <View style={styles.containerCards}>
+        {vacunaEstado.map((doc) => {
+          const { dose, state, vaccine, reinforcement } = doc;
+          return (
             <View style={styles.infoCard}>
-              <Text
-                style={styles.vacuna}
-              >
-                {item.dosis}
-                {item.refuerzo}{" "}
-              </Text>
-              <Text
-                style={styles.vacuna1}
-              >
-                {item.vacuna}{" "}
-              </Text>
+              <Text style={styles.vacuna}>{vaccine} </Text>
+              <Text style={styles.vacuna1}>{dose}{reinforcement} </Text>
               <TouchableOpacity
-                onPress={() => {
-                  this.setModalVisible(!this.state.modalVisible, item);
-                }}
-              >
-                <MaterialIcons name="add" size={20} color="black" />
-              </TouchableOpacity>
+              onPress={() => { setModalVisible(true) }}
+            >
+              <MaterialIcons name="add" size={20} color="black" />
+            </TouchableOpacity>
             </View>
-          )}
-        />
+          )
+        }
+        )}
+      </View>
 
-        <Modal
-          animationType="slide"
-          transparent={true}
-          visible={this.state.modalVisible}
-        >
-          <View style={styles.centeredViews}>
-            <View style={styles.modalView}>
-              <MaterialIcons
-                name="close"
-                size={24}
-                onPress={() => {
-                  this.setModalVisible(!this.state.modalVisible, {
-                    modalVisible: false,
-                    dosis: "",
-                    vacuna: "",
-                    refuerzo: "",
-                    estado: "false",
-                  });
-                }}
-              ></MaterialIcons>
+      <Modal
+        animationType="fade"
+        transparent={true}
+        visible={modalVisible}
+      >
+        <View style={styles.centeredViews}>
+          <View style={styles.modalView}>
+            <MaterialIcons
+              name="close"
+              size={24}
+              onPress={() => { setModalVisible(!modalVisible) }}
+            ></MaterialIcons>
 
-              <View style={styles.form}>
-                <View
-                  style={styles.formBox}
-                >
-                  <Text>{"Vacuna:" + this.state.vacuna}</Text>
-                  <Picker
-                    style={styles.pickerComponent}
-                    selectedValue={this.state.estado}
-                    onValueChange={(itemValor, itemIndex) =>
-                      this.setState({
-                        hijo: itemValor,
-                      })
-                    }
-                  >
-                    <Picker.Item label="Estado" value="0" />
-                    <Picker.Item label="Aplicada" value={"true"} />
-                    <Picker.Item label="Pendiente" value={"false"} />
-                  </Picker>
-                </View>
-
-                <View>
-                  <DatePicker
-                    format="DD/MM/YYYY"
-                    style={styles.dateComponent}
-                    date={this.state.data}
-                    onDateChange={this.changeDate}
-                  />
-                </View>
-
-                <TouchableOpacity
-                  style={styles.cumpleaños}
-                  onPress={this._showDateTimePicker}
-                >
-                  <Text
-                    style={styles.textCumpleaños}
-                  >
-                    Cumpleaños
-                  </Text>
-                </TouchableOpacity>
-                <DateTimePicker
-                  isVisible={this.state.isDateTimePickerVisible}
-                  onConfirm={this._handleDatePicked}
-                  onCancel={this._hideDateTimePicker}
-                />
-
-                <TouchableOpacity
-                  style={styles.buttonModal}
-                  onPress={() => {
-                    this.setModalVisible(!this.state.modalVisible);
-                  }}
-                >
-                  <Text style={styles.textAgregar}>
-                    Agregar
-                  </Text>
-                </TouchableOpacity>
-                <View></View>
+            <View style={styles.form}>
+              <View>
+                <Text style={styles.title1}>Agregar vacuna</Text>
               </View>
+              
+              <View
+                style={styles.formBox}
+              >
+                <Picker
+                  style={styles.pickerComponent}
+                  selectedValue={estado}
+                  onValueChange={(estado, itemIndex) =>
+                    changeEstado(estado)
+                  }
+                >
+                  <Picker.Item label="Estado" value="0" />
+                  <Picker.Item label="Aplicada" value={"true"} />
+                  <Picker.Item label="Pendiente" value={"false"} />
+                </Picker>
+              </View>
+
+              <View>
+                <DatePicker
+                  format="DD/MM/YYYY"
+                  style={styles.dateComponent}
+                  date={data}
+                  onDateChange={() => changeDate()}
+                />
+              </View>
+
+              <TouchableOpacity
+                style={styles.buttonModal}
+              >
+                <Text style={styles.textAgregar}>
+                  Agregar
+                  </Text>
+              </TouchableOpacity>
+              <View></View>
             </View>
           </View>
-        </Modal>
+        </View>
+      </Modal>
 
-        <View></View>
-      </SafeAreaView>
-    );
-  }
-}
+      <View></View>
+    </ScrollView>
+  );
+};
+
+export default VacunasScreen;
 
 

@@ -10,22 +10,30 @@ import {
 import AwesomeAlert from "react-native-awesome-alerts";
 import { firebase } from "./utils/firebase";
 import styles from "./styles/stylesLoginScreen";
+import LoadingScreen from "./LoadingScreen"
+
 //VISTA LOGIN
 
-const LoginScreen = (props) => {
+const LoginScreen = ({navigation}) => {
   LayoutAnimation.easeInEaseOut();
+
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState(null);
   const [showAlert, setShowAlert] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleLogin = () => {
     if (email !== "" && password !== "") {
+      setIsLoading(true);
       firebase
         .auth()
         .signInWithEmailAndPassword(email, password)
-        .catch((error) => setErrorMessage(error.message));
+        .catch((error) => {
+          isLoading(false);
+          setErrorMessage(error.message)
+        });
     } else {
       setShowAlert(true);
     }
@@ -60,7 +68,7 @@ const LoginScreen = (props) => {
           />
         </View>
       </View>
-      <TouchableOpacity onPress={() => props.navigation.navigate("")}>
+      <TouchableOpacity onPress={() => navigation.push("")}>
         <Text style={styles.textRecoverpassword}>¿Olvido su contraseña?</Text>
       </TouchableOpacity>
 
@@ -74,7 +82,7 @@ const LoginScreen = (props) => {
 
       <TouchableOpacity
         style={styles.buttonRegister}
-        onPress={() => props.navigation.navigate("Register")}
+        onPress={() => navigation.push("Register")}
       >
         <Text style={{ color: "#414959", fontSize: 14 }}>
           ¿No tiene cuenta?{" "}
@@ -84,11 +92,11 @@ const LoginScreen = (props) => {
         </Text>
       </TouchableOpacity>
 
-      <AwesomeAlert
+      {/* <AwesomeAlert
         show={showAlert}
         showProgress={false}
         title="Importante"
-        message="debe ingresar su correo y contraseña"
+        message="Debe ingresar su correo y contraseña"
         closeOnTouchOutside={true}
         closeOnHardwareBackPress={false}
         showCancelButton={false}
@@ -102,7 +110,7 @@ const LoginScreen = (props) => {
         onConfirmPressed={() => {
           setShowAlert(false);
         }}
-      />
+      /> */}
     </View>
   );
 };

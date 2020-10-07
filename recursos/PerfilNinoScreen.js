@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
   ScrollView,
   Image,
@@ -8,174 +8,117 @@ import {
   TouchableOpacity,
   LayoutAnimation,
   AsyncStorage,
+  YellowBox,
 } from "react-native";
+import { set } from "react-native-reanimated";
 import styles from "./styles/stylesPerfilNinoScreen";
 
 
 //VISTA HOME PRINCIPAL
-export default class PerfilNinoScreen extends React.Component {
-  static navigationOptions = {
-    headerShown: true,
-  };
+const PerfilNinoScreen = ({ route, navigation }) => {
+  LayoutAnimation.easeInEaseOut();
+  const [user, setUser] = useState({});
 
-  state = {
-    name: "",
-  };
+  useEffect(() => {
+    YellowBox.ignoreWarnings(["Setting a timer"]);
+    const { id } = route.params;
+    setUser(id[0]);
+  }, []);
 
-  state = {
-    escolaridade: "",
-  };
+  /* const getDataTarget {user.name}= async (id) => {
 
-  state = {
-    sangre: "",
-  };
+  } */
 
-  state = {
-    data: "",
-  };
+  return (
+    <ScrollView style={styles.container}>
+      <View style={styles.containerCards}>
+      <View style={styles.infoCard}>
+              
 
-  constructor() {
-    super();
-    this.state = {
-      Nino: "",
-    };
-    try {
-      AsyncStorage.getItem("database_ninoinfo1").then((value) => {
-        this.setState({
-          Nino: JSON.parse(value),
-        });
-      });
-    } catch (err) {
-      console.log(err);
-    }
-  }
-  parseData() {
-    if (this.state.Nino) {
-      return this.state.Nino.map((dataNino, i) => {
-        return (
-          <View
-            //MOSTRANDO LA DATA RECOLECTADA DEL NIÑO
-            style={styles.infoCard}
-            key={i}
-          >
-            <View>
-              <Text
-                style={{
-                  textAlign: "center",
-                  backgroundColor: "#05A4AC",
-                  padding: 6,
-                  color: "#fff",
-                  textTransform: "uppercase",
-                }}
-              >
-                {dataNino.name}{" "}
-              </Text>
-            </View>
-
-            <View style={{ flexDirection: "row" }}>
-              <View>
-                <Image
-                  source={require("../recursos/imagenes/logoSanitos.png")}
-                  style={{ width: 70, height: 70 }}
-                />
-              </View>
-              <View style={{ padding: 10 }}>
-                <Text>{dataNino.escolaridade} </Text>
-                <Text>{dataNino.sangre} </Text>
-                <Text>{dataNino.data} </Text>
+              <View style={styles.rowCard}>
+                <View>
+                  <Image
+                    source={require("../recursos/imagenes/logoSanitos.png")}
+                    style={{ width: 100, height: 100 }}
+                  />
+                </View>
+                <View style={styles.paddingCard}>
+                  <Text>{user.name} </Text>
+                  <Text>Edad: {user.birthday} </Text>
+                  <Text>Tipo de sangre: {user.bloodType}</Text>
+                  <Text>Sexo: {user.gender} </Text>
+                </View>
               </View>
             </View>
-          </View>
-        );
-      });
-    }
-  }
+      </View>
 
-  render() {
-    LayoutAnimation.easeInEaseOut();
-
-    return (
-      <ScrollView style={styles.container}>
-        <View style={styles.containerCards}>{this.parseData()}</View>
-
-        <View>
-          <View
-            style={styles.boxIconos}
-          >
-            <View style={styles.containerIconos}>
-              <TouchableOpacity
-                onPress={() => this.props.navigation.navigate("Peso")}
-              >
-                <Image
-                  resizeMode="contain"
-                  source={require("../recursos/imagenes/peso.png")}
-                  style={styles.iconCenter}
-                />
-                <Text
-                  style={styles.textIcon}
-                >
-                  Peso
-                </Text>
-              </TouchableOpacity>
-            </View>
-
-            <View style={styles.containerIconos}>
-              <TouchableOpacity
-                onPress={() => this.props.navigation.navigate("Estatura")}
-              >
-                <Image
-                  resizeMode="contain"
-                  source={require("../recursos/imagenes/estatura.png")}
-                  style={styles.iconCenter}
-                />
-                <Text
-                  style={styles.textIcon}
-                >
-                  Estatura
-                </Text>
-              </TouchableOpacity>
-            </View>
+      <View>
+        <View style={styles.boxIconos}>
+          <View style={styles.containerIconos}>
+            <TouchableOpacity
+              onPress={() => {
+                navigation.navigate("Peso", { idPesos: user });
+              }}
+            >
+              <Image
+                resizeMode="contain"
+                source={require("../recursos/imagenes/peso.png")}
+                style={styles.iconCenter}
+              />
+              <Text style={styles.textIcon}>Peso</Text>
+            </TouchableOpacity>
           </View>
 
-          <View
-            style={styles.containerIcon2}
-          >
-            <View style={styles.containerIconos}>
-              <TouchableOpacity
-                onPress={() => this.props.navigation.navigate("Vacunas")}
-              >
-                <Image
-                  resizeMode="contain"
-                  source={require("../recursos/imagenes/crecimiento.png")}
-                  style={styles.iconCenter}
-                />
-                <Text
-                  style={styles.textIcon}
-                >
-                  Estadistica
-                </Text>
-              </TouchableOpacity>
-            </View>
-
-            <View style={styles.containerIconos}>
-              <TouchableOpacity
-                onPress={() => this.props.navigation.navigate("Vacunas")}
-              >
-                <Image
-                  resizeMode="contain"
-                  source={require("../recursos/imagenes/vacunas.png")}
-                  style={styles.iconCenter}
-                />
-                <Text
-                  style={styles.textIcon}
-                >
-                  Vacunas
-                </Text>
-              </TouchableOpacity>
-            </View>
+          <View style={styles.containerIconos}>
+            <TouchableOpacity
+              onPress={() =>{
+                navigation.navigate("Estatura", { idPesos: user });
+              }}
+            >
+              <Image
+                resizeMode="contain"
+                source={require("../recursos/imagenes/estatura.png")}
+                style={styles.iconCenter}
+              />
+              <Text style={styles.textIcon}>Estatura</Text>
+            </TouchableOpacity>
           </View>
         </View>
-      </ScrollView>
-    );
-  }
-}
+
+        <View style={styles.containerIcon2}>
+          <View style={styles.containerIconos}>
+            <TouchableOpacity
+              onPress={() => {
+                navigation.navigate("Vacunas", { idPesos: user });
+              }}
+            >
+              <Image
+                resizeMode="contain"
+                source={require("../recursos/imagenes/crecimiento.png")}
+                style={styles.iconCenter}
+              />
+              <Text style={styles.textIcon}>Estadistica</Text>
+            </TouchableOpacity>
+          </View>
+
+          <View style={styles.containerIconos}>
+            <TouchableOpacity
+              onPress={() => {
+                navigation.navigate("Vacunas", { idPesos: user });
+              }}
+            >
+              <Image
+                resizeMode="contain"
+                source={require("../recursos/imagenes/vacunas.png")}
+                style={styles.iconCenter}
+              />
+              <Text style={styles.textIcon}>Vacunas</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </View>
+    </ScrollView>
+  );
+};
+
+export default PerfilNinoScreen;
