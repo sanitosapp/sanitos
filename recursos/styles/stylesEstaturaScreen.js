@@ -5,6 +5,7 @@ const styles = StyleSheet.create({
       flex: 1,
     },
     infoCard: {
+      flexDirection:'row',
       marginBottom: 24,
       borderWidth: 1,
       borderColor: "#05A4AC",
@@ -77,7 +78,14 @@ const styles = StyleSheet.create({
     textAgregar: { 
       color: "#ffffff", 
       fontWeight: "500" 
-    }
+    },
+    estatura:{
+        borderRightWidth: 1,
+        borderRightColor: "#1C94A4",
+        width: 113,
+        height: 40,
+        textAlign: "center",
+    },
 
   });
   

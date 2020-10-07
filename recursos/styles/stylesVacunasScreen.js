@@ -1,4 +1,4 @@
-import { StyleSheet, Dimensions } from "react-native";
+import { StyleSheet } from "react-native";
 
 const styles = StyleSheet.create({
   container: {
@@ -17,7 +17,7 @@ const styles = StyleSheet.create({
     width: 90,
   },
   buttonModal: {
-    marginTop: 68,
+    marginTop: 18,
     backgroundColor: "#E9446A",
     borderRadius: 4,
     height: 40,
@@ -40,7 +40,6 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   btnTab: {
-    width: Dimensions.get("window").width / 3.5,
     flexDirection: "row",
     borderWidth: 0.5,
     borderColor: "#EBEBEB",
