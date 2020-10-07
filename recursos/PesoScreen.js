@@ -3,7 +3,6 @@ import {
   Alert,
   Picker,
   TextInput,
-  TouchableWithoutFeedback,
   ScrollView,
   View,
   Text,
@@ -11,12 +10,12 @@ import {
   StyleSheet,
   TouchableOpacity,
   LayoutAnimation,
-  AsyncStorage,
   Modal,
   YellowBox,
 } from "react-native";
 import DatePicker from "react-native-datepicker";
 import moment from "moment";
+import "moment/locale/es";
 import { MaterialIcons, Feather } from "@expo/vector-icons";
 import { firebase } from "./utils/firebase";
 import styles from "./styles/stylesPesoScreen";
@@ -26,16 +25,15 @@ import styles from "./styles/stylesPesoScreen";
 const PesoScreen = ({ route, navigation }) => {
   LayoutAnimation.easeInEaseOut();
 
-  const [peso, setPeso] = useState("");
-  const [pesoId, setPesoId] = useState([]);
+  const [peso, setPeso] = useState([]);
+  const [peso1, setPeso1] = useState({});
+  const [pesoRegister, setPesoRegister] = useState([]);
   const [data, setData] = useState("");
   const [email, setEmail] = useState("");
   const [displayName, setDisplayName] = useState("");
   const [name, setName] = useState("");
   const [childUsers, setChildUsers] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
-
-  const { idPeso } = route.params;
 
   const changePeso = (peso) => {
     setPeso(peso);
@@ -47,34 +45,14 @@ const PesoScreen = ({ route, navigation }) => {
 
   useEffect(() => {
     YellowBox.ignoreWarnings(["Setting a timer"]);
-    const { email, displayName, uid } = firebase.auth().currentUser;
-    console.log(uid);
-    setDisplayName(displayName);
-    getData(uid);
-    pesos(idPeso);
-    setEmail(email);
+    const { idPesos } = route.params;
+    const { uid } = firebase.auth().currentUser;
+    setPeso1(idPesos);
+    pesos(uid, idPesos.id);
   }, []);
 
-  const getData = async (uid) => {
-    const querySnapshot = firebase.firestore().collection("usuarios").doc(uid).collection('childUsers');
-    const childUsers = await querySnapshot.get();
-    const children = []
-    childUsers.forEach((doc) => {
-      const { birthday } = doc.data()
-      const formatoFecha = moment(birthday.toDate()).format('LL')
-      children.push({
-        ...doc.data(),
-        birthday: formatoFecha,
-        id: doc.id
-      })
-    });
-    if (children.length > 0) {
 
-      setChildUsers(children)
-    }
-  };
-
-  const pesos = async (idPeso) => {
+  const pesos = async (uid, childId) => {
     const arrayPeso = [];
     const querySnapshot = firebase
       .firestore()
@@ -82,51 +60,22 @@ const PesoScreen = ({ route, navigation }) => {
       .doc("peso")
       .collection("records")
       .where("userId", "==", uid)
-      .where("childId", "==", idPeso);
+      .where("childId", "==", childId);
     const pesoId = await querySnapshot.get();
     pesoId.forEach((doc) => {
-      arrayPeso.push({ id: doc.id, ...doc.data() });
+      const { date } = doc.data()
+      const formatoFecha = moment(date.toDate()).format('LL')
+      arrayPeso.push({
+        ...doc.data(),
+        date: formatoFecha,
+        id: doc.id
+      })
     });
     if (arrayPeso.length > 0) {
-      setPesoId(arrayPeso)
+      setPesoRegister(arrayPeso)
       console.log("arrayPeso", arrayPeso);
     }
   };
-
-  /* const buttonPressed = () => {
-    const arrayDataNino = [];
-    if (this.state.peso && this.state.data) {
-      const dataNino = {
-        peso: this.state.peso,
-        data: this.state.data,
-      };
-      arrayDataNino.push(dataNino);
-      try {
-        AsyncStorage.getItem("database_peso").then((value) => {
-          if (value !== null) {
-            const d = JSON.parse(value);
-            d.push(dataNino);
-            AsyncStorage.setItem("database_peso", JSON.stringify(d)).then(
-              () => {
-                this.modalHandler();
-              }
-            );
-          } else {
-            AsyncStorage.setItem(
-              "database_peso",
-              JSON.stringify(arrayDataNino)
-            ).then(() => {
-              this.modalHandler();
-            });
-          }
-        });
-      } catch (err) {
-        console.log(err);
-      }
-    } else {
-      Alert.alert("Falta completar un campo");
-    }
-  } */
 
   return (
     <ScrollView style={styles.container}>
@@ -148,18 +97,17 @@ const PesoScreen = ({ route, navigation }) => {
         <Text style={styles.textWhite}>Peso</Text>
       </View>
 
-      <Text>idPeso: {JSON.stringify(idPeso)}</Text>
-
       <View style={styles.containerCards}>
-        {pesoId.map((doc) => {
-            const { date, weight, id } = doc;
-            return (
-              <View>
-              
-                <Text>{date}{weight}{id} </Text>
-              </View>
-            )
-          }
+        {pesoRegister.map((doc) => {
+          const { date, weight, id } = doc;
+          return (
+            <View>
+
+              <Text>{date}</Text>
+              <Text>{weight} </Text>
+            </View>
+          )
+        }
         )}
       </View>
 

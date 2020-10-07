@@ -92,6 +92,24 @@ const HomeStackScreen = () => {
           fontWeight: "normal",
         },
       }} />
+      <HomeStack.Screen name="Estatura" component={EstaturaScreen} options={{
+        title: "Perfil del niño/a", headerStyle: {
+          backgroundColor: "#05A4AC"
+        },
+        headerTintColor: '#fff',
+        headerTitleStyle: {
+          fontWeight: "normal",
+        },
+      }} />
+      <HomeStack.Screen name="Vacunas" component={VacunasScreen} options={{
+        title: "Perfil del niño/a", headerStyle: {
+          backgroundColor: "#05A4AC"
+        },
+        headerTintColor: '#fff',
+        headerTitleStyle: {
+          fontWeight: "normal",
+        },
+      }} />
     </HomeStack.Navigator>
   );
 }

@@ -25,7 +25,7 @@ import styles from "./styles/stylesHomeScreen";
 
 
 //VISTA HOME PRINCIPAL
- const HomeScreen = ({navigation}) => {
+const HomeScreen = ({ navigation }) => {
   LayoutAnimation.easeInEaseOut();
   const [email, setEmail] = useState("");
   const [displayName, setDisplayName] = useState("");
@@ -39,7 +39,6 @@ import styles from "./styles/stylesHomeScreen";
   useEffect(() => {
     YellowBox.ignoreWarnings(["Setting a timer"]);
     const { email, displayName, uid } = firebase.auth().currentUser;
-    console.log(uid);
     setDisplayName(displayName);
     getData(uid);
     setEmail(email);
@@ -83,11 +82,11 @@ import styles from "./styles/stylesHomeScreen";
     }
   };
 
- /*  const changeScreen = (id) => {
-    navigation.navigate("Nino", {
-      childId:id,
-    });
-  } */
+  /*  const changeScreen = (id) => {
+     navigation.navigate("Nino", {
+       childId:id,
+     });
+   } */
 
   const changeName = (name) => {
     setName(name);
@@ -111,9 +110,9 @@ import styles from "./styles/stylesHomeScreen";
         Bienvenida {email} !{"\n"}
         Estamos felices de verte por aquí
       </Text>
-      <View style={styles.containerCards} onPress={()=>changeScreen(id)}>
+      <View style={styles.containerCards} onPress={() => changeScreen(id)}>
         {childUsers.map((doc) => {
-          const { name, birthday, bloodType, gender,id } = doc;
+          const { name, birthday, bloodType, gender, id } = doc;
           return (
             <View style={styles.infoCard}>
               <View>
@@ -139,9 +138,11 @@ import styles from "./styles/stylesHomeScreen";
                 </View>
               </View>
               <View>
-                <TouchableOpacity onPress={()=>{navigation.navigate('Nino',{
-                  id:childUsers,
-                })}}>
+                <TouchableOpacity onPress={() => {
+                  navigation.navigate('Nino', {
+                    id: childUsers, 
+                  })
+                }}>
                   <Text
                     style={styles.textCard}
                   >

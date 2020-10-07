@@ -17,7 +17,7 @@ const styles = StyleSheet.create({
       width: 90,
     },
     buttonModal: {
-      marginTop: 68,
+      marginTop: 18,
       backgroundColor: "#E9446A",
       borderRadius: 4,
       height: 40,
