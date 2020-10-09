@@ -192,6 +192,8 @@ const PesoScreen = ({ route }) => {
                   onChangeText={(peso) => changePeso(peso)}
                   value={peso}
                 />
+
+                
               </View>
 
              <View>
