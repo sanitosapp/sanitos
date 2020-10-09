@@ -82,7 +82,6 @@ const HomeScreen = ({ navigation }) => {
         gender,
         name,
       };
-
       handleAddChildUser(documentChildUser);
     } else {
       alert("llene todo los campos");

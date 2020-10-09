@@ -110,6 +110,15 @@ const styles = StyleSheet.create({
   button: {
     backgroundColor: "red",
   },
+    input: {
+      borderColor: "#ccc",
+      borderWidth: 1,
+      borderRadius: 4,
+      height: 40,
+      fontSize: 15,
+      color: "#161F3D",
+      padding: 10,
+    },
 });
 
 export default styles;
