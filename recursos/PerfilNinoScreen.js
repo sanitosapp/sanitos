@@ -22,7 +22,7 @@ const PerfilNinoScreen = ({ route, navigation }) => {
   useEffect(() => {
     YellowBox.ignoreWarnings(["Setting a timer"]);
     const { id } = route.params;
-    setUser(id[0]);
+    setUser(id);
   }, []);
 
   /* const getDataTarget {user.name}= async (id) => {
@@ -33,8 +33,6 @@ const PerfilNinoScreen = ({ route, navigation }) => {
     <ScrollView style={styles.container}>
       <View style={styles.containerCards}>
       <View style={styles.infoCard}>
-              
-
               <View style={styles.rowCard}>
                 <View>
                   <Image

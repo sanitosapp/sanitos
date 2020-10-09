@@ -4,6 +4,7 @@ import styles from "../styles/stylesHomeScreen";
 
 const CardChildUsers = ({ childUsers, navigation }) => {
   return childUsers.map((doc, index) => {
+    console.log(doc)
     const { name, birthday, bloodType, gender } = doc;
     return (
       <TouchableOpacity
@@ -11,7 +12,7 @@ const CardChildUsers = ({ childUsers, navigation }) => {
         key={index}
         onPress={() => {
           navigation.navigate("Nino", {
-            id: childUsers,
+            id: doc,
           });
         }}
       >

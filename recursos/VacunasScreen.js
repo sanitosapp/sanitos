@@ -2,22 +2,17 @@ import React, { useState, useEffect } from "react";
 import {
   Picker,
   Modal,
-  SafeAreaView,
   ScrollView,
   Text,
   StatusBar,
   View,
-  StyleSheet,
   TouchableOpacity,
-  FlatList,
   YellowBox,
 } from "react-native";
 import DatePicker from "react-native-datepicker";
 import { MaterialIcons } from "@expo/vector-icons";
-import moment from "moment";
 import "moment/locale/es";
 import { firebase } from "./utils/firebase";
-import DateTimePicker from "react-native-modal-datetime-picker";
 import styles from "./styles/stylesVacunasScreen";
 
 
@@ -38,9 +33,7 @@ const VacunasScreen = ({ route, navigation }) => {
     setData(valor);
   };
 
-const aplicadas = () => {
-  
-}
+
 
   useEffect(() => {
     YellowBox.ignoreWarnings(["Setting a timer"]);
@@ -51,8 +44,7 @@ const aplicadas = () => {
   }, []);
 
   const vacunas = async (uid, childId) => {
-    console.log('id', uid);
-    console.log('idchi', childId);
+    
     const arrayVacunas = [];
     const querySnapshot = firebase
       .firestore()
@@ -61,33 +53,18 @@ const aplicadas = () => {
       .collection("childUsers")
       .doc(childId)
       .collection("vacunas")
-    //.where("userId", "==", uid)
-    //.where("childId", "==", childId);
+  
     const vacunaId = await querySnapshot.get();
     vacunaId.forEach((doc) => {
-      //const { date } = doc.data()
-      //const formatoFecha = moment(date.toDate()).format('LL')
       arrayVacunas.push({
         ...doc.data(),
-        //date: formatoFecha,
         id: doc.id
       })
     });
     if (arrayVacunas.length > 0) {
       setVacunaEstado(arrayVacunas)
-      console.log("arrayVacunas", arrayVacunas);
     }
   };
-
-  /* 
-    filterVacuna() {
-      const newdata = this.state.data.filter((item) => {
-        return item !== '1ra'
-      })
-      this.setState({
-        data: newdata
-      });
-    } */
 
   return (
     <ScrollView style={styles.container}>
@@ -122,14 +99,21 @@ const aplicadas = () => {
           const { dose, state, vaccine, reinforcement } = doc;
           return (
             <View style={styles.infoCard}>
-              <Text style={styles.vacuna}>{vaccine} </Text>
-              <Text style={styles.vacuna1}>{dose}{reinforcement} </Text>
-              <TouchableOpacity
-              onPress={() => { setModalVisible(true) }}
+              <View style={styles.col1}> 
+                <Text style={styles.text}>{vaccine}</Text>
+              </View>
+              <View style={styles.col2}>
+                <Text style={styles.text}>{dose}{reinforcement} </Text>
+              </View>
+            
+                <TouchableOpacity
+                  onPress={() => { setModalVisible(true) }}
+                   style={styles.col3}
             >
               <MaterialIcons name="add" size={20} color="black" />
-            </TouchableOpacity>
-            </View>
+                </TouchableOpacity>
+              </View>      
+           
           )
         }
         )}

@@ -11,10 +11,11 @@ const styles = StyleSheet.create({
     marginHorizontal: 10,
     backgroundColor: "#E9446A",
     borderRadius: 4,
-    height: 39,
+    height: 40,
     alignItems: "center",
     justifyContent: "center",
-    width: 90,
+    width: '28%',
+  
   },
   buttonModal: {
     marginTop: 18,
@@ -26,7 +27,8 @@ const styles = StyleSheet.create({
     width: 200,
   },
   title: {
-    fontSize: 16,
+    fontSize: 12,
+    paddingHorizontal:10,
     textAlign: "center",
     color: "#fff",
   },
@@ -58,11 +60,10 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "#05A4AC",
     borderRadius: 4,
-    width: 300,
-    height: 40,
-    left: 30,
-    justifyContent: "center",
-    alignItems: "center",
+    width: "90%",
+    height: 50,
+    marginHorizontal:'5%',
+    backgroundColor:'white'
   },
   pickerComponent: {
     height: 40,
@@ -108,20 +109,27 @@ const styles = StyleSheet.create({
     justifyContent: "space-evenly",
     marginTop: 20,
   },
-  vacuna: {
+  col1: {
     borderRightWidth: 1,
     borderRightColor: "#1C94A4",
-    width: 140,
-    height: 40,
-    textAlign: "center",
-    justifyContent: "center",
+    width: '30%',
+    height: 49,
+    justifyContent: 'center',
+    alignItems:'center'
   },
-  vacuna1: {
+  col2: {
     borderRightWidth: 1,
     borderRightColor: "#1C94A4",
-    width: 113,
-    height: 40,
-    textAlign: "center",
+    width: '55%',
+    height: 49,
+     justifyContent: 'center',
+    alignItems:'center'
+  },
+  col3: {
+    width: '15%',
+    height: 49,
+     justifyContent: 'center',
+    alignItems:'center'
   },
   formBox: {
     marginTop: 20,
@@ -152,6 +160,10 @@ const styles = StyleSheet.create({
     color: "#ffffff",
     fontWeight: "500",
   },
+  text: {
+    fontSize: 12,
+    textAlign:'center'
+  }
 });
 
 export default styles;

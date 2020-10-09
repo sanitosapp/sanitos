@@ -10,8 +10,9 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "#05A4AC",
     borderRadius: 4,
-    width: 300,
+    width:'100%',
     left: 30,
+    backgroundColor:'red'
   },
   containerCards: {
     marginTop: 30,
@@ -53,7 +54,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "#05A4AC",
     borderRadius: 4,
-    width: 300,
+    width: '100%',
   },
   textName: {
     fontSize: 16,
