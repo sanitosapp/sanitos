@@ -15,13 +15,45 @@ const styles = StyleSheet.create({
     containerCards: {
       marginTop: 30,
     },
+     centeredViews: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(212, 228, 231, 0.5)",
+  }, 
+  modalView: {
+    margin: 20,
+    width: 300,
+    height: 350,
+    backgroundColor: "white",
+    borderRadius: 4,
+    padding: 30,
+
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
+
+   iconBox: {
+    marginLeft: 220,
+  },
+     title1: {
+    fontSize: 16,
+    textAlign: "center",
+    textTransform: "uppercase",
+    marginVertical: 10,
+  },
     button: {
       height: 40,
-      width: 300,
-      left: 30,
+      width: "80%",
+      marginHorizontal:"10%",
       backgroundColor: "#E9446A",
       borderRadius: 4,
-  
       alignItems: "center",
       justifyContent: "center",
     },
@@ -43,15 +75,36 @@ const styles = StyleSheet.create({
     },
     boxTitle:{
         marginTop: 40,
-        left: 28,
+        marginHorizontal:"10%",
         flexDirection: "row",
         backgroundColor: "#05A4AC",
         justifyContent: "space-around",
-        width: 304,
+        width: "80%",
         height: 36,
         borderRadius: 4,
         alignItems: "center",
-    },
+  },
+    
+  boxWeight: {
+        marginBottom: 20,
+        marginHorizontal:"10%",
+        flexDirection: "row",
+        backgroundColor: "#05A4AC",
+        justifyContent: "space-around",
+        width: "80%",
+        height: 36,
+        borderRadius: 4,
+        alignItems: "center",
+        marginHorizontal:"10%",
+        flexDirection: "row",
+        backgroundColor: "white",
+        justifyContent: "space-around",
+        width: "80%",
+        height: 36,
+        borderRadius: 4,
+        alignItems: "center", 
+  },
+  
     textWhite:{ 
         color: "#fff" 
     },
@@ -66,7 +119,15 @@ const styles = StyleSheet.create({
         backgroundColor: "grey",
         padding: 10,
         borderRadius: 4,
-    }, 
+  }, 
+     buttonModal: {
+    backgroundColor: "#E9446A",
+    borderRadius: 4,
+    height: 35,
+    alignItems: "center",
+    justifyContent: "center",
+    marginTop: 25,
+  },
 });
 
 export default styles;

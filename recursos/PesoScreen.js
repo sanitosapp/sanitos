@@ -1,59 +1,51 @@
 import React, { useState, useEffect } from "react";
 import {
-  Alert,
-  Picker,
   TextInput,
   ScrollView,
   View,
   Text,
   StatusBar,
-  StyleSheet,
   TouchableOpacity,
   LayoutAnimation,
   Modal,
-  YellowBox,
+  Button
 } from "react-native";
-import DatePicker from "react-native-datepicker";
+import DateTimePicker from "@react-native-community/datetimepicker";
 import moment from "moment";
 import "moment/locale/es";
-import { MaterialIcons, Feather } from "@expo/vector-icons";
+import { MaterialIcons } from "@expo/vector-icons";
 import { firebase } from "./utils/firebase";
 import styles from "./styles/stylesPesoScreen";
 
 
 //VISTA HOME PRINCIPAL
-const PesoScreen = ({ route, navigation }) => {
+const PesoScreen = ({ route }) => {
   LayoutAnimation.easeInEaseOut();
 
-  const [peso, setPeso] = useState([]);
-  const [peso1, setPeso1] = useState({});
-  const [pesoRegister, setPesoRegister] = useState([]);
-  const [data, setData] = useState("");
-  const [email, setEmail] = useState("");
-  const [displayName, setDisplayName] = useState("");
-  const [name, setName] = useState("");
-  const [childUsers, setChildUsers] = useState([]);
+  const [peso, setPeso] = useState('');
+  const [weightRegister, setWeightRegister] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
-
+  const [date, setDate] = useState(new Date());
+  const [mode, setMode] = useState("date");
+  const [show, setShow] = useState(false);
+  const [selectDate, setSelectDate] = useState(false);
+  const [childId, setChildId] = useState('');
+  const [userId, setUserId] = useState('');
+  
   const changePeso = (peso) => {
     setPeso(peso);
   }
 
-  const changeDate = (valor) => {
-    setData(valor);
-  };
-
   useEffect(() => {
-    YellowBox.ignoreWarnings(["Setting a timer"]);
     const { idPesos } = route.params;
     const { uid } = firebase.auth().currentUser;
-    setPeso1(idPesos);
-    pesos(uid, idPesos.id);
+    setChildId(idPesos.id)
+    setUserId(uid)
+    getDataWeight(uid, idPesos.id);
   }, []);
 
 
-  const pesos = async (uid, childId) => {
-    const arrayPeso = [];
+  const getDataWeight = async (uid, childId) => {
     const querySnapshot = firebase
       .firestore()
       .collection("categories")
@@ -61,8 +53,10 @@ const PesoScreen = ({ route, navigation }) => {
       .collection("records")
       .where("userId", "==", uid)
       .where("childId", "==", childId);
-    const pesoId = await querySnapshot.get();
-    pesoId.forEach((doc) => {
+    
+     querySnapshot.onSnapshot((querySnapshot) => {
+     const arrayPeso = [];
+      querySnapshot.forEach((doc) => {
       const { date } = doc.data()
       const formatoFecha = moment(date.toDate()).format('LL')
       arrayPeso.push({
@@ -70,16 +64,70 @@ const PesoScreen = ({ route, navigation }) => {
         date: formatoFecha,
         id: doc.id
       })
-    });
-    if (arrayPeso.length > 0) {
-      setPesoRegister(arrayPeso)
-      console.log("arrayPeso", arrayPeso);
+      });
+       
+      if (arrayPeso.length > 0) {
+      setWeightRegister(arrayPeso)
     }
+     });
+  };
+
+   const onChange = (event, selectedDate) => {
+    const currentDate = selectedDate || date;
+    setShow(Platform.OS === "ios");
+    setDate(currentDate);
+  };
+
+  const showMode = (currentMode) => {
+    setShow(true);
+    setMode(currentMode);
+  };
+
+  const showDatepicker = () => {
+    setSelectDate(true);
+    showMode("date");
+  };
+
+  const handleOnChange = () => {
+    if (selectDate && peso !== "") {
+      let now = new Date(date);
+      const documentChildWeight = {
+        childId,
+        date: firebase.firestore.Timestamp.fromDate(now),
+        userId,
+        weight:parseInt(peso) 
+      };
+      handleAddWeight(documentChildWeight)
+    } else {
+      alert("llene todo los campos");
+    }
+  }
+
+
+
+  const handleAddWeight = (documentChildWeight) => {
+    const ref = firebase
+      .firestore()
+      .collection("categories")
+      .doc("peso")
+      .collection("records");
+    ref
+      .add(documentChildWeight)
+      .then((docRef) => {
+        const { id } = docRef;
+        console.log("adding document: ",id)
+        setModalVisible(false);
+        setPeso('');
+        setSelectDate(false);
+      })
+      .catch(function (error) {
+        console.error("Error adding document: ", error);
+      });
   };
 
   return (
     <ScrollView style={styles.container}>
-      <StatusBar barStyle="light-content"></StatusBar>
+      <StatusBar barStyle="light-content" />
       <TouchableOpacity
         onPress={() => props.navigation.navigate("Nino")}
       >
@@ -98,11 +146,10 @@ const PesoScreen = ({ route, navigation }) => {
       </View>
 
       <View style={styles.containerCards}>
-        {pesoRegister.map((doc) => {
-          const { date, weight, id } = doc;
+        {weightRegister.map((doc) => {
+          const { date, weight} = doc;
           return (
-            <View>
-
+            <View  style={styles.boxWeight}>
               <Text>{date}</Text>
               <Text>{weight} </Text>
             </View>
@@ -115,7 +162,6 @@ const PesoScreen = ({ route, navigation }) => {
 
         <TouchableOpacity style={styles.button} onPress={() => { setModalVisible(true) }}>
           <Text style={styles.textButton}>
-            {" "}
               + Agregue nueva medida
             </Text>
         </TouchableOpacity>
@@ -130,7 +176,8 @@ const PesoScreen = ({ route, navigation }) => {
               name="close"
               size={24}
               onPress={() => { setModalVisible(!modalVisible) }}
-            ></MaterialIcons>
+              style={styles.iconBox}
+              />
 
             <View style={styles.form}>
               <View>
@@ -144,27 +191,44 @@ const PesoScreen = ({ route, navigation }) => {
                   autoCapitalize="none"
                   onChangeText={(peso) => changePeso(peso)}
                   value={peso}
-                ></TextInput>
-              </View>
-
-              <View>
-                <DatePicker
-                  format="DD/MM/YYYY"
-                  style={styles.dateComponent}
-                  date={data}
-                  onDateChange={() => changeDate()}
                 />
               </View>
 
+             <View>
+                <View>
+                  <View
+                    style={{
+                      color: "#ffffff",
+                      fontWeight: "500",
+                      marginTop: 10,
+                    }}
+                  >
+                    <Button
+                      onPress={showDatepicker}
+                      title="fecha de nacimiento"
+                    />
+                  </View>
+
+                  {show && (
+                    <DateTimePicker
+                      testID="dateTimePicker"
+                      value={date}
+                      mode={mode}
+                      is24Hour={true}
+                      display="default"
+                      onChange={onChange}
+                    />
+                  )}
+                </View>
+              </View>
               <TouchableOpacity
-                style={styles.button}
-                onPress={() => modalHandler()}
+                 style={styles.buttonModal}
+                onPress={() => handleOnChange()}
               >
                 <Text style={{ color: "#ffffff", fontWeight: "500" }}>
                   Agregar
                     </Text>
               </TouchableOpacity>
-              <View></View>
             </View>
           </View>
         </View>
