@@ -103,7 +103,7 @@ const VacunasScreen = ({ route, navigation }) => {
                 <Text style={styles.text}>{vaccine}</Text>
               </View>
               <View style={styles.col2}>
-                <Text style={styles.text}>{dose}{reinforcement} </Text>
+                <Text style={styles.text}>{dose==="no tiene" ? null:dose}{reinforcement==="no tiene" ? null:reinforcement} </Text>
               </View>
             
                 <TouchableOpacity

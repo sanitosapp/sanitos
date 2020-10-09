@@ -35,13 +35,7 @@ const CardChildUsers = ({ childUsers, navigation }) => {
           </View>
         </View>
         <View>
-          <TouchableOpacity
-            onPress={() => {
-              navigation.navigate("Nino", {
-                id: childUsers,
-              });
-            }}
-          >
+          <TouchableOpacity>
             <Text style={styles.textCard}> + Presiona aqui para ver mas </Text>
           </TouchableOpacity>
         </View>
