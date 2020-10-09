@@ -154,6 +154,8 @@ const PesoScreen = ({ route, navigation }) => {
                   date={data}
                   onDateChange={() => changeDate()}
                 />
+
+                
               </View>
 
               <TouchableOpacity

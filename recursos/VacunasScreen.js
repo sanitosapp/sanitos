@@ -56,9 +56,11 @@ const aplicadas = () => {
     const arrayVacunas = [];
     const querySnapshot = firebase
       .firestore()
-      .collection("categories")
-      .doc("krx7j8IsEC50wHiDNjw0")
-      .collection("records")
+      .collection("usuarios")
+      .doc(uid)
+      .collection("childUsers")
+      .doc(childId)
+      .collection("vacunas")
     //.where("userId", "==", uid)
     //.where("childId", "==", childId);
     const vacunaId = await querySnapshot.get();

@@ -85,7 +85,7 @@ const HomeScreen = ({ navigation }) => {
 
       handleAddChildUser(documentChildUser);
     } else {
-      alert("llene todo los campos");
+      alert("Llene todo los campos");
     }
   };
 
