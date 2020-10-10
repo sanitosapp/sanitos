@@ -1,5 +1,5 @@
 import React from 'react'
-import {Alert, Picker, TextInput, TouchableWithoutFeedback, ScrollView, Image, View, Text, StatusBar, StyleSheet, TouchableOpacity, LayoutAnimation, AsyncStorage, Modal, Button } from 'react-native'
+import { Alert, Picker, TextInput, TouchableWithoutFeedback, ScrollView, Image, View, Text, StatusBar, StyleSheet, TouchableOpacity, LayoutAnimation, AsyncStorage, Modal, Button } from 'react-native'
 import DatePicker from 'react-native-datepicker'
 import { MaterialIcons } from '@expo/vector-icons'
 
@@ -76,7 +76,9 @@ export default class HomeScreen extends React.Component {
   state = {
     isVisible: false
   }
-
+  goToChart = () => {
+    this.props.navigation.navigate('ChildChart');
+  }
   modalHandler = () => {
     this.setState({ isVisible: !this.state.isVisible })
   }
@@ -175,7 +177,7 @@ export default class HomeScreen extends React.Component {
         style={styles.container}
       >
         <StatusBar barStyle='light-content' ></StatusBar>
-      
+
 
 
         <Text style={{ marginTop: 60, left: 30, fontSize: 16 }}>
@@ -185,6 +187,17 @@ export default class HomeScreen extends React.Component {
         <View style={styles.containerCards}>
           {this.parseData()}
         </View>
+
+        <View style={styles.infoCard}>
+          <TouchableOpacity
+            onPress={this.goToChart}
+          >
+            <Text
+              style={{ textAlign: 'center', padding: 20, fontSize: 16, color: '#C4C4C4' }}
+            > Ver Reporte </Text>
+          </TouchableOpacity>
+        </View>
+
         <View style={styles.infoCard}>
           <TouchableOpacity
             onPress={this.modalHandler}
@@ -211,9 +224,9 @@ export default class HomeScreen extends React.Component {
                 style={{ height: '80%', width: '80%', backgroundColor: 'grey', padding: 10, borderRadius: 4 }}
               >
                 <MaterialIcons
-                name='close'
-                size={24}
-                onPress={() =>this.modalHandler()}
+                  name='close'
+                  size={24}
+                  onPress={() => this.modalHandler()}
                 >
                 </MaterialIcons>
 

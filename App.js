@@ -1,9 +1,9 @@
 import React from 'react';
 /*import logoSanitos from './recursos/imagenes/logoSanitos.png';*/
-import { createAppContainer, createSwitchNavigator} from 'react-navigation'
-import {createStackNavigator} from 'react-navigation-stack'
-import {createBottomTabNavigator} from 'react-navigation-tabs'
-import {Ionicons} from '@expo/vector-icons'
+import { createAppContainer, createSwitchNavigator } from 'react-navigation'
+import { createStackNavigator } from 'react-navigation-stack'
+import { createBottomTabNavigator } from 'react-navigation-tabs'
+import { Ionicons } from '@expo/vector-icons'
 
 
 import LoadingScreen from './recursos/LoadingScreen'
@@ -21,6 +21,7 @@ import ProfileScreen from './recursos/ProfileScreen'
 import AgregarNinoScreen from './recursos/AgregarNinoScreen'
 import ForgotPasswordScreen from './recursos/ForgotPasswordScreen'
 
+import ChildChartScreen from './recursos/chart/ChildChartScreen'
 
 import * as Facebook from 'expo-facebook'
 
@@ -41,41 +42,41 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 /*  firebase.analytics();*/
 
-const AppTabNavigator = createBottomTabNavigator (
+const AppTabNavigator = createBottomTabNavigator(
   {
     Home: {
       screen: HomeScreen,
       navigationOptions: {
-        tabBarIcon: ({tintColor}) => <Ionicons name='ios-home' size={24} color={tintColor}/>
+        tabBarIcon: ({ tintColor }) => <Ionicons name='ios-home' size={24} color={tintColor} />
       }
     },
     Post: {
       screen: PostScreen,
       navigationOptions: {
-        tabBarIcon: ({tintColor}) => <Ionicons name='ios-add-circle' size={48} color={'#E9446A'} style={{shadowColor: '#E9446A', shadowOffset: {width: 0, height: 0, shadowRadius:10, shadowOpacity:0.3}}} />
+        tabBarIcon: ({ tintColor }) => <Ionicons name='ios-add-circle' size={48} color={'#E9446A'} style={{ shadowColor: '#E9446A', shadowOffset: { width: 0, height: 0, shadowRadius: 10, shadowOpacity: 0.3 } }} />
       }
     },
     Profile: {
       screen: ProfileScreen,
       navigationOptions: {
-        tabBarIcon: ({tintColor}) => <Ionicons name='ios-person' size={24} color={tintColor}/>
+        tabBarIcon: ({ tintColor }) => <Ionicons name='ios-person' size={24} color={tintColor} />
       }
     }
   },
   {
     tabBarOptions: {
-      activeTintColor:'#161F3D',
-      inactiveTintColor:'#B8BBC4',
-      showLabel:false
+      activeTintColor: '#161F3D',
+      inactiveTintColor: '#B8BBC4',
+      showLabel: false
     }
   }
 );
 
-const AuthStack = createStackNavigator ({
+const AuthStack = createStackNavigator({
   LoginRegister: LoginRegisterScreen,
   Login: LoginScreen,
   Register: SignupScreen,
-  Home: HomeScreen,  
+  Home: HomeScreen,
   App: AppTabNavigator,
   Nino: PerfilNinoScreen,
   ForgotPassword: ForgotPasswordScreen,
@@ -84,12 +85,13 @@ const AuthStack = createStackNavigator ({
   Peso: PesoScreen,
   Estatura: EstaturaScreen,
   AgregarNino: AgregarNinoScreen,
+  ChildChart: ChildChartScreen
 })
 
 export default createAppContainer(
   createSwitchNavigator(
     {
-      
+
       Loading: LoadingScreen,
       App: AppTabNavigator,
       Auth: AuthStack
