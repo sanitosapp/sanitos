@@ -44,7 +44,7 @@ const VacunasScreen = ({ route, navigation }) => {
   }, []);
 
   const vacunas = async (uid, childId) => {
-    
+
     const arrayVacunas = [];
     const querySnapshot = firebase
       .firestore()
@@ -53,7 +53,7 @@ const VacunasScreen = ({ route, navigation }) => {
       .collection("childUsers")
       .doc(childId)
       .collection("vacunas")
-  
+
     const vacunaId = await querySnapshot.get();
     vacunaId.forEach((doc) => {
       arrayVacunas.push({
@@ -69,15 +69,6 @@ const VacunasScreen = ({ route, navigation }) => {
   return (
     <ScrollView style={styles.container}>
       <StatusBar barStyle="light-content"></StatusBar>
-      <TouchableOpacity
-        onPress={() => navigation.navigate("Nino")}
-      >
-        <Text
-          style={styles.breadCrumb}
-        >
-          {"< Infomación < Vacunas"}{" "}
-        </Text>
-      </TouchableOpacity>
 
       <View
         style={styles.buttonBox}
@@ -94,30 +85,43 @@ const VacunasScreen = ({ route, navigation }) => {
           <Text style={styles.title}>Todas</Text>
         </TouchableOpacity>
       </View>
-      <View style={styles.containerCards}>
-        {vacunaEstado.map((doc) => {
-          const { dose, state, vaccine, reinforcement } = doc;
-          return (
-            <View style={styles.infoCard}>
-              <View style={styles.col1}> 
-                <Text style={styles.text}>{vaccine}</Text>
-              </View>
-              <View style={styles.col2}>
-                <Text style={styles.text}>{dose==="no tiene" ? null:dose}{reinforcement==="no tiene" ? null:reinforcement} </Text>
-              </View>
-            
-                <TouchableOpacity
-                  onPress={() => { setModalVisible(true) }}
-                   style={styles.col3}
+
+      {vacunaEstado.map((doc) => {
+        const { dose, state, vaccine, reinforcement } = doc;
+        return (
+          <View
+            style={styles.boxVacunas}
+          >
+            <TouchableOpacity
+            style={{width: '85%',}}
+              onPress={() => {
+                navigation.navigate("VacunasInfo", { vacunaId: vacunaEstado });
+              }}
             >
-              <MaterialIcons name="add" size={20} color="black" />
-                </TouchableOpacity>
-              </View>      
-           
-          )
-        }
-        )}
-      </View>
+              <View style={styles.targetVacunas}
+              >
+              <View style={styles.targetTitle}>
+                <Text style={styles.titleStyle}>{vaccine}</Text>
+              </View>
+              <View style={styles.paddingCard}>
+                <Text style={styles.textVacuna}>{dose === "no tiene" ? null : dose}{reinforcement === "no tiene" ? null : reinforcement} </Text>
+              </View>
+              <View>
+                <Text style={styles.textCard} > + Presiona aqui para ver mas </Text>
+              </View>
+              {/* <TouchableOpacity
+                  onPress={() => { setModalVisible(true) }}
+                  style={styles.col3}
+                >
+                  <MaterialIcons name="add" size={20} color="black" />
+                </TouchableOpacity> */}
+                </View>
+            </TouchableOpacity>
+          </View>
+        )
+      }
+      )}
+
 
       <Modal
         animationType="fade"
@@ -136,7 +140,7 @@ const VacunasScreen = ({ route, navigation }) => {
               <View>
                 <Text style={styles.title1}>Agregar vacuna</Text>
               </View>
-              
+
               <View
                 style={styles.formBox}
               >
@@ -169,7 +173,6 @@ const VacunasScreen = ({ route, navigation }) => {
                   Agregar
                   </Text>
               </TouchableOpacity>
-              <View></View>
             </View>
           </View>
         </View>

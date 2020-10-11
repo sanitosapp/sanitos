@@ -1,20 +1,16 @@
 import React, { useState, useEffect } from "react";
 import {
-  Picker,
-  Alert,
   TextInput,
   ScrollView,
   View,
   Text,
   StatusBar,
-  StyleSheet,
   TouchableOpacity,
   LayoutAnimation,
   Modal,
   Button,
-  YellowBox,
 } from "react-native";
-import DatePicker from "react-native-datepicker";
+import DateTimePicker from "@react-native-community/datetimepicker";
 import moment from "moment";
 import "moment/locale/es";
 import { MaterialIcons, Feather } from "@expo/vector-icons";
@@ -27,33 +23,28 @@ const EstaturaScreen = ({ route, navigation }) => {
   LayoutAnimation.easeInEaseOut();
 
   const [estatura, setEstatura] = useState([]);
-  const [data, setData] = useState("");
-  const [estatura1, setEstatura1] = useState({});
+  const [date, setDate] = useState(new Date());
+  const [mode, setMode] = useState("date");
+  const [show, setShow] = useState(false);
+  const [selectDate, setSelectDate] = useState(false);
+  const [childId, setChildId] = useState('');
+  const [userId, setUserId] = useState('');
   const [estaturaRegister, setEstaturaRegister] = useState([]);
-  const [email, setEmail] = useState("");
-  const [displayName, setDisplayName] = useState("");
-  const [name, setName] = useState("");
-  const [childUsers, setChildUsers] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
 
   const changeEstatura = (estatura) => {
     setEstatura(estatura);
   }
 
-  const changeDate = (valor) => {
-    setData(valor);
-  };
-
   useEffect(() => {
-    YellowBox.ignoreWarnings(["Setting a timer"]);
     const { idPesos } = route.params;
     const { uid } = firebase.auth().currentUser;
-    setEstatura1(idPesos);
-    estaturas(uid, idPesos.id);
+    setChildId(idPesos.id);
+    setUserId(uid);
+    getDataHeight(uid, idPesos.id);
   }, []);
 
-  const estaturas = async (uid, childId) => {
-    const arrayEstatura = [];
+  const getDataHeight = async (uid, childId) => {
     const querySnapshot = firebase
       .firestore()
       .collection("categories")
@@ -61,26 +52,81 @@ const EstaturaScreen = ({ route, navigation }) => {
       .collection("records")
       .where("userId", "==", uid)
       .where("childId", "==", childId);
-    const estaturaId = await querySnapshot.get();
-    estaturaId.forEach((doc) => {
-      const { date } = doc.data()
-      const formatoFecha = moment(date.toDate()).format('LL')
-      arrayEstatura.push({
-        ...doc.data(),
-        date: formatoFecha,
-        id: doc.id
-      })
+
+    querySnapshot.onSnapshot((querySnapshot) => {
+      const arrayEstatura = [];
+      querySnapshot.forEach((doc) => {
+        const { date } = doc.data()
+        const formatoFecha = moment(date.toDate()).format('LL')
+        arrayEstatura.push({
+          ...doc.data(),
+          date: formatoFecha,
+          id: doc.id
+        })
+      });
+      
+      if (arrayEstatura.length > 0) {
+        setEstaturaRegister(arrayEstatura)
+        console.log("arrayestatura", arrayEstatura);
+      }
     });
-    if (arrayEstatura.length > 0) {
-      setEstaturaRegister(arrayEstatura)
-      console.log("arrayestatura", arrayEstatura);
+  };
+
+  const onChange = (event, selectedDate) => {
+    const currentDate = selectedDate || date;
+    setShow(Platform.OS === "ios");
+    setDate(currentDate);
+  };
+
+  const showMode = (currentMode) => {
+    setShow(true);
+    setMode(currentMode);
+  };
+
+  const showDatepicker = () => {
+    setSelectDate(true);
+    showMode("date");
+  };
+
+  const handleOnChange = () => {
+    if (selectDate && estatura !== "") {
+      let now = new Date(date);
+      const documentChildHeight = {
+        childId,
+        date: firebase.firestore.Timestamp.fromDate(now),
+        userId,
+        height: parseInt(estatura)
+      };
+      handleAddHeight(documentChildHeight)
+    } else {
+      alert("Llene todo los campos");
     }
+  };
+
+  const handleAddHeight = (documentChildHeight) => {
+    const ref = firebase
+      .firestore()
+      .collection("categories")
+      .doc("estatura")
+      .collection("records");
+    ref
+      .add(documentChildHeight)
+      .then((docRef) => {
+        const { id } = docRef;
+        console.log("adding document: ", id)
+        setModalVisible(false);
+        setEstatura('');
+        setSelectDate(false);
+      })
+      .catch(function (error) {
+        console.error("Error adding document: ", error);
+      });
   };
 
   return (
     <ScrollView style={styles.container}>
       <StatusBar barStyle="light-content"></StatusBar>
-      <TouchableOpacity
+      {/* <TouchableOpacity
         onPress={() => navigation.navigate("Nino")}
       >
         <Text
@@ -88,23 +134,23 @@ const EstaturaScreen = ({ route, navigation }) => {
         >
           {"< Infomación < Estatura"}{" "}
         </Text>
-      </TouchableOpacity>
+      </TouchableOpacity> */}
 
       <View
-        style={styles.containerFeEs}
+        style={styles.boxTitle}
       >
-        <Text style={styles.whiteColor}>Fecha</Text>
-        <Text style={styles.whiteColor}>Estatura</Text>
+        <Text style={styles.textWhite}>Fecha</Text>
+        <Text style={styles.textWhite}>Estatura</Text>
       </View>
 
       <View style={styles.containerCards}>
         {estaturaRegister.map((doc) => {
           const { date, height, id } = doc;
           return (
-            <View style={styles.infoCard}>
+            <View style={styles.boxHeight}>
 
-              <Text style={styles.estatura}>{date}</Text>
-              <Text style={styles.estatura}>{height} </Text>
+              <Text>{date}</Text>
+              <Text>{height} </Text>
             </View>
           )
         }
@@ -114,7 +160,6 @@ const EstaturaScreen = ({ route, navigation }) => {
       <View>
         <TouchableOpacity style={styles.button} onPress={() => { setModalVisible(true) }}>
           <Text style={styles.textButton}>
-            {" "}
               + Agregue nueva medida
             </Text>
         </TouchableOpacity>
@@ -133,12 +178,10 @@ const EstaturaScreen = ({ route, navigation }) => {
 
             <View style={styles.form}>
               <View>
-                <Text style={styles.title1}>Agregar estatura</Text>
+                <Text style={styles.title1}>Estatura</Text>
               </View>
 
-              <View
-              style={styles.formBox}
-              >
+              <View>
                 <TextInput
                   style={styles.input}
                   placeholder="Estatura"
@@ -149,24 +192,42 @@ const EstaturaScreen = ({ route, navigation }) => {
               </View>
 
               <View>
-                <DatePicker
-                  format="DD/MM/YYYY"
-                  style={styles.dateComponent}
-                  date={data}
-                  onDateChange={() => changeDate()}
-                />
+                <View>
+                  <View
+                    style={{
+                      color: "#ffffff",
+                      fontWeight: "500",
+                      marginTop: 10,
+                    }}
+                  >
+                    <Button
+                      onPress={showDatepicker}
+                      title="Fecha"
+                    />
+                  </View>
+
+                  {show && (
+                    <DateTimePicker
+                      testID="dateTimePicker"
+                      value={date}
+                      mode={mode}
+                      is24Hour={true}
+                      display="default"
+                      onChange={onChange}
+                    />
+                  )}
+                </View>
               </View>
 
               <TouchableOpacity
-                style={styles.button}
-                onPress={() => modalHandler()}
+                style={styles.buttonModal}
+                onPress={() => handleOnChange()}
               >
                 <Text style={styles.textAgregar}>
                   Agregar
                     </Text>
               </TouchableOpacity>
 
-              <View></View>
             </View>
           </View>
         </View>

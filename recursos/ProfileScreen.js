@@ -46,10 +46,6 @@ export default class ProfileScreen extends React.Component {
       });
   };
 
-  signOutUser = () => {
-    firebase.auth().signOut();
-  };
-
   render() {
     LayoutAnimation.easeInEaseOut();
     return (
@@ -93,10 +89,7 @@ export default class ProfileScreen extends React.Component {
         >
           <Text style={styles.buttonText}>Editar</Text>
         </TouchableOpacity>
-
-        <TouchableOpacity style={styles.button} onPress={this.signOutUser}>
-          <Text style={styles.buttonText}>Salir</Text>
-        </TouchableOpacity>
+        
       </View>
     );
   }
