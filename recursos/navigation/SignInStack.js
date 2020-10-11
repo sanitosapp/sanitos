@@ -1,8 +1,9 @@
 import React from "react";
-import { Image } from "react-native";
+import { Image, View, Button } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator, TransitionPresets } from "@react-navigation/stack";
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createDrawerNavigator } from '@react-navigation/drawer';
 
 import { Ionicons } from "@expo/vector-icons";
 
@@ -14,13 +15,16 @@ import PesoScreen from "../PesoScreen";
 import PostScreen from "../PostScreen";
 import PerfilNinoScreen from "../PerfilNinoScreen";
 import ProfileScreen from "../ProfileScreen";
+import SingOutScreen from "../SingOutScreen";
+import VacunasInfoScreen from "../VacunasInfoScreen";
 
 const Stack = createStackNavigator();
+const Drawer = createDrawerNavigator();
 
 const SignInStack = () => {
   return (
     <NavigationContainer>
-      <Tabs.Navigator screenOptions={({ route }) => ({
+      <Drawer.Navigator screenOptions={({ route }) => ({
           tabBarIcon: ({ focused, color, size }) => {
             let iconName;
 
@@ -43,17 +47,15 @@ const SignInStack = () => {
           activeTintColor: '#05A4AC',
           inactiveTintColor: 'gray',
         }}>
-        <Tabs.Screen name="Home" component={HomeStackScreen}  />
-        <Tabs.Screen name="Post" component={PostStackScreen} />
-        <Tabs.Screen name="Profile" component={ProfileStackScreen} />
-      </Tabs.Navigator>
+        <Drawer.Screen name="Home" component={HomeStackScreen} options={{ title: 'Home' }} />
+        <Drawer.Screen name="Profile" component={ProfileStackScreen} options={{ title: 'Perfil' }} />
+        <Drawer.Screen name="SingOut" component={SingOutScreen}  options={{ title: 'Salir' }}/>
+      </Drawer.Navigator>
     </NavigationContainer>
   )
 };
 
 export default SignInStack;
-
-
 
 const AuthStack = createStackNavigator();
 const Tabs = createBottomTabNavigator();
@@ -70,10 +72,16 @@ const LogoTitle = () => {
   );
 }
 
-const HomeStackScreen = () => {
+ const HomeStackScreen = () => {
   return (
     <HomeStack.Navigator >
-      <HomeStack.Screen name="Home" component={HomeScreen} options={{ headerTitle: props => <LogoTitle {...props} />, headerTitleAlign: 'center', }} />
+      <HomeStack.Screen name="Home" component={HomeScreen} options={{ headerTitle: props => <LogoTitle {...props} />, headerTitleAlign: 'center',  /* headerRight: () => (
+            <Button
+              onPress={() => alert('This is a button!')}
+              title="Info"
+              color="#000"
+            />
+          ), */ }} />
       <HomeStack.Screen name="Nino" component={PerfilNinoScreen} options={{
         title: "Perfil del niño/a", headerStyle: {
           backgroundColor: "#05A4AC"
@@ -84,7 +92,7 @@ const HomeStackScreen = () => {
         },
       }} />
       <HomeStack.Screen name="Peso" component={PesoScreen} options={{
-        title: "Perfil del niño/a", headerStyle: {
+        title: "Peso", headerStyle: {
           backgroundColor: "#05A4AC"
         },
         headerTintColor: '#fff',
@@ -93,7 +101,7 @@ const HomeStackScreen = () => {
         },
       }} />
       <HomeStack.Screen name="Estatura" component={EstaturaScreen} options={{
-        title: "Perfil del niño/a", headerStyle: {
+        title: "Estatura", headerStyle: {
           backgroundColor: "#05A4AC"
         },
         headerTintColor: '#fff',
@@ -102,7 +110,16 @@ const HomeStackScreen = () => {
         },
       }} />
       <HomeStack.Screen name="Vacunas" component={VacunasScreen} options={{
-        title: "Perfil del niño/a", headerStyle: {
+        title: "Vacunas", headerStyle: {
+          backgroundColor: "#05A4AC"
+        },
+        headerTintColor: '#fff',
+        headerTitleStyle: {
+          fontWeight: "normal",
+        },
+      }} />
+      <HomeStack.Screen name="VacunasInfo" component={VacunasInfoScreen} options={{
+        title: "Vacunas", headerStyle: {
           backgroundColor: "#05A4AC"
         },
         headerTintColor: '#fff',
@@ -112,7 +129,7 @@ const HomeStackScreen = () => {
       }} />
     </HomeStack.Navigator>
   );
-}
+} 
 
 const ProfileStackScreen = () => {
   return (

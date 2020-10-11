@@ -19,7 +19,7 @@ import styles from "./styles/stylesPesoScreen";
 
 
 //VISTA HOME PRINCIPAL
-const PesoScreen = ({ route }) => {
+const PesoScreen = ({ route, navigation }) => {
   LayoutAnimation.easeInEaseOut();
 
   const [peso, setPeso] = useState('');
@@ -31,7 +31,7 @@ const PesoScreen = ({ route }) => {
   const [selectDate, setSelectDate] = useState(false);
   const [childId, setChildId] = useState('');
   const [userId, setUserId] = useState('');
-  
+
   const changePeso = (peso) => {
     setPeso(peso);
   }
@@ -53,26 +53,26 @@ const PesoScreen = ({ route }) => {
       .collection("records")
       .where("userId", "==", uid)
       .where("childId", "==", childId);
-    
-     querySnapshot.onSnapshot((querySnapshot) => {
-     const arrayPeso = [];
+
+    querySnapshot.onSnapshot((querySnapshot) => {
+      const arrayPeso = [];
       querySnapshot.forEach((doc) => {
-      const { date } = doc.data()
-      const formatoFecha = moment(date.toDate()).format('LL')
-      arrayPeso.push({
-        ...doc.data(),
-        date: formatoFecha,
-        id: doc.id
-      })
+        const { date } = doc.data()
+        const formatoFecha = moment(date.toDate()).format('LL')
+        arrayPeso.push({
+          ...doc.data(),
+          date: formatoFecha,
+          id: doc.id
+        })
       });
-       
+
       if (arrayPeso.length > 0) {
-      setWeightRegister(arrayPeso)
-    }
-     });
+        setWeightRegister(arrayPeso)
+      }
+    });
   };
 
-   const onChange = (event, selectedDate) => {
+  const onChange = (event, selectedDate) => {
     const currentDate = selectedDate || date;
     setShow(Platform.OS === "ios");
     setDate(currentDate);
@@ -95,13 +95,13 @@ const PesoScreen = ({ route }) => {
         childId,
         date: firebase.firestore.Timestamp.fromDate(now),
         userId,
-        weight:parseInt(peso) 
+        weight: parseInt(peso)
       };
       handleAddWeight(documentChildWeight)
     } else {
-      alert("llene todo los campos");
+      alert("Llene todo los campos");
     }
-  }
+  };
 
 
 
@@ -115,7 +115,7 @@ const PesoScreen = ({ route }) => {
       .add(documentChildWeight)
       .then((docRef) => {
         const { id } = docRef;
-        console.log("adding document: ",id)
+        console.log("adding document: ", id)
         setModalVisible(false);
         setPeso('');
         setSelectDate(false);
@@ -128,15 +128,15 @@ const PesoScreen = ({ route }) => {
   return (
     <ScrollView style={styles.container}>
       <StatusBar barStyle="light-content" />
-      <TouchableOpacity
-        onPress={() => props.navigation.navigate("Nino")}
+      {/* <TouchableOpacity
+        onPress={() => navigation.navigate("Nino")}
       >
         <Text
           style={styles.breadCrumb}
         >
           {"< Infomación < Peso"}{" "}
-        </Text>
-      </TouchableOpacity>
+        </Text> 
+      </TouchableOpacity>*/}
 
       <View
         style={styles.boxTitle}
@@ -147,9 +147,9 @@ const PesoScreen = ({ route }) => {
 
       <View style={styles.containerCards}>
         {weightRegister.map((doc) => {
-          const { date, weight} = doc;
+          const { date, weight } = doc;
           return (
-            <View  style={styles.boxWeight}>
+            <View style={styles.boxWeight}>
               <Text>{date}</Text>
               <Text>{weight} </Text>
             </View>
@@ -162,7 +162,7 @@ const PesoScreen = ({ route }) => {
 
         <TouchableOpacity style={styles.button} onPress={() => { setModalVisible(true) }}>
           <Text style={styles.textButton}>
-              + Agregue nueva medida
+            + Agregue nueva medida
             </Text>
         </TouchableOpacity>
       </View>
@@ -177,11 +177,11 @@ const PesoScreen = ({ route }) => {
               size={24}
               onPress={() => { setModalVisible(!modalVisible) }}
               style={styles.iconBox}
-              />
+            />
 
             <View style={styles.form}>
               <View>
-                <Text style={styles.title1}>Agregar peso</Text>
+                <Text style={styles.title1}>Peso</Text>
               </View>
 
               <View>
@@ -192,11 +192,9 @@ const PesoScreen = ({ route }) => {
                   onChangeText={(peso) => changePeso(peso)}
                   value={peso}
                 />
-
-                
               </View>
 
-             <View>
+              <View>
                 <View>
                   <View
                     style={{
@@ -207,7 +205,7 @@ const PesoScreen = ({ route }) => {
                   >
                     <Button
                       onPress={showDatepicker}
-                      title="fecha de nacimiento"
+                      title="Fecha"
                     />
                   </View>
 
@@ -223,8 +221,9 @@ const PesoScreen = ({ route }) => {
                   )}
                 </View>
               </View>
+
               <TouchableOpacity
-                 style={styles.buttonModal}
+                style={styles.buttonModal}
                 onPress={() => handleOnChange()}
               >
                 <Text style={{ color: "#ffffff", fontWeight: "500" }}>

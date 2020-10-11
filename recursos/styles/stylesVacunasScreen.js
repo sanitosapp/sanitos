@@ -15,7 +15,57 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     width: '28%',
-  
+
+  },
+  infoCard: {
+    marginBottom: 24,
+    borderWidth: 1,
+    borderColor: "#05A4AC",
+    borderRadius: 4,
+    width: "100%",
+    flexDirection: 'column',
+  },
+  textName: {
+    fontSize: 16,
+    textAlign: "center",
+    backgroundColor: "#1D96A3",
+    padding: 6,
+    color: "#fff",
+    textTransform: "uppercase",
+  },
+  targetVacunas: {
+    borderWidth: 1,
+    borderBottomColor: '#E9446A',
+    borderRadius:4,
+    width: '100%',
+    alignItems: 'center',
+    justifyContent: "center",
+  },
+  boxVacunas: {
+    alignItems: 'center',
+    justifyContent: "center",
+    marginTop: 20,
+  },
+  textCard: {
+    textAlign: "center",
+    padding: 6,
+    fontSize: 14,
+    color: "#C4C4C4",
+  },
+  targetTitle: {
+    backgroundColor: '#E9446A',
+    shadowColor:'#000',
+    width: '100%',
+    padding: 6,
+  },
+  textVacuna:{
+    fontSize:14,
+  },
+  titleStyle: {
+    fontSize: 14,
+    textAlign: "center",
+    color: "#fff",
+    textTransform: "uppercase",
   },
   buttonModal: {
     marginTop: 18,
@@ -28,7 +78,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 12,
-    paddingHorizontal:10,
+    paddingHorizontal: 10,
     textAlign: "center",
     color: "#fff",
   },
@@ -62,8 +112,8 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     width: "90%",
     height: 50,
-    marginHorizontal:'5%',
-    backgroundColor:'white'
+    marginHorizontal: '5%',
+    backgroundColor: 'white'
   },
   pickerComponent: {
     height: 40,
@@ -115,21 +165,21 @@ const styles = StyleSheet.create({
     width: '30%',
     height: 49,
     justifyContent: 'center',
-    alignItems:'center'
+    alignItems: 'center'
   },
   col2: {
     borderRightWidth: 1,
     borderRightColor: "#1C94A4",
     width: '55%',
     height: 49,
-     justifyContent: 'center',
-    alignItems:'center'
+    justifyContent: 'center',
+    alignItems: 'center'
   },
   col3: {
     width: '15%',
     height: 49,
-     justifyContent: 'center',
-    alignItems:'center'
+    justifyContent: 'center',
+    alignItems: 'center'
   },
   formBox: {
     marginTop: 20,
@@ -162,7 +212,7 @@ const styles = StyleSheet.create({
   },
   text: {
     fontSize: 12,
-    textAlign:'center'
+    textAlign: 'center'
   }
 });
 

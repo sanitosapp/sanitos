@@ -2,22 +2,22 @@ import React from "react";
 import { Image, View, Text, TouchableOpacity } from "react-native";
 import styles from "../styles/stylesHomeScreen";
 
-const CardChildUsers = ({ childUsers, navigation }) => {
-  return childUsers.map((doc, index) => {
+const CardVacuna = ({ vacunaEstado, navigation }) => {
+  return vacunaEstado.map((doc, index) => {
     console.log(doc)
-    const { name, birthday, bloodType, gender } = doc;
+    const { vaccines, dose, reinforcement, state } = doc;
     return (
       <TouchableOpacity
         style={styles.infoCard}
         key={index}
         onPress={() => {
-          navigation.navigate("Nino", {
+          navigation.navigate("VacunasInfo", {
             id: doc,
           });
         }}
       >
         <View>
-          <Text style={styles.textName}>{name}</Text>
+          <Text style={styles.textName}>{vaccines}</Text>
         </View>
 
         <View style={styles.rowCard}>
@@ -28,10 +28,10 @@ const CardChildUsers = ({ childUsers, navigation }) => {
             />
           </View>
           <View style={styles.paddingCard}>
-            <Text>Nombre: {name} </Text>
-            <Text>Edad: {birthday} </Text>
-            <Text>Tipo de sangre: {bloodType}</Text>
-            <Text>Sexo: {gender} </Text>
+            <Text>Vacuna: {vaccines} </Text>
+            <Text>dosis: {dose} </Text>
+            <Text>refuerzo: {reinforcement}</Text>
+            <Text>estado: {state} </Text>
           </View>
         </View>
         <View>
@@ -42,4 +42,4 @@ const CardChildUsers = ({ childUsers, navigation }) => {
   });
 };
 
-export default CardChildUsers;
+export default CardVacuna;
