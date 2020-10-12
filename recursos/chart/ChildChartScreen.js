@@ -4,6 +4,7 @@ import {
     View,
     Button
 } from 'react-native';
+import { SD3neg, SD2neg, SD0, SD2, SD3 } from '../../utilitarios/Constants';
 import HighchartsReactNative from '@highcharts/highcharts-react-native';
 
 class Screen extends React.Component {
@@ -13,25 +14,33 @@ class Screen extends React.Component {
         this.state = {
             chartOptions: {
                 title: {
-                    text: 'Solar Employment Growth by Sector, 2010-2016'
+                    text: ''
                 },
 
                 subtitle: {
-                    text: 'Source: thesolarfoundation.com'
+                    text: ''
                 },
 
                 yAxis: {
                     title: {
-                        text: 'Number of Employees'
+                        text: '(kg)'
                     }
                 },
 
                 xAxis: {
-                    accessibility: {
-                        rangeDescription: 'Range: 2010 to 2017'
+                    title: {
+                        text: '(meses)'
+                    },
+                    type: 'date',
+                    labels: {
+                        overflow: 'justify'
                     }
                 },
                 chart: {
+                    scrollablePlotArea: {
+                        minWidth: 700,
+                        scrollPositionX: 1
+                    },
                     zoomType: 'x'
                 },
                 legend: {
@@ -45,24 +54,29 @@ class Screen extends React.Component {
                         label: {
                             connectorAllowed: false
                         },
-                        pointStart: 2010
+                        pointStart: 0
                     }
                 },
                 series: [{
-                    name: 'Installation',
-                    data: [43934, 52503, 57177, 69658, 97031, 119931, 137133, 154175]
+                    name: 'SD3neg',
+                    data: SD3neg,
+                    color: '#000000'
                 }, {
-                    name: 'Manufacturing',
-                    data: [24916, 24064, 29742, 29851, 32490, 30282, 38121, 40434]
+                    name: 'SD2neg',
+                    data: SD2neg,
+                    color: '#FF0000'
                 }, {
-                    name: 'Sales & Distribution',
-                    data: [11744, 17722, 16005, 19771, 20185, 24377, 32147, 39387]
+                    name: 'SD0',
+                    data: SD0,
+                    color: '#56FF9A'
                 }, {
-                    name: 'Project Development',
-                    data: [null, null, 7988, 12169, 15112, 22452, 34400, 34227]
+                    name: 'SD2',
+                    data: SD2,
+                    color: '#FF525C'
                 }, {
-                    name: 'Other',
-                    data: [12908, 5948, 8105, 11248, 8989, 11816, 18274, 18111]
+                    name: 'SD3',
+                    data: SD3,
+                    color: '#00D9FF'
                 }],
 
                 responsive: {
@@ -74,7 +88,7 @@ class Screen extends React.Component {
                             legend: {
                                 layout: 'horizontal',
                                 align: 'center',
-                                verticalAlign: 'bottom'
+                                verticalAlign: 'top'
                             }
                         }
                     }]
