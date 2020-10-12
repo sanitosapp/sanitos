@@ -28,7 +28,7 @@ class Screen extends React.Component {
 
         xAxis: {
           title: {
-            text: "(meses)",
+            text: "(días)",
           },
           type: "date",
           labels: {
