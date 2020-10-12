@@ -136,7 +136,7 @@ const VacunasScreen = ({ route, navigation }) => {
             <TouchableOpacity
               style={{ width: "85%" }}
               onPress={() => {
-                navigation.navigate("VacunasInfo", { vacunaId: vacunaEstado });
+                navigation.navigate("VacunasInfo", { vacunaId: doc });
               }}
             >
               <View style={styles.targetVacunas}>

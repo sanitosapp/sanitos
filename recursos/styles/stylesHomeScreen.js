@@ -3,11 +3,19 @@ import { StyleSheet } from "react-native";
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: "#F4F4F4",
   },
   infoCard: {
+    backgroundColor: "#fff",
     marginBottom: 24,
-    borderWidth: 1,
-    borderColor: "#05A4AC",
+    elevation: 16,
+    shadowOpacity: 1,
+    shadowRadius: 50,
+    shadowColor: "#000",
+    shadowOffset: {
+      widht: 1,
+      height: 1
+    },
     borderRadius: 4,
     width: "85%",
   },
@@ -32,17 +40,20 @@ const styles = StyleSheet.create({
     marginTop: 25,
   },
   textWelcome: {
-    marginTop: 60,
-    left: 30,
+    marginTop: 30,
+    marginHorizontal: 30,
     fontSize: 16,
+    color: '#B0B0B0',
   },
   textName: {
-    fontSize: 16,
+    fontSize: 14,
     textAlign: "center",
-    backgroundColor: "#1D96A3",
+    backgroundColor: "#7DB3B9",
     padding: 6,
     color: "#fff",
     textTransform: "uppercase",
+    borderTopLeftRadius:4,
+    borderTopRightRadius:4,
   },
   rowCard: {
     flexDirection: "row",
@@ -50,16 +61,23 @@ const styles = StyleSheet.create({
   paddingCard: {
     padding: 10,
   },
+  textCardChild:{
+    color:"#838383",
+  },
+  textCardChildName:{
+    color:"#838383",
+    textTransform: "capitalize",
+  },
   textCard: {
     textAlign: "center",
     padding: 6,
-    fontSize: 16,
+    fontSize: 14,
     color: "#C4C4C4",
   },
   textAgregar: {
     textAlign: "center",
     padding: 20,
-    fontSize: 16,
+    fontSize: 14,
     color: "#C4C4C4",
   },
   modalStyle: {
@@ -74,7 +92,6 @@ const styles = StyleSheet.create({
     padding: 10,
     borderRadius: 4,
   },
-  form: {},
   centeredViews: {
     flex: 1,
     justifyContent: "center",
@@ -82,13 +99,10 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(212, 228, 231, 0.5)",
   },
   modalView: {
-    margin: 20,
-    width: 300,
-    height: 350,
+    width: "85%",
+    height: "65%",
     backgroundColor: "white",
     borderRadius: 4,
-    padding: 30,
-
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
@@ -96,29 +110,68 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
-    elevation: 5,
+    elevation: 16,
   },
-  title1: {
-    fontSize: 16,
+  titleModal: {
+    fontSize: 14,
     textAlign: "center",
     textTransform: "uppercase",
-    marginVertical: 10,
+    marginHorizontal: 30,
+    color:"#B0B0B0",
   },
   iconBox: {
-    marginLeft: 220,
+    marginHorizontal: 30,
+    textAlign:'right',
+    color:"#B0B0B0"
   },
   button: {
     backgroundColor: "red",
   },
-    input: {
-      borderColor: "#ccc",
-      borderWidth: 1,
-      borderRadius: 4,
-      height: 40,
-      fontSize: 15,
-      color: "#161F3D",
-      padding: 10,
-    },
+  input: {
+    alignItems: "center",
+    justifyContent: "center",
+    marginHorizontal: 30,
+    borderRadius: 4,
+    height: 40,
+    width:"85%",
+    fontSize: 14,
+    color: "#B0B0B0",
+    padding: 10,
+    backgroundColor:"#fff",
+    elevation: 5,
+    shadowOpacity: 1,
+    shadowRadius: 10,
+    shadowColor: "#000",
+    shadowOffset: {
+      widht: -1,
+      height: -1
+    }
+  },
+  input1:{
+    marginTop:20,
+  },
+  pickerBox:{
+    justifyContent: "center",
+    marginHorizontal: 30,
+    borderRadius: 4,
+    height: 40,
+    width:"85%",
+    fontSize: 14,
+    color: "#B0B0B0",
+    padding: 10,
+    backgroundColor:"#fff",
+    elevation: 5,
+    shadowOpacity: 1,
+    shadowRadius: 10,
+    shadowColor: "#000",
+    shadowOffset: {
+      widht: -1,
+      height: -1
+    }
+  },
+  picker:{
+    color:"#B0B0B0"
+  }
 });
 
 export default styles;

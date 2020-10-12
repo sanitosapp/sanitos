@@ -5,10 +5,10 @@ import {
   StatusBar,
 } from "react-native";
 import AwesomeAlert from "react-native-awesome-alerts";
-import { TouchableOpacity, TextInput } from "react-native-gesture-handler"
+import { TouchableOpacity, TextInput, Image } from "react-native-gesture-handler"
 import { firebase } from "./utils/firebase";
 import styles from "./styles/stylesSignupScreen";
-import LoadingScreen from "./LoadingScreen"
+import { EvilIcons,AntDesign } from '@expo/vector-icons'; 
 
 
 const SignupScreen = ({ navigation }) => {
@@ -34,116 +34,133 @@ const SignupScreen = ({ navigation }) => {
           })
           .catch((error) => {
             setLoading(false);
-          setErrorMessage(error.message)
+            setErrorMessage(error.message)
           });
       } else {
         setShowAlert(true);
       }
   };
 
-  return isLoading ? (
+  return (
     <View style={styles.container}>
-      <LoadingScreen />
-    </View>
-  ) : (
 
-      <View style={styles.container}>
-        <StatusBar barStyle="light-content"></StatusBar>
-
-        <View>
-          <Text style={styles.greeting}>{"Regístrese"}</Text>
-        </View>
-
-        <View style={styles.errorMessage}>
-          {errorMessage && <Text style={styles.error}>{errorMessage}</Text>}
-        </View>
-
-        <View style={styles.form}>
-          <View>
-            <TextInput
-              placeholder={"Nombre"}
-              style={styles.input}
-              autoCapitalize="none"
-              onChangeText={(name) => setName(name)}
-              value={name}
-            ></TextInput>
-          </View>
-
-          <View>
-            <TextInput
-              placeholder={"Email"}
-              style={styles.input}
-              autoCapitalize="none"
-              onChangeText={(email) => setEmail(email)}
-              value={email}
-            ></TextInput>
-          </View>
-          <View>
-            <TextInput
-              placeholder={"Contraseña"}
-              style={styles.input}
-              secureTextEntry
-              autoCapitalize="none"
-              onChangeText={(password) => setPassword(password)}
-              value={password}
-            ></TextInput>
-          </View>
-          <View>
-            <TextInput
-              placeholder={"Repetir contraseña"}
-              style={styles.input}
-              secureTextEntry
-              autoCapitalize="none"
-              onChangeText={(cpassword) => setCPassword(cpassword)}
-              value={cpassword}
-            ></TextInput>
-          </View>
-        </View>
-
-        <TouchableOpacity style={styles.button} onPress={() => handleSignUp()}>
-          <Text style={styles.buttonText}>Regístrate</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity style={styles.buttonFb}>
-          <Text style={styles.buttonText}>
-            Ingresar con Facebook
-        </Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          style={styles.touchContainer}
-          onPress={() => navigation.push("Login")}
-        >
-          <Text style={styles.textButton}>
-            Ya tienes cuenta?{" "}
-            <Text style={styles.textButton2}>
-              Inicia sesión
-          </Text>
-          </Text>
-        </TouchableOpacity>
-
-        <AwesomeAlert
-          show={showAlert}
-          showProgress={false}
-          title="Importante"
-          message="debe ingresar todos los campos"
-          closeOnTouchOutside={true}
-          closeOnHardwareBackPress={false}
-          showCancelButton={false}
-          showConfirmButton={true}
-          cancelText="Cancelar"
-          confirmText="Aceptar"
-          confirmButtonColor="#E9446A"
-          onCancelPressed={() => {
-            setShowAlert(false);
-          }}
-          onConfirmPressed={() => {
-            setShowAlert(false);
-          }}
-        />
+      <StatusBar barStyle="light-content"></StatusBar>
+      <Text style={styles.textTitle}>Regístrese</Text>
+      <View style={styles.errorMessage}>
+        {errorMessage && <Text style={styles.error}>{errorMessage}</Text>}
       </View>
-    )
-    ;
+
+      <View>
+        <View
+        style={styles.input1}
+        >
+          <TextInput
+            placeholder={"Nombre"}
+            style={styles.input}
+            autoCapitalize="none"
+            onChangeText={(name) => setName(name)}
+            value={name}
+          ></TextInput>
+        </View>
+
+        <View
+        style={styles.input2}
+        >
+          <TextInput
+            placeholder={"Email"}
+            style={styles.input}
+            autoCapitalize="none"
+            onChangeText={(email) => setEmail(email)}
+            value={email}
+          ></TextInput>
+        </View>
+        <View
+        style={styles.input3}
+        >
+          <TextInput
+            placeholder={"Contraseña"}
+            style={styles.input}
+            secureTextEntry
+            autoCapitalize="none"
+            onChangeText={(password) => setPassword(password)}
+            value={password}
+          ></TextInput>
+        </View>
+        <View
+        style={styles.input4}
+        >
+          <TextInput
+            placeholder={"Repetir contraseña"}
+            style={styles.input}
+            secureTextEntry
+            autoCapitalize="none"
+            onChangeText={(cpassword) => setCPassword(cpassword)}
+            value={cpassword}
+          ></TextInput>
+        </View>
+      </View>
+
+      <View
+      style={styles.button1}
+      >
+      <TouchableOpacity style={styles.button} onPress={() => handleSignUp()}>
+        <Text style={styles.textbutton}>Regístrate</Text>
+      </TouchableOpacity>
+      </View>
+
+      <View
+      style={styles.button2}
+      >
+      <TouchableOpacity style={styles.buttonFb}>
+      <EvilIcons name="sc-facebook" size={30} color="white" />
+        <Text style={styles.textbutton}>
+          Ingresar con Facebook
+        </Text>
+      </TouchableOpacity>
+      </View>
+
+      <View
+      style={styles.button3}
+      >
+        <TouchableOpacity style={styles.buttonGo}>
+        <AntDesign name="google" size={20} color="red" />
+          <Text style={styles.textbutton1}>Ingresar con Google</Text>
+        </TouchableOpacity>
+      </View>
+
+      <TouchableOpacity
+        style={styles.containerTextSignIn}
+        onPress={() => navigation.push("Login")}
+      >
+        <Text style={{ color: "#B0B0B0", fontSize: 12 }}>
+          Ya tienes cuenta?{" "}
+          <Text style={{ fontWeight: "500", color: "#1D96A3" }}>
+            Inicia sesión
+          </Text>
+        </Text>
+      </TouchableOpacity>
+
+      <AwesomeAlert
+        show={showAlert}
+        showProgress={false}
+        title="Importante"
+        message="debe ingresar todos los campos"
+        closeOnTouchOutside={true}
+        closeOnHardwareBackPress={false}
+        showCancelButton={false}
+        showConfirmButton={true}
+        cancelText="Cancelar"
+        confirmText="Aceptar"
+        confirmButtonColor="#E9446A"
+        onCancelPressed={() => {
+          setShowAlert(false);
+        }}
+        onConfirmPressed={() => {
+          setShowAlert(false);
+        }}
+      />
+    </View>
+  )
 };
 
 export default SignupScreen;

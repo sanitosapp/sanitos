@@ -3,24 +3,23 @@ import { StyleSheet } from "react-native";
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 30,
+    backgroundColor:"#FBFBFB",
   },
-  greeting: {
+  textTitle: {
     marginTop: 84,
-    fontSize: 20,
+    fontSize: 18,
     fontWeight: "400",
     textAlign: "center",
-    color: "#424242",
+    color: "#B0B0B0",
   },
   errorMessage: {
-    color: "#E9446A",
-    height: 30,
+    marginTop:10,
     alignItems: "center",
     justifyContent: "center",
   },
   error: {
     color: "#E9446A",
-    fontSize: 13,
+    fontSize: 12,
     fontWeight: "600",
     textAlign: "center",
   },
@@ -30,43 +29,113 @@ const styles = StyleSheet.create({
     textTransform: "uppercase",
   },
   input: {
-    marginTop: 18,
-    borderWidth: 1,
+    alignItems: "center",
+    justifyContent: "center",
+    marginHorizontal: 30,
     borderRadius: 4,
-    borderColor: "#C4C4C4",
     height: 40,
-    fontSize: 16,
-    color: "#161F3D",
+    width:"85%",
+    fontSize: 14,
+    color: "#B0B0B0",
     padding: 10,
+    backgroundColor:"#fff",
+    elevation: 5,
+    shadowOpacity: 1,
+    shadowRadius: 10,
+    shadowColor: "#000",
+    shadowOffset: {
+      widht: -1,
+      height: -1
+    }
+  },
+  input1:{
+    marginTop:76,
+  },
+  input2:{
+    marginTop:18,
   },
   button: {
-    marginTop: 18,
-    backgroundColor: "#E9446A",
-    borderRadius: 4,
-    height: 40,
+    backgroundColor: '#C13273',
+    width: "85%",
     alignItems: "center",
     justifyContent: "center",
+    marginHorizontal: 30,
+    height: 40,
+    borderRadius: 4,
+    elevation: 16,
+    shadowOpacity: 1,
+    shadowRadius: 50,
+    shadowColor: "#000",
+    shadowOffset: {
+      widht: 1,
+      height: 1
+    },
+    
   },
   buttonFb: {
-    marginTop: 18,
     backgroundColor: "#3C609F",
-    borderRadius: 4,
-    height: 40,
+    width: "85%",
     alignItems: "center",
-    justifyContent: "center",
+    justifyContent: "space-evenly",
+    marginHorizontal: 30,
+    height: 40,
+    borderRadius: 4,
+    elevation: 16,
+    shadowOpacity: 1,
+    shadowRadius: 50,
+    shadowColor: "#000",
+    shadowOffset: {
+      widht: 1,
+      height: 1
+    },
+    flexDirection:'row',
   },
-  form: {
-    marginTop: 100,
+  buttonGo: {
+    backgroundColor: "#fff",
+    width: "85%",
+    alignItems: "center",
+    justifyContent: "space-evenly",
+    marginHorizontal: 30,
+    height: 40,
+    borderRadius: 4,
+    elevation: 16,
+    shadowOpacity: 1,
+    shadowRadius: 50,
+    shadowColor: "#000",
+    shadowOffset: {
+      widht: 1,
+      height: 1
+    },
+    flexDirection:'row',
   },
-
-  textRecoverpassword: {
+  button1:{
+    marginTop:18,
+  },
+  button2:{
+    marginTop:18,
+  },
+  button3:{
+    marginTop:18,
+  },
+  textForgotPass: {
     marginTop: 12,
-    color: "#05A4AC",
-    fontSize: 14,
+    color: "#1D96A3",
+    fontSize: 12,
     textAlign: "right",
+    marginHorizontal: 30,
   },
-  textbutton: { color: "#ffffff", fontWeight: "500" },
-  buttonRegister: { alignSelf: "center", position: "absolute", top: 564 },
+  textbutton: {
+    fontSize: 14,
+    color: "#fff",
+  },
+  textbutton1: {
+    fontSize: 14,
+    color: "#ABABAB",
+  },
+  containerTextRegister: { 
+    alignSelf: "center", 
+    marginTop: 48, 
+  },
 });
 
 export default styles;

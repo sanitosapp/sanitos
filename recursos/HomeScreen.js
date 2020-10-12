@@ -180,12 +180,14 @@ const HomeScreen = ({ navigation }) => {
               style={styles.iconBox}
             />
 
-            <View style={styles.form}>
+            <View>
               <View>
-                <Text style={styles.title1}>Agregar niña/o</Text>
+                <Text style={styles.titleModal}>Agregar niña/o</Text>
               </View>
 
-              <View>
+              <View 
+              style={styles.input1}
+              >
                 <TextInput
                   style={styles.input}
                   placeholder="Nombre"
@@ -195,9 +197,11 @@ const HomeScreen = ({ navigation }) => {
                 />
               </View>
 
-              <View>
+              <View
+              style={styles.pickerBox}
+              >
                 <Picker
-                  style={styles.pickerComponent}
+                  style={styles.picker}
                   selectedValue={gender}
                   onValueChange={(itemValor) => setGender(itemValor)}
                 >

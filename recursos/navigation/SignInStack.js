@@ -24,7 +24,7 @@ const Drawer = createDrawerNavigator();
 const SignInStack = () => {
   return (
     <NavigationContainer>
-      <Drawer.Navigator screenOptions={({ route }) => ({
+      <Tabs.Navigator screenOptions={({ route }) => ({
           tabBarIcon: ({ focused, color, size }) => {
             let iconName;
 
@@ -47,10 +47,10 @@ const SignInStack = () => {
           activeTintColor: '#05A4AC',
           inactiveTintColor: 'gray',
         }}>
-        <Drawer.Screen name="Home" component={HomeStackScreen} options={{ title: 'Home' }} />
-        <Drawer.Screen name="Profile" component={ProfileStackScreen} options={{ title: 'Perfil' }} />
-        <Drawer.Screen name="SingOut" component={SingOutScreen}  options={{ title: 'Salir' }}/>
-      </Drawer.Navigator>
+        <Tabs.Screen name="Home" component={HomeStackScreen} options={{ title: 'Home' }} />
+        <Tabs.Screen name="Post" component={PostStackScreen}  options={{ title: 'Agregar' }}/>
+        <Tabs.Screen name="Profile" component={ProfileStackScreen} options={{ title: 'Perfil' }} />
+      </Tabs.Navigator>
     </NavigationContainer>
   )
 };
@@ -92,7 +92,7 @@ const LogoTitle = () => {
         },
       }} />
       <HomeStack.Screen name="Peso" component={PesoScreen} options={{
-        title: "Peso", headerStyle: {
+        title: "Perfil del niño/a", headerStyle: {
           backgroundColor: "#05A4AC"
         },
         headerTintColor: '#fff',

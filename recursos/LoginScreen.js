@@ -10,11 +10,11 @@ import {
 import AwesomeAlert from "react-native-awesome-alerts";
 import { firebase } from "./utils/firebase";
 import styles from "./styles/stylesLoginScreen";
-import LoadingScreen from "./LoadingScreen"
+import { EvilIcons,AntDesign } from '@expo/vector-icons'; 
 
 //VISTA LOGIN
 
-const LoginScreen = ({navigation}) => {
+const LoginScreen = ({ navigation }) => {
   LayoutAnimation.easeInEaseOut();
 
 
@@ -22,16 +22,13 @@ const LoginScreen = ({navigation}) => {
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState(null);
   const [showAlert, setShowAlert] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
 
   const handleLogin = () => {
     if (email !== "" && password !== "") {
-      setIsLoading(true);
       firebase
         .auth()
         .signInWithEmailAndPassword(email, password)
         .catch((error) => {
-          isLoading(false);
           setErrorMessage(error.message)
         });
     } else {
@@ -42,13 +39,15 @@ const LoginScreen = ({navigation}) => {
   return (
     <View style={styles.container}>
       <StatusBar barStyle="light-content"></StatusBar>
-      <Text style={styles.greeting}>"Inicie sesión"</Text>
+      <Text style={styles.textTitle}>Inicie sesión</Text>
       <View style={styles.errorMessage}>
         {errorMessage && <Text style={styles.error}>{errorMessage}</Text>}
       </View>
 
-      <View style={styles.form}>
-        <View>
+      <View>
+        <View
+          style={styles.input1}
+        >
           <TextInput
             placeholder="Email"
             style={styles.input}
@@ -57,7 +56,9 @@ const LoginScreen = ({navigation}) => {
             value={email}
           />
         </View>
-        <View>
+        <View
+          style={styles.input2}
+        >
           <TextInput
             placeholder="Contraseña"
             style={styles.input}
@@ -69,30 +70,48 @@ const LoginScreen = ({navigation}) => {
         </View>
       </View>
       <TouchableOpacity onPress={() => navigation.push("")}>
-        <Text style={styles.textRecoverpassword}>¿Olvido su contraseña?</Text>
+        <Text style={styles.textForgotPass}>¿Olvido su contraseña?</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity style={styles.button} onPress={() => handleLogin()}>
-        <Text style={styles.textbutton}>Ingresar</Text>
-      </TouchableOpacity>
+      <View
+      style={styles.button1}
+      >
+        <TouchableOpacity style={styles.button} onPress={() => handleLogin()}>
+          <Text style={styles.textbutton}>Ingresar</Text>
+        </TouchableOpacity>
+      </View>
 
-      <TouchableOpacity style={styles.buttonFb}>
-        <Text style={styles.textbutton}>Ingresar con Facebook</Text>
-      </TouchableOpacity>
+      <View
+      style={styles.button2}
+      >
+        <TouchableOpacity style={styles.buttonFb}>
+        <EvilIcons name="sc-facebook" size={30} color="white" />
+          <Text style={styles.textbutton}>Ingresar con Facebook</Text>
+        </TouchableOpacity>
+      </View>
+
+      <View
+      style={styles.button3}
+      >
+        <TouchableOpacity style={styles.buttonGo}>
+        <AntDesign name="google" size={20} color="red" />
+          <Text style={styles.textbutton1}>Ingresar con Google</Text>
+        </TouchableOpacity>
+      </View>
 
       <TouchableOpacity
-        style={styles.buttonRegister}
+        style={styles.containerTextRegister}
         onPress={() => navigation.push("Register")}
       >
-        <Text style={{ color: "#414959", fontSize: 14 }}>
+        <Text style={{ color: "#B0B0B0", fontSize: 12 }}>
           ¿No tiene cuenta?{" "}
-          <Text style={{ fontWeight: "500", color: "#05A4AC" }}>
+          <Text style={{ fontWeight: "500", color: "#1D96A3" }}>
             Registrese aquí
           </Text>
         </Text>
       </TouchableOpacity>
 
-      {/* <AwesomeAlert
+      <AwesomeAlert
         show={showAlert}
         showProgress={false}
         title="Importante"
@@ -103,14 +122,14 @@ const LoginScreen = ({navigation}) => {
         showConfirmButton={true}
         cancelText="Cancelar"
         confirmText="Aceptar"
-        confirmButtonColor="#E9446A"
+        confirmButtonColor="#C13273"
         onCancelPressed={() => {
           setShowAlert(false);
         }}
         onConfirmPressed={() => {
           setShowAlert(false);
         }}
-      /> */}
+      />
     </View>
   );
 };

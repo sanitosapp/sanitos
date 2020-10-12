@@ -39,7 +39,20 @@ const VacunasInfoScreen = ({ route, navigation }) => {
     };
     return (
         <View>
-
+            <View style={styles.targetVacunas}>
+                <View style={styles.targetTitle}>
+                  <Text style={styles.titleStyle}>{vacunaInfo.vaccine}</Text>
+                </View>
+                <View style={styles.paddingCard}>
+                  <Text style={styles.textVacuna}>
+                    {vacunaInfo.dose === "no tiene" ? null : vacunaInfo.dose}
+                    {vacunaInfo.reinforcement === "no tiene" ? null : vacunaInfo.reinforcement}{" "}
+                  </Text>
+                  <Text style={styles.textVacuna}>
+                    {vacunaInfo.state ? "Vacuna aplicada" : "Vacuna pendiente"}
+                  </Text>
+                </View>
+              </View>
 
             <Modal
                 animationType="fade"
