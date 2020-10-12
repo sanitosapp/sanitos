@@ -9,13 +9,21 @@ const styles = StyleSheet.create({
   },
   button: {
     marginHorizontal: 10,
+    backgroundColor: "#b02a49",
+    borderRadius: 4,
+    height: 40,
+    alignItems: "center",
+    justifyContent: "center",
+    width: "28%",
+  },
+  buttonActive: {
+    marginHorizontal: 10,
     backgroundColor: "#E9446A",
     borderRadius: 4,
     height: 40,
     alignItems: "center",
     justifyContent: "center",
-    width: '28%',
-
+    width: "28%",
   },
   infoCard: {
     marginBottom: 24,
@@ -23,7 +31,7 @@ const styles = StyleSheet.create({
     borderColor: "#05A4AC",
     borderRadius: 4,
     width: "100%",
-    flexDirection: 'column',
+    flexDirection: "column",
   },
   textName: {
     fontSize: 16,
@@ -35,14 +43,14 @@ const styles = StyleSheet.create({
   },
   targetVacunas: {
     borderWidth: 1,
-    borderBottomColor: '#E9446A',
-    borderRadius:4,
-    width: '100%',
-    alignItems: 'center',
+    borderBottomColor: "#E9446A",
+    borderRadius: 4,
+    width: "100%",
+    alignItems: "center",
     justifyContent: "center",
   },
   boxVacunas: {
-    alignItems: 'center',
+    alignItems: "center",
     justifyContent: "center",
     marginTop: 20,
   },
@@ -53,13 +61,13 @@ const styles = StyleSheet.create({
     color: "#C4C4C4",
   },
   targetTitle: {
-    backgroundColor: '#E9446A',
-    shadowColor:'#000',
-    width: '100%',
+    backgroundColor: "#E9446A",
+    shadowColor: "#000",
+    width: "100%",
     padding: 6,
   },
-  textVacuna:{
-    fontSize:14,
+  textVacuna: {
+    fontSize: 14,
   },
   titleStyle: {
     fontSize: 14,
@@ -81,6 +89,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     textAlign: "center",
     color: "#fff",
+    fontWeight: "bold",
   },
   subtitle: {
     marginLeft: 10,
@@ -112,8 +121,8 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     width: "90%",
     height: 50,
-    marginHorizontal: '5%',
-    backgroundColor: 'white'
+    marginHorizontal: "5%",
+    backgroundColor: "white",
   },
   pickerComponent: {
     height: 40,
@@ -162,24 +171,24 @@ const styles = StyleSheet.create({
   col1: {
     borderRightWidth: 1,
     borderRightColor: "#1C94A4",
-    width: '30%',
+    width: "30%",
     height: 49,
-    justifyContent: 'center',
-    alignItems: 'center'
+    justifyContent: "center",
+    alignItems: "center",
   },
   col2: {
     borderRightWidth: 1,
     borderRightColor: "#1C94A4",
-    width: '55%',
+    width: "55%",
     height: 49,
-    justifyContent: 'center',
-    alignItems: 'center'
+    justifyContent: "center",
+    alignItems: "center",
   },
   col3: {
-    width: '15%',
+    width: "15%",
     height: 49,
-    justifyContent: 'center',
-    alignItems: 'center'
+    justifyContent: "center",
+    alignItems: "center",
   },
   formBox: {
     marginTop: 20,
@@ -212,8 +221,8 @@ const styles = StyleSheet.create({
   },
   text: {
     fontSize: 12,
-    textAlign: 'center'
-  }
+    textAlign: "center",
+  },
 });
 
 export default styles;

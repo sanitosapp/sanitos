@@ -15,15 +15,16 @@ import "moment/locale/es";
 import { firebase } from "./utils/firebase";
 import styles from "./styles/stylesVacunasScreen";
 
-
 //VISTA HOME PRINCIPAL
 const VacunasScreen = ({ route, navigation }) => {
-
-  const [vacuna, setVacuna] = useState([]);
+  const [dataVacuna, setDataVacuna] = useState([]);
   const [vacunaEstado, setVacunaEstado] = useState([]);
   const [data, setData] = useState("");
   const [estado, setEstado] = useState("");
   const [modalVisible, setModalVisible] = useState(false);
+  const [activeAll, setActiveAll] = useState(true);
+  const [activeSlopes, setActiveSlopes] = useState(false);
+  const [activeApplied, setActiveApplied] = useState(false);
 
   const changeEstado = (estado) => {
     setEstado(estado);
@@ -33,18 +34,14 @@ const VacunasScreen = ({ route, navigation }) => {
     setData(valor);
   };
 
-
-
   useEffect(() => {
     YellowBox.ignoreWarnings(["Setting a timer"]);
     const { idPesos } = route.params;
     const { uid } = firebase.auth().currentUser;
-    setVacuna(idPesos);
     vacunas(uid, idPesos.id);
   }, []);
 
   const vacunas = async (uid, childId) => {
-
     const arrayVacunas = [];
     const querySnapshot = firebase
       .firestore()
@@ -52,88 +49,136 @@ const VacunasScreen = ({ route, navigation }) => {
       .doc(uid)
       .collection("childUsers")
       .doc(childId)
-      .collection("vacunas")
+      .collection("vacunas");
 
     const vacunaId = await querySnapshot.get();
     vacunaId.forEach((doc) => {
       arrayVacunas.push({
         ...doc.data(),
-        id: doc.id
-      })
+        id: doc.id,
+      });
     });
     if (arrayVacunas.length > 0) {
-      setVacunaEstado(arrayVacunas)
+      setVacunaEstado(arrayVacunas);
+      setDataVacuna(arrayVacunas);
     }
+  };
+
+  const filterVaccinesPending = () => {
+    const ArrayVaccinesPending = [];
+    dataVacuna.forEach((element) => {
+      const { state } = element;
+      if (!state) {
+        ArrayVaccinesPending.push({ ...element });
+      }
+    });
+    setVacunaEstado(ArrayVaccinesPending);
+    setActiveAll(false);
+    setActiveSlopes(true);
+    setActiveApplied(false);
+  };
+
+  const filterVaccinesApplied = () => {
+    const ArrayVaccinesApplied = [];
+    dataVacuna.forEach((element) => {
+      const { state } = element;
+      if (state) {
+        ArrayVaccinesApplied.push({ ...element });
+      }
+    });
+    setVacunaEstado(ArrayVaccinesApplied);
+    setActiveAll(false);
+    setActiveSlopes(false);
+    setActiveApplied(true);
+  };
+
+  const filterVaccinesAll = () => {
+    const ArrayVaccinesAll = [];
+    dataVacuna.forEach((element) => {
+      ArrayVaccinesAll.push({ ...element });
+    });
+    setVacunaEstado(ArrayVaccinesAll);
+    setActiveAll(true);
+    setActiveSlopes(false);
+    setActiveApplied(false);
   };
 
   return (
     <ScrollView style={styles.container}>
       <StatusBar barStyle="light-content"></StatusBar>
 
-      <View
-        style={styles.buttonBox}
-      >
-        <TouchableOpacity style={styles.button}>
+      <View style={styles.buttonBox}>
+        <TouchableOpacity
+          style={activeAll ? styles.buttonActive : styles.button}
+          onPress={filterVaccinesAll}
+        >
+          <Text style={styles.title}>Todas</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={activeSlopes ? styles.buttonActive : styles.button}
+          onPress={filterVaccinesPending}
+        >
           <Text style={styles.title}>Vacunas pendientes</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.button}>
+        <TouchableOpacity
+          style={activeApplied ? styles.buttonActive : styles.button}
+          onPress={filterVaccinesApplied}
+        >
           <Text style={styles.title}>Vacunas aplicadas</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity style={styles.button}>
-          <Text style={styles.title}>Todas</Text>
         </TouchableOpacity>
       </View>
 
-      {vacunaEstado.map((doc) => {
+      {vacunaEstado.map((doc, index) => {
         const { dose, state, vaccine, reinforcement } = doc;
         return (
-          <View
-            style={styles.boxVacunas}
-          >
+          <View style={styles.boxVacunas} key={index}>
             <TouchableOpacity
-            style={{width: '85%',}}
+              style={{ width: "85%" }}
               onPress={() => {
                 navigation.navigate("VacunasInfo", { vacunaId: vacunaEstado });
               }}
             >
-              <View style={styles.targetVacunas}
-              >
-              <View style={styles.targetTitle}>
-                <Text style={styles.titleStyle}>{vaccine}</Text>
-              </View>
-              <View style={styles.paddingCard}>
-                <Text style={styles.textVacuna}>{dose === "no tiene" ? null : dose}{reinforcement === "no tiene" ? null : reinforcement} </Text>
-              </View>
-              <View>
-                <Text style={styles.textCard} > + Presiona aqui para ver mas </Text>
-              </View>
-              {/* <TouchableOpacity
+              <View style={styles.targetVacunas}>
+                <View style={styles.targetTitle}>
+                  <Text style={styles.titleStyle}>{vaccine}</Text>
+                </View>
+                <View style={styles.paddingCard}>
+                  <Text style={styles.textVacuna}>
+                    {dose === "no tiene" ? null : dose}
+                    {reinforcement === "no tiene" ? null : reinforcement}{" "}
+                  </Text>
+                  <Text style={styles.textVacuna}>
+                    {state ? "Vacuna aplicada" : "Vacuna pendiente"}
+                  </Text>
+                </View>
+                <View>
+                  <Text style={styles.textCard}>
+                    {" "}
+                    + Presiona aqui para ver mas{" "}
+                  </Text>
+                </View>
+                {/* <TouchableOpacity
                   onPress={() => { setModalVisible(true) }}
                   style={styles.col3}
                 >
                   <MaterialIcons name="add" size={20} color="black" />
                 </TouchableOpacity> */}
-                </View>
+              </View>
             </TouchableOpacity>
           </View>
-        )
-      }
-      )}
+        );
+      })}
 
-
-      <Modal
-        animationType="fade"
-        transparent={true}
-        visible={modalVisible}
-      >
+      <Modal animationType="fade" transparent={true} visible={modalVisible}>
         <View style={styles.centeredViews}>
           <View style={styles.modalView}>
             <MaterialIcons
               name="close"
               size={24}
-              onPress={() => { setModalVisible(!modalVisible) }}
+              onPress={() => {
+                setModalVisible(!modalVisible);
+              }}
             ></MaterialIcons>
 
             <View style={styles.form}>
@@ -141,15 +186,11 @@ const VacunasScreen = ({ route, navigation }) => {
                 <Text style={styles.title1}>Agregar vacuna</Text>
               </View>
 
-              <View
-                style={styles.formBox}
-              >
+              <View style={styles.formBox}>
                 <Picker
                   style={styles.pickerComponent}
                   selectedValue={estado}
-                  onValueChange={(estado, itemIndex) =>
-                    changeEstado(estado)
-                  }
+                  onValueChange={(estado, itemIndex) => changeEstado(estado)}
                 >
                   <Picker.Item label="Estado" value="0" />
                   <Picker.Item label="Aplicada" value={"true"} />
@@ -166,12 +207,8 @@ const VacunasScreen = ({ route, navigation }) => {
                 />
               </View>
 
-              <TouchableOpacity
-                style={styles.buttonModal}
-              >
-                <Text style={styles.textAgregar}>
-                  Agregar
-                  </Text>
+              <TouchableOpacity style={styles.buttonModal}>
+                <Text style={styles.textAgregar}>Agregar</Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -184,5 +221,3 @@ const VacunasScreen = ({ route, navigation }) => {
 };
 
 export default VacunasScreen;
-
-
