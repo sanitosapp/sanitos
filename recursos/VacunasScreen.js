@@ -112,20 +112,20 @@ const VacunasScreen = ({ route, navigation }) => {
           style={activeAll ? styles.buttonActive : styles.button}
           onPress={filterVaccinesAll}
         >
-          <Text style={styles.title}>Todas</Text>
+          <Text style={styles.titleBtnFilter}>Todas</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={activeSlopes ? styles.buttonActive : styles.button}
           onPress={filterVaccinesPending}
         >
-          <Text style={styles.title}>Vacunas pendientes</Text>
+          <Text style={styles.titleBtnFilter}>Vacunas pendientes</Text>
         </TouchableOpacity>
 
         <TouchableOpacity
           style={activeApplied ? styles.buttonActive : styles.button}
           onPress={filterVaccinesApplied}
         >
-          <Text style={styles.title}>Vacunas aplicadas</Text>
+          <Text style={styles.titleBtnFilter}>Vacunas aplicadas</Text>
         </TouchableOpacity>
       </View>
 
@@ -151,13 +151,14 @@ const VacunasScreen = ({ route, navigation }) => {
                   <Text style={styles.textVacuna}>
                     {state ? "Vacuna aplicada" : "Vacuna pendiente"}
                   </Text>
-                </View>
-                <View>
-                  <Text style={styles.textCard}>
-                    {" "}
+                  <View>
+                    <Text style={styles.textCard}>
+                      {" "}
                     + Presiona aqui para ver mas{" "}
-                  </Text>
+                    </Text>
+                  </View>
                 </View>
+
                 {/* <TouchableOpacity
                   onPress={() => { setModalVisible(true) }}
                   style={styles.col3}

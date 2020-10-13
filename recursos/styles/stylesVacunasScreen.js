@@ -3,27 +3,25 @@ import { StyleSheet } from "react-native";
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor:"#EDEDED",
   },
   form: {
     alignItems: "center",
   },
   button: {
-    marginHorizontal: 10,
-    backgroundColor: "#b02a49",
-    borderRadius: 4,
+    backgroundColor: "#4DA6AF",
     height: 40,
     alignItems: "center",
     justifyContent: "center",
-    width: "28%",
+    width: "33.3%",
   },
   buttonActive: {
-    marginHorizontal: 10,
-    backgroundColor: "#E9446A",
-    borderRadius: 4,
+    backgroundColor: "#1D96A3",
     height: 40,
     alignItems: "center",
     justifyContent: "center",
-    width: "28%",
+    width: "33.3%",
+
   },
   infoCard: {
     marginBottom: 24,
@@ -42,32 +40,52 @@ const styles = StyleSheet.create({
     textTransform: "uppercase",
   },
   targetVacunas: {
-    borderWidth: 1,
-    borderBottomColor: "#E9446A",
-    borderRadius: 4,
     width: "100%",
-    alignItems: "center",
-    justifyContent: "center",
+  },
+  paddingCard:{
+    marginTop:4,
+    padding:6,
+    backgroundColor:"#fff",
+    borderRadius:4,
+    elevation: 10,
+    shadowOpacity: 0.5,
+    shadowRadius: 2,
+    shadowColor: "#000",
+    shadowOffset: {
+      widht: 0,
+      height: -1
+    }
   },
   boxVacunas: {
     alignItems: "center",
     justifyContent: "center",
-    marginTop: 20,
+    marginVertical: 10,
   },
   textCard: {
     textAlign: "center",
-    padding: 6,
+    marginTop:6,
     fontSize: 14,
     color: "#C4C4C4",
   },
   targetTitle: {
-    backgroundColor: "#E9446A",
+    backgroundColor: "#1D96A3",
     shadowColor: "#000",
     width: "100%",
     padding: 6,
+    borderRadius:4,
+    elevation: 10,
+    shadowOpacity: 0.5,
+    shadowRadius: 2,
+    shadowColor: "#000",
+    shadowOffset: {
+      widht: 0,
+      height: -1
+    }
   },
   textVacuna: {
     fontSize: 14,
+    textAlign:"center",
+    color:"#838383"
   },
   titleStyle: {
     fontSize: 14,
@@ -84,8 +102,8 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     width: 200,
   },
-  title: {
-    fontSize: 12,
+  titleBtnFilter: {
+    fontSize:14,
     paddingHorizontal: 10,
     textAlign: "center",
     color: "#fff",
@@ -156,17 +174,11 @@ const styles = StyleSheet.create({
     shadowRadius: 3.84,
     elevation: 5,
   },
-  breadCrumb: {
-    marginTop: 40,
-    textAlign: "left",
-    color: "#424242",
-    fontSize: 16,
-    left: 30,
-  },
   buttonBox: {
+    borderTopWidth:1,
+    borderTopColor:"#fff",
     flexDirection: "row",
     justifyContent: "space-evenly",
-    marginTop: 20,
   },
   col1: {
     borderRightWidth: 1,

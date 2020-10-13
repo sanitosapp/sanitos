@@ -75,7 +75,12 @@ const LogoTitle = () => {
  const HomeStackScreen = () => {
   return (
     <HomeStack.Navigator >
-      <HomeStack.Screen name="Home" component={HomeScreen} options={{ headerTitle: props => <LogoTitle {...props} />, headerTitleAlign: 'center',  /* headerRight: () => (
+      <HomeStack.Screen name="Home" component={HomeScreen} options={{title: "Sanitos", headerTitleAlign: 'center', headerStyle: {
+          backgroundColor: "#1D96A3"
+        }, headerTintColor: '#fff',
+        headerTitleStyle: {
+          fontWeight: "normal",
+        },/* headerRight: () => (
             <Button
               onPress={() => alert('This is a button!')}
               title="Info"
@@ -84,7 +89,7 @@ const LogoTitle = () => {
           ), */ }} />
       <HomeStack.Screen name="Nino" component={PerfilNinoScreen} options={{
         title: "Perfil del niño/a", headerStyle: {
-          backgroundColor: "#05A4AC"
+          backgroundColor: "#1D96A3"
         },
         headerTintColor: '#fff',
         headerTitleStyle: {
@@ -92,8 +97,8 @@ const LogoTitle = () => {
         },
       }} />
       <HomeStack.Screen name="Peso" component={PesoScreen} options={{
-        title: "Perfil del niño/a", headerStyle: {
-          backgroundColor: "#05A4AC"
+        title: "Peso", headerStyle: {
+          backgroundColor: "#C13273"
         },
         headerTintColor: '#fff',
         headerTitleStyle: {
@@ -102,7 +107,7 @@ const LogoTitle = () => {
       }} />
       <HomeStack.Screen name="Estatura" component={EstaturaScreen} options={{
         title: "Estatura", headerStyle: {
-          backgroundColor: "#05A4AC"
+          backgroundColor: "#C13273"
         },
         headerTintColor: '#fff',
         headerTitleStyle: {
@@ -111,7 +116,7 @@ const LogoTitle = () => {
       }} />
       <HomeStack.Screen name="Vacunas" component={VacunasScreen} options={{
         title: "Vacunas", headerStyle: {
-          backgroundColor: "#05A4AC"
+          backgroundColor: "#1D96A3"
         },
         headerTintColor: '#fff',
         headerTitleStyle: {
@@ -120,7 +125,7 @@ const LogoTitle = () => {
       }} />
       <HomeStack.Screen name="VacunasInfo" component={VacunasInfoScreen} options={{
         title: "Vacunas", headerStyle: {
-          backgroundColor: "#05A4AC"
+          backgroundColor: "#1D96A3"
         },
         headerTintColor: '#fff',
         headerTitleStyle: {

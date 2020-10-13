@@ -9,20 +9,24 @@ import {
     TouchableOpacity,
     YellowBox,
 } from "react-native";
-import DatePicker from "react-native-datepicker";
+import DateTimePicker from "@react-native-community/datetimepicker";
 import { MaterialIcons } from "@expo/vector-icons";
 import "moment/locale/es";
 import { firebase } from "./utils/firebase";
-import styles from "./styles/stylesVacunasScreen";
+import styles from "./styles/stylesVacunasInfoScreen";
 
 const VacunasInfoScreen = ({ route, navigation }) => {
 
     const [vacuna, setVacuna] = useState([]);
     const [vacunaEstado, setVacunaEstado] = useState([]);
     const [data, setData] = useState("");
+    const [date, setDate] = useState(new Date());
     const [estado, setEstado] = useState("");
     const [modalVisible, setModalVisible] = useState(false);
     const [vacunaInfo, setVacunaInfo] = useState({});
+    const [mode, setMode] = useState("date");
+    const [show, setShow] = useState(false);
+    const [selectDate, setSelectDate] = useState(false);
 
     useEffect(() => {
         YellowBox.ignoreWarnings(["Setting a timer"]);
@@ -37,23 +41,50 @@ const VacunasInfoScreen = ({ route, navigation }) => {
     const changeDate = (valor) => {
         setData(valor);
     };
+
+    const onChange = (event, selectedDate) => {
+        const currentDate = selectedDate || date;
+        setShow(Platform.OS === "ios");
+        setDate(currentDate);
+    };
+
+    const showMode = (currentMode) => {
+        setShow(true);
+        setMode(currentMode);
+    };
+
+    const showDatepicker = () => {
+        setSelectDate(true);
+        showMode("date");
+    };
     return (
         <View>
-            <View style={styles.targetVacunas}>
-                <View style={styles.targetTitle}>
-                  <Text style={styles.titleStyle}>{vacunaInfo.vaccine}</Text>
+            <View style={styles.boxVacunas}>
+                <View style={styles.targetVacunas}>
+                    <View style={styles.targetTitle}>
+                        <Text style={styles.titleStyle}>{vacunaInfo.vaccine}</Text>
+                    </View>
+                    <View style={styles.paddingCard}>
+                        <Text style={styles.textVacuna}>
+                            {vacunaInfo.dose === "no tiene" ? null : vacunaInfo.dose}
+                            {vacunaInfo.reinforcement === "no tiene" ? null : vacunaInfo.reinforcement}{" "}
+                        </Text>
+                        <Text style={styles.textVacuna}>
+                            {vacunaInfo.state ? "Vacuna aplicada" : "Vacuna pendiente"}
+                        </Text>
+                    </View>
                 </View>
-                <View style={styles.paddingCard}>
-                  <Text style={styles.textVacuna}>
-                    {vacunaInfo.dose === "no tiene" ? null : vacunaInfo.dose}
-                    {vacunaInfo.reinforcement === "no tiene" ? null : vacunaInfo.reinforcement}{" "}
-                  </Text>
-                  <Text style={styles.textVacuna}>
-                    {vacunaInfo.state ? "Vacuna aplicada" : "Vacuna pendiente"}
-                  </Text>
-                </View>
-              </View>
-
+            </View>
+            <View style={{ justifyContent: 'center', alignContent: 'center' }}>
+                <TouchableOpacity
+                    style={styles.buttonVacuna}
+                    onPress={() => {
+                        setModalVisible(true);
+                    }}
+                >
+                    <Text style={styles.textButtonVacuna}>Programar vacuna</Text>
+                </TouchableOpacity>
+            </View>
             <Modal
                 animationType="fade"
                 transparent={true}
@@ -65,18 +96,19 @@ const VacunasInfoScreen = ({ route, navigation }) => {
                             name="close"
                             size={24}
                             onPress={() => { setModalVisible(!modalVisible) }}
-                        ></MaterialIcons>
+                            style={styles.iconBox}
+                        />
 
-                        <View style={styles.form}>
+                        <View>
                             <View>
-                                <Text style={styles.title1}>Agregar vacuna</Text>
+                                <Text style={styles.titleModal}>Agregar vacuna</Text>
                             </View>
 
                             <View
-                                style={styles.formBox}
+                                style={styles.pickerBox}
                             >
                                 <Picker
-                                    style={styles.pickerComponent}
+                                    style={styles.picker}
                                     selectedValue={estado}
                                     onValueChange={(estado, itemIndex) =>
                                         changeEstado(estado)
@@ -89,20 +121,36 @@ const VacunasInfoScreen = ({ route, navigation }) => {
                             </View>
 
                             <View>
-                                <DatePicker
-                                    format="DD/MM/YYYY"
-                                    style={styles.dateComponent}
-                                    date={data}
-                                    onDateChange={() => changeDate()}
-                                />
+                                <View>
+                                    <TouchableOpacity
+                                        onPress={showDatepicker}
+                                        style={styles.inputDate}>
+                                        <Text style={styles.textAgregar1}
+                                        >
+                                            Fecha de vacuna
+                      </Text>
+                                    </TouchableOpacity>
+
+
+                                    {show && (
+                                        <DateTimePicker
+                                            testID="dateTimePicker"
+                                            value={date}
+                                            mode={mode}
+                                            is24Hour={true}
+                                            display="default"
+                                            onChange={onChange}
+                                        />
+                                    )}
+                                </View>
                             </View>
 
                             <TouchableOpacity
                                 style={styles.buttonModal}
                             >
-                                <Text style={styles.textAgregar}>
+                                <Text style={{ color: "#ffffff", fontWeight: "500" }}>
                                     Agregar
-                  </Text>
+                                    </Text>
                             </TouchableOpacity>
                         </View>
                     </View>
