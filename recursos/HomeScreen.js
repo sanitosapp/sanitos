@@ -18,8 +18,8 @@ import {
 } from "react-native";
 import DatePicker from "react-native-datepicker";
 import { MaterialIcons } from "@expo/vector-icons";
-
 import * as firebase from "firebase";
+import historiaHijoTest from "../utilitarios/historiaHijo.json";
 
 //VISTA HOME PRINCIPAL
 export default class HomeScreen extends React.Component {
@@ -100,16 +100,51 @@ export default class HomeScreen extends React.Component {
     isVisible: false,
   };
 
+  consultarHistoriaHijo(hijoId, callback) {
+    let partsZero = historiaHijoTest.fechaNacimiento.split("-");
+    let fechaZero = new Date(partsZero[2], partsZero[1] - 1, partsZero[1]);
+
+    let registrosEstatura = historiaHijoTest.historialEstatura;
+    let registrosPeso = historiaHijoTest.historialPeso;
+
+    var historialEstatura = [];
+    var historialPeso = [];
+
+    registrosEstatura.forEach((value) => {
+      let parts = value.fechaRegistro.split("-");
+      let fechaRegistro = new Date(parts[2], parts[1] - 1, parts[1]);
+
+      var Difference_In_Time = fechaRegistro.getTime() - fechaZero.getTime();
+      var Difference_In_Days = Difference_In_Time / (1000 * 3600 * 24);
+
+      historialEstatura[Difference_In_Days] = value.estatura;
+    });
+
+    registrosPeso.forEach((value) => {
+      let parts = value.fechaRegistro.split("-");
+      let fechaRegistro = new Date(parts[2], parts[1] - 1, parts[1]);
+
+      var Difference_In_Time = fechaRegistro.getTime() - fechaZero.getTime();
+      var Difference_In_Days = Difference_In_Time / (1000 * 3600 * 24);
+
+      historialPeso[Difference_In_Days] = value.peso;
+    });
+
+    return {
+      historialEstatura: historialEstatura,
+      historialPeso: historialPeso,
+      primerNombreApellido: historiaHijoTest.primerNombreApellido,
+    };
+  }
+
   goToChart = () => {
+    let dataHistorial = this.consultarHistoriaHijo();
+
     let parametro = {
       ctipoChart: "Altura",
-    };
-    this.props.navigation.navigate("ChildChart", parametro);
-  };
-
-  goToChartPeso = () => {
-    let parametro = {
-      ctipoChart: "Peso",
+      historicoPeso: dataHistorial.historialPeso,
+      historicoEstatura: dataHistorial.historialEstatura,
+      primerNombreApellido: dataHistorial.primerNombreApellido,
     };
     this.props.navigation.navigate("ChildChart", parametro);
   };
@@ -229,23 +264,7 @@ export default class HomeScreen extends React.Component {
               }}
             >
               {" "}
-              Ver Reporte Estatura{" "}
-            </Text>
-          </TouchableOpacity>
-        </View>
-
-        <View style={styles.infoCard}>
-          <TouchableOpacity onPress={this.goToChartPeso}>
-            <Text
-              style={{
-                textAlign: "center",
-                padding: 20,
-                fontSize: 16,
-                color: "#C4C4C4",
-              }}
-            >
-              {" "}
-              Ver Reporte Peso
+              Ver Gráfico Niño{" "}
             </Text>
           </TouchableOpacity>
         </View>

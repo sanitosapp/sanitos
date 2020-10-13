@@ -26,17 +26,14 @@ class Screen extends React.Component {
         title: {
           text: "",
         },
-
         subtitle: {
           text: "",
         },
-
         yAxis: {
           title: {
             text: "(cm)",
           },
         },
-
         xAxis: {
           title: {
             text: "(días)",
@@ -58,7 +55,6 @@ class Screen extends React.Component {
           align: "right",
           verticalAlign: "middle",
         },
-
         plotOptions: {
           series: {
             label: {
@@ -93,8 +89,12 @@ class Screen extends React.Component {
             data: alturaSD3,
             color: "#00D9FF",
           },
+          {
+            name: props.navigation.state.params.primerNombreApellido,
+            data: props.navigation.state.params.historicoEstatura,
+            color: "#EFEF09",
+          },
         ],
-
         responsive: {
           rules: [
             {
@@ -116,17 +116,14 @@ class Screen extends React.Component {
         title: {
           text: "",
         },
-
         subtitle: {
           text: "",
         },
-
         yAxis: {
           title: {
             text: "(kg)",
           },
         },
-
         xAxis: {
           title: {
             text: "(días)",
@@ -148,7 +145,6 @@ class Screen extends React.Component {
           align: "right",
           verticalAlign: "middle",
         },
-
         plotOptions: {
           series: {
             label: {
@@ -183,8 +179,12 @@ class Screen extends React.Component {
             data: pesoSD3,
             color: "#00D9FF",
           },
+          {
+            name: props.navigation.state.params.primerNombreApellido,
+            data: props.navigation.state.params.historicoPeso,
+            color: "#EFEF09",
+          },
         ],
-
         responsive: {
           rules: [
             {
@@ -203,6 +203,22 @@ class Screen extends React.Component {
         },
       },
     };
+  }
+
+  async componentDidMount() {
+    const { navigation } = this.props;
+    const ctipoChart = navigation.getParam("ctipoChart", "");
+
+    if (ctipoChart) {
+      switch (ctipoChart) {
+        case "Altura":
+          this.setState({ initialPage: 1, tabactivo: 1 });
+          break;
+        case "Peso":
+          this.setState({ initialPage: 0, tabactivo: 0 });
+          break;
+      }
+    }
   }
 
   render() {
