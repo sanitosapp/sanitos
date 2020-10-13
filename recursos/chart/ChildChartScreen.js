@@ -1,6 +1,17 @@
 import React from "react";
 import { StyleSheet, View, Button } from "react-native";
-import { SD3neg, SD2neg, SD0, SD2, SD3 } from "../../utilitarios/Constants";
+import {
+  alturaSD3neg,
+  alturaSD2neg,
+  alturaSD0,
+  alturaSD2,
+  alturaSD3,
+  pesoSD3neg,
+  pesoSD2neg,
+  pesoSD0,
+  pesoSD2,
+  pesoSD3,
+} from "../../utilitarios/Constants";
 import HighchartsReactNative from "@highcharts/highcharts-react-native";
 import { Grid, Col, Input, Tab, Tabs, TabHeading, Text } from "native-base";
 
@@ -11,7 +22,7 @@ class Screen extends React.Component {
     this.state = {
       initialPage: 1,
       tabactivo: 1,
-      chartOptions: {
+      alturaChartOptions: {
         title: {
           text: "",
         },
@@ -59,27 +70,117 @@ class Screen extends React.Component {
         series: [
           {
             name: "SD3neg",
-            data: SD3neg,
+            data: alturaSD3neg,
             color: "#000000",
           },
           {
             name: "SD2neg",
-            data: SD2neg,
+            data: alturaSD2neg,
             color: "#FF0000",
           },
           {
             name: "SD0",
-            data: SD0,
+            data: alturaSD0,
             color: "#56FF9A",
           },
           {
             name: "SD2",
-            data: SD2,
+            data: alturaSD2,
             color: "#FF525C",
           },
           {
             name: "SD3",
-            data: SD3,
+            data: alturaSD3,
+            color: "#00D9FF",
+          },
+        ],
+
+        responsive: {
+          rules: [
+            {
+              condition: {
+                maxWidth: 500,
+              },
+              chartOptions: {
+                legend: {
+                  layout: "horizontal",
+                  align: "center",
+                  verticalAlign: "top",
+                },
+              },
+            },
+          ],
+        },
+      },
+      pesoChartOptions: {
+        title: {
+          text: "",
+        },
+
+        subtitle: {
+          text: "",
+        },
+
+        yAxis: {
+          title: {
+            text: "(kg)",
+          },
+        },
+
+        xAxis: {
+          title: {
+            text: "(días)",
+          },
+          type: "date",
+          labels: {
+            overflow: "justify",
+          },
+        },
+        chart: {
+          scrollablePlotArea: {
+            minWidth: 700,
+            scrollPositionX: 1,
+          },
+          zoomType: "x",
+        },
+        legend: {
+          layout: "vertical",
+          align: "right",
+          verticalAlign: "middle",
+        },
+
+        plotOptions: {
+          series: {
+            label: {
+              connectorAllowed: false,
+            },
+            pointStart: 0,
+          },
+        },
+        series: [
+          {
+            name: "SD3neg",
+            data: pesoSD3neg,
+            color: "#000000",
+          },
+          {
+            name: "SD2neg",
+            data: pesoSD2neg,
+            color: "#FF0000",
+          },
+          {
+            name: "SD0",
+            data: pesoSD0,
+            color: "#56FF9A",
+          },
+          {
+            name: "SD2",
+            data: pesoSD2,
+            color: "#FF525C",
+          },
+          {
+            name: "SD3",
+            data: pesoSD3,
             color: "#00D9FF",
           },
         ],
@@ -131,7 +232,12 @@ class Screen extends React.Component {
               </TabHeading>
             }
           >
-            <View></View>
+            <View style={styles.container}>
+              <HighchartsReactNative
+                styles={styles.container}
+                options={this.state.pesoChartOptions}
+              />
+            </View>
           </Tab>
           <Tab
             heading={
@@ -150,7 +256,7 @@ class Screen extends React.Component {
             <View style={styles.container}>
               <HighchartsReactNative
                 styles={styles.container}
-                options={this.state.chartOptions}
+                options={this.state.alturaChartOptions}
               />
             </View>
           </Tab>
