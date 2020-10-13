@@ -58,9 +58,10 @@ class Screen extends React.Component {
         plotOptions: {
           series: {
             label: {
-              connectorAllowed: false,
+              connectorAllowed: true,
             },
             pointStart: 0,
+            connectNulls: true,
           },
         },
         series: [
@@ -82,17 +83,17 @@ class Screen extends React.Component {
           {
             name: "SD2",
             data: alturaSD2,
-            color: "#FF525C",
+            color: "#FF0000",
           },
           {
             name: "SD3",
             data: alturaSD3,
-            color: "#00D9FF",
+            color: "#000000",
           },
           {
             name: props.navigation.state.params.primerNombreApellido,
             data: props.navigation.state.params.historicoEstatura,
-            color: "#EFEF09",
+            color: "#1C96A3",
           },
         ],
         responsive: {
@@ -148,9 +149,10 @@ class Screen extends React.Component {
         plotOptions: {
           series: {
             label: {
-              connectorAllowed: false,
+              connectorAllowed: true,
             },
             pointStart: 0,
+            connectNulls: true,
           },
         },
         series: [
@@ -172,17 +174,17 @@ class Screen extends React.Component {
           {
             name: "SD2",
             data: pesoSD2,
-            color: "#FF525C",
+            color: "#FF0000",
           },
           {
             name: "SD3",
             data: pesoSD3,
-            color: "#00D9FF",
+            color: "#000000",
           },
           {
             name: props.navigation.state.params.primerNombreApellido,
             data: props.navigation.state.params.historicoPeso,
-            color: "#EFEF09",
+            color: "#1C96A3",
           },
         ],
         responsive: {
