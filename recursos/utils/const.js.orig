@@ -4,38 +4,59 @@ const vaccines = () => [
     reinforcement: "no tiene",
     state: false,
     vaccine: "BCG",
+<<<<<<< HEAD
     time: "Recién nacido",
     date: "",
+=======
+    time:"Recién nacido",
+    date:"",
+>>>>>>> 8139f0e630e268540bdcdec1942730765b4d0366
   },
   {
     dose: "Única dosis",
     reinforcement: "no tiene",
     state: false,
     vaccine: "Hepatitis B",
+<<<<<<< HEAD
     time: "Recién nacido",
     date: "",
+=======
+    time:"Recién nacido",
+    date:"",
+>>>>>>> 8139f0e630e268540bdcdec1942730765b4d0366
   },
   {
     dose: "1ra dosis",
     reinforcement: "no tiene",
     state: false,
     vaccine: "Pentavalente",
+<<<<<<< HEAD
     time: "2 meses",
     date: "",
+=======
+    time:"2 meses",
+    date:""
+>>>>>>> 8139f0e630e268540bdcdec1942730765b4d0366
   },
   {
     dose: "1ra dosis",
     reinforcement: "no tiene",
     state: false,
     vaccine: "Polio inyección",
+<<<<<<< HEAD
     time: "2 meses",
     date: "",
+=======
+    time:"2 meses",
+    date:""
+>>>>>>> 8139f0e630e268540bdcdec1942730765b4d0366
   },
   {
     dose: "1ra dosis",
     reinforcement: "no tiene",
     state: false,
     vaccine: "Rotavirus",
+<<<<<<< HEAD
     time: "2 meses",
     date: "",
     diseases:
@@ -45,156 +66,255 @@ const vaccines = () => [
       "Rotarix y RotaTeq. Es importante utilizar durante toda la serie de vacunación la misma vacuna, Rotarix o RotaTeq, no se pueden intercambiar.",
     effect:
       "Se ha demostrado que son vacunas seguras tras amplios estudios buscando posibles efectos secundarios graves. Los efectos adversos más frecuentes son vómitos, diarrea y fiebre moderada, todos ellos leves. ",
+=======
+    time:"2 meses",
+    date:"",
+    diseases:"Esta vacuna previene la gastroenteritis aguda por rotavirus, cuya complicación más común es la deshidratación. Suele presentarse con más frecuencia a bebés y niños pequeños. Este virus se transmite de forma fecal-oral. El contagio se produce por contacto con personas enfermas, generalmente a través de las manos.",
+    administration:"Vía oral.",
+    vaccinebrands:"Rotarix y RotaTeq. Es importante utilizar durante toda la serie de vacunación la misma vacuna, Rotarix o RotaTeq, no se pueden intercambiar.",
+    effect:"Se ha demostrado que son vacunas seguras tras amplios estudios buscando posibles efectos secundarios graves. Los efectos adversos más frecuentes son vómitos, diarrea y fiebre moderada, todos ellos leves. ",
+>>>>>>> 8139f0e630e268540bdcdec1942730765b4d0366
   },
   {
     dose: "1ra dosis",
     reinforcement: "no tiene",
     state: false,
     vaccine: "Neumococo",
+<<<<<<< HEAD
     time: "2 meses",
     date: "",
+=======
+    time:"2 meses",
+    date:""
+>>>>>>> 8139f0e630e268540bdcdec1942730765b4d0366
   },
   {
     dose: "2da dosis",
     reinforcement: "no tiene",
     state: false,
     vaccine: "Pentavalente",
+<<<<<<< HEAD
     time: "4 meses",
     date: "",
+=======
+    time:"4 meses",
+    date:""
+>>>>>>> 8139f0e630e268540bdcdec1942730765b4d0366
   },
   {
     dose: "2da dosis",
     reinforcement: "no tiene",
     state: false,
     vaccine: "Polio inyección",
+<<<<<<< HEAD
     time: "4 meses",
     date: "",
+=======
+    time:"4 meses",
+    date:""
+>>>>>>> 8139f0e630e268540bdcdec1942730765b4d0366
   },
   {
     dose: "2da dosis",
     reinforcement: "no tiene",
     state: false,
     vaccine: "Rotavirus",
+<<<<<<< HEAD
     time: "4 meses",
     date: "",
+=======
+    time:"4 meses",
+    date:""
+>>>>>>> 8139f0e630e268540bdcdec1942730765b4d0366
   },
   {
     dose: "2da dosis",
     reinforcement: "no tiene",
     state: false,
     vaccine: "Neumococo",
+<<<<<<< HEAD
     time: "4 meses",
     date: "",
+=======
+    time:"4 meses",
+    date:""
+>>>>>>> 8139f0e630e268540bdcdec1942730765b4d0366
   },
   {
     dose: "3ra dosis",
     reinforcement: "no tiene",
     state: false,
     vaccine: "Pentavalente",
+<<<<<<< HEAD
     time: "6 meses",
     date: "",
+=======
+    time:"6 meses",
+    date:""
+>>>>>>> 8139f0e630e268540bdcdec1942730765b4d0366
   },
   {
     dose: "3ra dosis",
     reinforcement: "no tiene",
     state: false,
     vaccine: "Polio oral",
+<<<<<<< HEAD
     time: "6 meses",
     date: "",
+=======
+    time:"6 meses",
+    date:""
+>>>>>>> 8139f0e630e268540bdcdec1942730765b4d0366
   },
   {
     dose: "1ra dosis",
     reinforcement: "no tiene",
     state: false,
     vaccine: "Influenza",
+<<<<<<< HEAD
     time: "6 meses",
     date: "",
+=======
+    time:"6 meses",
+    date:""
+>>>>>>> 8139f0e630e268540bdcdec1942730765b4d0366
   },
   {
     dose: "2da dosis",
     reinforcement: "no tiene",
     state: false,
     vaccine: "Influenza estacional",
+<<<<<<< HEAD
     time: "7 meses",
     date: "",
+=======
+    time:"7 meses",
+    date:""
+>>>>>>> 8139f0e630e268540bdcdec1942730765b4d0366
   },
   {
     dose: "3ra dosis",
     reinforcement: "no tiene",
     state: false,
     vaccine: "Neumococo",
+<<<<<<< HEAD
     time: "12 meses",
     date: "",
+=======
+    time:"12 meses",
+    date:""
+>>>>>>> 8139f0e630e268540bdcdec1942730765b4d0366
   },
   {
     dose: "1ra dosis",
     reinforcement: "no tiene",
     state: false,
     vaccine: "SPR",
+<<<<<<< HEAD
     time: "12 meses",
     date: "",
+=======
+    time:"12 meses",
+    date:""
+>>>>>>> 8139f0e630e268540bdcdec1942730765b4d0366
   },
   {
     dose: "1ra dosis",
     reinforcement: "no tiene",
     state: false,
     vaccine: "Varicela",
+<<<<<<< HEAD
     time: "12 meses",
     date: "",
+=======
+    time:"12 meses",
+    date:""
+>>>>>>> 8139f0e630e268540bdcdec1942730765b4d0366
   },
   {
     dose: "Única dosis",
     reinforcement: "no tiene",
     state: false,
     vaccine: "Influenza",
+<<<<<<< HEAD
     time: "12 meses",
     date: "",
+=======
+    time:"12 meses",
+    date:""
+>>>>>>> 8139f0e630e268540bdcdec1942730765b4d0366
   },
   {
     dose: "Única dosis",
     reinforcement: "no tiene",
     state: false,
     vaccine: "Fiebre amarilla",
+<<<<<<< HEAD
     time: "15 meses",
     date: "",
+=======
+    time:"15 meses",
+    date:""
+>>>>>>> 8139f0e630e268540bdcdec1942730765b4d0366
   },
   {
     dose: "2da dosis",
     reinforcement: "no tiene",
     state: false,
     vaccine: "SRP",
+<<<<<<< HEAD
     time: "18 meses",
     date: "",
+=======
+    time:"18 meses",
+    date:""
+>>>>>>> 8139f0e630e268540bdcdec1942730765b4d0366
   },
   {
     dose: "no tiene",
     reinforcement: "1er refuerzo",
     state: false,
     vaccine: "DTP",
+<<<<<<< HEAD
     time: "18 meses",
     date: "",
+=======
+    time:"18 meses",
+    date:""
+>>>>>>> 8139f0e630e268540bdcdec1942730765b4d0366
   },
   {
     dose: "no tiene",
     reinforcement: "1er refuerzo",
     state: false,
     vaccine: "Polio oral",
+<<<<<<< HEAD
     time: "18 meses",
     date: "",
+=======
+    time:"18 meses",
+    date:""
+>>>>>>> 8139f0e630e268540bdcdec1942730765b4d0366
   },
   {
     dose: "no tiene",
     reinforcement: "2do refuerzo",
     state: false,
     vaccine: "DTP",
+<<<<<<< HEAD
     time: "4 años",
     date: "",
+=======
+    time:"4 años",
+    date:""
+>>>>>>> 8139f0e630e268540bdcdec1942730765b4d0366
   },
   {
     dose: "no tiene",
     reinforcement: "2do refuerzo",
     state: false,
     vaccine: "Polio oral",
+<<<<<<< HEAD
     time: "4 años",
     date: "",
   },
@@ -18804,3 +18924,11 @@ export {
   pesoSD2,
   pesoSD3,
 };
+=======
+    time:"4 años",
+    date:""
+  },
+];
+
+export { vaccines };
+>>>>>>> 8139f0e630e268540bdcdec1942730765b4d0366
