@@ -1,429 +1,275 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
-  Alert,
   Picker,
   TextInput,
-  TouchableWithoutFeedback,
   ScrollView,
-  Image,
   View,
   Text,
   StatusBar,
-  StyleSheet,
   TouchableOpacity,
   LayoutAnimation,
-  AsyncStorage,
   Modal,
+  YellowBox,
   Button,
 } from "react-native";
-import DatePicker from "react-native-datepicker";
+import DateTimePicker from "@react-native-community/datetimepicker";
+import moment from "moment";
+import "moment/locale/es";
 import { MaterialIcons } from "@expo/vector-icons";
-import * as firebase from "firebase";
-import historiaHijoTest from "../utilitarios/historiaHijo.json";
+import { firebase } from "./utils/firebase";
+import styles from "./styles/stylesHomeScreen";
+import CardChildUsers from "./components/cardChildUsers";
+import { vaccines } from "./utils/const";
 
 //VISTA HOME PRINCIPAL
-export default class HomeScreen extends React.Component {
-  static navigationOptions = {
-    headerShown: false,
-  };
+const HomeScreen = ({ navigation }) => {
+  LayoutAnimation.easeInEaseOut();
+  const [email, setEmail] = useState("");
+  const [name, setName] = useState("");
+  const [gender, setGender] = useState("");
+  const [sangre, setSangre] = useState("");
+  const [childUsers, setChildUsers] = useState([]);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [date, setDate] = useState(new Date());
+  const [mode, setMode] = useState("date");
+  const [show, setShow] = useState(false);
+  const [selectDate, setSelectDate] = useState(false);
+  const [uidUser, setUidUser] = useState("");
 
-  state = {
-    name: "",
-  };
+  useEffect(() => {
+    YellowBox.ignoreWarnings(["Setting a timer"]);
+    const { email, uid } = firebase.auth().currentUser;
+    getData(uid);
+    setEmail(email);
+    setUidUser(uid);
+  }, []);
 
-  state = {
-    escolaridade: "",
-  };
+  const getData = async (uid) => {
+    const querySnapshot = firebase
+      .firestore()
+      .collection("usuarios")
+      .doc(uid)
+      .collection("childUsers");
+    querySnapshot.onSnapshot((querySnapshot) => {
+      var children = [];
+      querySnapshot.forEach((doc) => {
+        const { birthday } = doc.data();
+        const formatoFecha = moment(birthday.toDate()).format("LL");
+        children.push({
+          ...doc.data(),
+          birthday: formatoFecha,
+          id: doc.id,
+        });
+      });
 
-  state = {
-    sangre: "",
-  };
-
-  state = {
-    data: "",
-  };
-
-  changeName(name) {
-    this.setState({ name });
-  }
-
-  changeDate = (valor) => {
-    this.setState({
-      data: valor,
+      if (children.length > 0) {
+        setChildUsers(children);
+      }
     });
   };
 
-  buttonPressed() {
-    const arrayDataNino = [];
-    if (
-      this.state.name &&
-      this.state.escolaridade &&
-      this.state.sangre &&
-      this.state.data
-    ) {
-      const dataNino = {
-        name: this.state.name,
-        escolaridade: this.state.escolaridade,
-        sangre: this.state.sangre,
-        data: this.state.data,
+  const changeName = (name) => {
+    setName(name);
+  };
+
+  const buttonPressed = () => {
+    if (selectDate && name !== "" && gender !== "" && sangre !== "") {
+      let now = new Date(date);
+
+      const documentChildUser = {
+        birthday: firebase.firestore.Timestamp.fromDate(now),
+        bloodType: sangre,
+        gender,
+        name,
       };
-      arrayDataNino.push(dataNino);
-      try {
-        AsyncStorage.getItem("database_agregarnino0").then((value) => {
-          if (value !== null) {
-            const d = JSON.parse(value);
-            d.push(dataNino);
-            AsyncStorage.setItem(
-              "database_agregarnino0",
-              JSON.stringify(d)
-            ).then(() => {
-              this.modalHandler();
-            });
-          } else {
-            AsyncStorage.setItem(
-              "database_agregarnino0",
-              JSON.stringify(arrayDataNino)
-            ).then(() => {
-              this.modalHandler();
-            });
-          }
-        });
-      } catch (err) {
-        console.log(err);
-      }
+      handleAddChildUser(documentChildUser);
     } else {
-      Alert.alert("Falta completar un campo");
+      alert("Llene todo los campos");
     }
-  }
-
-  state = {
-    isVisible: false,
   };
 
-  consultarHistorialChild(childId) {
-    //let historiaHijoTest = this.getHistorialByChild(childId)
+  const handleAddChildUser = (documentChildUser) => {
+    const ref = firebase
+      .firestore()
+      .collection("usuarios")
+      .doc(uidUser)
+      .collection("childUsers");
 
-    let partsZero = historiaHijoTest.fechaNacimiento.split("-");
-    let fechaZero = new Date(partsZero[2], partsZero[1] - 1, partsZero[1]);
-    let registrosEstatura = historiaHijoTest.historialEstatura;
-    let registrosPeso = historiaHijoTest.historialPeso;
-    let lastRegistroEstatura = { index: 0, value: 0 };
-    let lastRegistroPeso = { index: 0, value: 0 };
-
-    var historialEstatura = [];
-    var historialPeso = [];
-
-    //Conversión de Json historico estatura en formato de data para gráfico
-    registrosEstatura.forEach((value) => {
-      let parts = value.fechaRegistro.split("-");
-      let fechaRegistro = new Date(parts[2], parts[1] - 1, parts[1]);
-
-      let Difference_In_Time = fechaRegistro.getTime() - fechaZero.getTime();
-      let Difference_In_Days = Difference_In_Time / (1000 * 3600 * 24);
-
-      if (lastRegistroEstatura.index <= Difference_In_Days) {
-        lastRegistroEstatura.index = Difference_In_Days;
-        lastRegistroEstatura.value = value.estatura;
-      }
-
-      historialEstatura[Difference_In_Days] = value.estatura;
-    });
-
-    //Conversión de Json historico peso en formato de data para gráfico
-    registrosPeso.forEach((value) => {
-      let parts = value.fechaRegistro.split("-");
-      let fechaRegistro = new Date(parts[2], parts[1] - 1, parts[1]);
-
-      let Difference_In_Time = fechaRegistro.getTime() - fechaZero.getTime();
-      let Difference_In_Days = Difference_In_Time / (1000 * 3600 * 24);
-
-      if (lastRegistroPeso.index <= Difference_In_Days) {
-        lastRegistroPeso.index = Difference_In_Days;
-        lastRegistroPeso.value = value.peso;
-      }
-
-      historialPeso[Difference_In_Days] = value.peso;
-    });
-
-    return {
-      lastRegistroEstatura: lastRegistroEstatura,
-      lastRegistroPeso: lastRegistroPeso,
-      historicoEstatura: historialEstatura,
-      historicoPeso: historialPeso,
-      nombre: historiaHijoTest.nombre,
-    };
-  }
-
-  goToChart = () => {
-    let dataHistorial = this.consultarHistorialChild();
-
-    // let parametro = {
-    //   ctipoChart: "Altura",
-    //   historicoPeso: dataHistorial.historialPeso,
-    //   historicoEstatura: dataHistorial.historialEstatura,
-    //   primerNombreApellido: dataHistorial.primerNombreApellido,
-    // };
-    this.props.navigation.navigate("ChildChart", dataHistorial);
+    ref
+      .add(documentChildUser)
+      .then((docRef) => {
+        const { id } = docRef;
+        setModalVisible(false);
+        setName("");
+        setGender("");
+        setSangre("");
+        setSelectDate(false);
+        handleAddVaccines(ref, id);
+      })
+      .catch(function (error) {
+        console.error("Error adding document: ", error);
+      });
   };
 
-  modalHandler = () => {
-    this.setState({ isVisible: !this.state.isVisible });
-  };
-
-  state = {
-    email: "",
-    displayName: "",
-  };
-
-  componentDidMount() {
-    const { email, displayName } = firebase.auth().currentUser;
-
-    this.setState({ email, displayName });
-  }
-
-  signOutUser = () => {
-    firebase.auth().signOut();
-  };
-
-  constructor() {
-    super();
-    this.state = {
-      Nino: "",
-    };
-    try {
-      AsyncStorage.getItem("database_agregarnino0").then((value) => {
-        this.setState({
-          Nino: JSON.parse(value),
+  const handleAddVaccines = (ref, id) => {
+    const refChild = ref.doc(id).collection("vacunas");
+    const vaccinesArray = vaccines();
+    vaccinesArray.forEach((Element) => {
+      refChild
+        .add(Element)
+        .then((docRef) => {
+          const { id } = docRef;
+          console.log(" adding document: ", id);
+        })
+        .catch(function (error) {
+          console.error("Error adding document: ", error);
         });
-      });
-    } catch (err) {
-      console.log(err);
-    }
-  }
-  parseData() {
-    if (this.state.Nino) {
-      return this.state.Nino.map((dataNino, i) => {
-        return (
-          <View style={styles.infoCard} key={i}>
-            <View>
-              <Text
-                style={{
-                  fontSize: 16,
-                  textAlign: "center",
-                  backgroundColor: "#1D96A3",
-                  padding: 6,
-                  color: "#fff",
-                  textTransform: "uppercase",
-                }}
-              >
-                {dataNino.name}{" "}
-              </Text>
-            </View>
+    });
+  };
 
-            <View style={{ flexDirection: "row" }}>
-              <View>
-                <Image
-                  source={require("../recursos/imagenes/logoSanitos.png")}
-                  style={{ width: 70, height: 70 }}
-                />
-              </View>
-              <View style={{ padding: 10 }}>
-                <Text>{dataNino.escolaridade} </Text>
-                <Text>{dataNino.sangre} </Text>
-                <Text>{dataNino.data} </Text>
-              </View>
-            </View>
-            <View>
-              <TouchableOpacity
-                onPress={() => this.props.navigation.navigate("Nino")}
-              >
-                <Text
-                  style={{
-                    textAlign: "center",
-                    padding: 6,
-                    fontSize: 16,
-                    color: "#C4C4C4",
-                  }}
-                >
-                  {" "}
-                  + Presiona aqui para ver mas{" "}
-                </Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-        );
-      });
-    }
-  }
+  const onChange = (event, selectedDate) => {
+    const currentDate = selectedDate || date;
+    setShow(Platform.OS === "ios");
+    setDate(currentDate);
+  };
 
-  render() {
-    const { isVisible } = this.state;
-    LayoutAnimation.easeInEaseOut();
+  const showMode = (currentMode) => {
+    setShow(true);
+    setMode(currentMode);
+  };
 
-    return (
-      <ScrollView style={styles.container}>
-        <StatusBar barStyle="light-content"></StatusBar>
+  const showDatepicker = () => {
+    setSelectDate(true);
+    showMode("date");
+  };
 
-        <Text style={{ marginTop: 60, left: 30, fontSize: 16 }}>
-          Bienvenida {this.state.email} !{"\n"}
-          Estamos felices de verte por aquí
-        </Text>
-        <View style={styles.containerCards}>{this.parseData()}</View>
+  return (
+    <ScrollView style={styles.container}>
+      <StatusBar barStyle="light-content" />
 
-        <View style={styles.infoCard}>
-          <TouchableOpacity onPress={this.goToChart}>
-            <Text
-              style={{
-                textAlign: "center",
-                padding: 20,
-                fontSize: 16,
-                color: "#C4C4C4",
-              }}
-            >
-              {" "}
-              Ver Gráfico Niño{" "}
-            </Text>
-          </TouchableOpacity>
-        </View>
+      <Text style={styles.textWelcome}>
+        Bienvenida {email} !{"\n"}
+        Estamos felices de verte por aquí
+      </Text>
+      <View style={styles.containerCards}>
+        <CardChildUsers childUsers={childUsers} navigation={navigation} />
 
-        <View style={styles.infoCard}>
-          <TouchableOpacity onPress={this.modalHandler}>
-            <Text
-              style={{
-                textAlign: "center",
-                padding: 20,
-                fontSize: 16,
-                color: "#C4C4C4",
-              }}
-            >
+        <View style={styles.infoCard1}>
+          <TouchableOpacity
+            onPress={() => {
+              setModalVisible(true);
+            }}
+          >
+            <Text style={styles.textAgregar}>
               {" "}
               + Agregue los datos de su niño/niña{" "}
             </Text>
           </TouchableOpacity>
         </View>
+      </View>
 
-        <Modal visible={false} transparent={true} animationType="fade">
-          <TouchableOpacity
-            onPress={() => this.modalHandler()}
-            style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
-          >
-            <TouchableWithoutFeedback>
+      <Modal visible={modalVisible} transparent={true} animationType="fade">
+        <View style={styles.centeredViews}>
+          <View style={styles.modalView}>
+            <MaterialIcons
+              name="close"
+              size={24}
+              onPress={() => {
+                setModalVisible(!modalVisible);
+              }}
+              style={styles.iconBox}
+            />
+
+            <View>
+              <View>
+                <Text style={styles.titleModal}>Agregar niña/o</Text>
+              </View>
+
               <View
-                style={{
-                  height: "80%",
-                  width: "80%",
-                  backgroundColor: "grey",
-                  padding: 10,
-                  borderRadius: 4,
-                }}
+                style={styles.input1}
               >
-                <MaterialIcons
-                  name="close"
-                  size={24}
-                  onPress={() => this.modalHandler()}
-                ></MaterialIcons>
+                <TextInput
+                  style={styles.input}
+                  placeholder="Nombre"
+                  autoCapitalize="none"
+                  onChangeText={(name) => changeName(name)}
+                  value={name}
+                />
+              </View>
 
-                <View style={styles.form}>
-                  <View>
-                    <Text style={styles.title1}>Agregar niña/a</Text>
-                  </View>
+              <View
+                style={styles.pickerBox}
+              >
+                <Picker
+                  style={styles.picker}
+                  selectedValue={gender}
+                  onValueChange={(itemValor) => setGender(itemValor)}
+                >
+                  <Picker.Item label="Sexo" value="" />
+                  <Picker.Item label="Niña" value="Niña" />
+                  <Picker.Item label="Niño" value="Niño" />
+                </Picker>
+              </View>
 
-                  <View>
-                    <TextInput
-                      style={styles.input}
-                      placeholder="Nombre"
-                      autoCapitalize="none"
-                      onChangeText={(name) => this.changeName(name)}
-                      value={this.state.name}
-                    ></TextInput>
-                  </View>
+              <View
+                style={styles.pickerBox}
+              >
+                <Picker
+                  style={styles.picker}
+                  selectedValue={sangre}
+                  onValueChange={(itemValor) => setSangre(itemValor)}
+                >
+                  <Picker.Item label="Tipo de sangre" value="" />
+                  <Picker.Item label="A positivo" value="A positivo" />
+                  <Picker.Item label="A negativo" value="A negativo" />
+                  <Picker.Item label="B positivo" value="B positivo" />
+                  <Picker.Item label="B negativo" value="B negativo" />
+                  <Picker.Item label="O negativo" value="O negativo" />
+                  <Picker.Item label="O negativo" value="O negativo" />
+                  <Picker.Item label="AB positivo" value="AB positivo" />
+                  <Picker.Item label="AB negativo" value="AB negativo" />
+                </Picker>
+              </View>
 
-                  <View>
-                    <Picker
-                      style={styles.pickerComponent}
-                      selectedValue={this.state.escolaridade}
-                      onValueChange={(itemValor, itemIndex) =>
-                        this.setState({
-                          escolaridade: itemValor,
-                        })
-                      }
-                    >
-                      <Picker.Item label="Sexo" value="" />
-                      <Picker.Item label="Niña" value="Niña" />
-                      <Picker.Item label="Niño" value="Niño" />
-                    </Picker>
-                  </View>
+              <View>
+                <View>
+                    <TouchableOpacity
+                      onPress={showDatepicker}
+                      style={styles.inputBirthday}>
+                      <Text style={styles.textAgregar1}
+                      >
+                        Fecha de nacimiento
+                      </Text>
+                    </TouchableOpacity>
 
-                  <View>
-                    <Picker
-                      style={styles.pickerComponent}
-                      selectedValue={this.state.sangre}
-                      onValueChange={(itemValor, itemIndex) =>
-                        this.setState({
-                          sangre: itemValor,
-                        })
-                      }
-                    >
-                      <Picker.Item label="Tipo de sangre" value="" />
-                      <Picker.Item label="A positivo" value="A positivo" />
-                      <Picker.Item label="A negativo" value="A negativo" />
-                      <Picker.Item label="B positivo" value="B positivo" />
-                      <Picker.Item label="B negativo" value="B negativo" />
-                      <Picker.Item label="O negativo" value="O negativo" />
-                      <Picker.Item label="O negativo" value="O negativo" />
-                      <Picker.Item label="AB positivo" value="AB positivo" />
-                      <Picker.Item label="AB negativo" value="AB negativo" />
-                    </Picker>
-                  </View>
 
-                  <View>
-                    <DatePicker
-                      format="DD/MM/YYYY"
-                      style={styles.dateComponent}
-                      date={this.state.data}
-                      onDateChange={this.changeDate}
+                  {show && (
+                    <DateTimePicker
+                      testID="dateTimePicker"
+                      value={date}
+                      mode={mode}
+                      is24Hour={true}
+                      display="default"
+                      onChange={onChange}
                     />
-                  </View>
-
-                  <TouchableOpacity
-                    style={styles.button}
-                    onPress={() => this.buttonPressed()}
-                  >
-                    <Text style={{ color: "#ffffff", fontWeight: "500" }}>
-                      Agregar
-                    </Text>
-                  </TouchableOpacity>
-                  <View></View>
+                  )}
                 </View>
               </View>
-            </TouchableWithoutFeedback>
-          </TouchableOpacity>
-        </Modal>
-      </ScrollView>
-    );
-  }
-}
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  infoCard: {
-    marginBottom: 24,
-    borderWidth: 1,
-    borderColor: "#05A4AC",
-    borderRadius: 4,
-    width: 300,
-    left: 30,
-  },
-  containerCards: {
-    marginTop: 30,
-  },
-  button: {
-    backgroundColor: "#E9446A",
-    borderRadius: 4,
+              <TouchableOpacity
+                style={styles.buttonModal}
+                onPress={() => buttonPressed()}
+              >
+                <Text style={{ color: "#ffffff", fontWeight: "500" }}>
+                  Agregar
+                </Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </Modal>
+    </ScrollView>
+  );
+};
 
-    alignItems: "center",
-    justifyContent: "center",
-  },
-});
+export default HomeScreen;

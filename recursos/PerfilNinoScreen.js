@@ -1,234 +1,175 @@
-import React from 'react'
-import { ScrollView, Image, View, Text, StyleSheet, TouchableOpacity, LayoutAnimation, AsyncStorage, StatusBar } from 'react-native'
-import { Ionicons } from '@expo/vector-icons'
-
-import * as firebase from 'firebase'
-
+import React, { useState, useEffect } from "react";
+import {
+  ScrollView,
+  Image,
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  LayoutAnimation,
+  AsyncStorage,
+  YellowBox,
+} from "react-native";
+import { set } from "react-native-reanimated";
+import styles from "./styles/stylesPerfilNinoScreen";
+import childDataTest from "./utils/childDataTest.json";
 
 //VISTA HOME PRINCIPAL
-export default class PerfilNinoScreen extends React.Component {
+const PerfilNinoScreen = ({ route, navigation }) => {
+  LayoutAnimation.easeInEaseOut();
+  const [user, setUser] = useState({});
 
-  static navigationOptions = {
-    headerShown: true
-  }
+  useEffect(() => {
+    YellowBox.ignoreWarnings(["Setting a timer"]);
+    const { id } = route.params;
+    setUser(id);
+  }, []);
 
-  
-  state = {
-    name: ""
-  }
+  /* const getDataTarget {user.name}= async (id) => {
 
-  state = {
-    escolaridade: ""
+  } */
+
+  const getRecordChild = () => {
+    let partsZero = childDataTest.fechaNacimiento.split("-");
+    let fechaZero = new Date(partsZero[2], partsZero[1] - 1, partsZero[1]);
+    let registrosEstatura = childDataTest.historialEstatura;
+    let registrosPeso = childDataTest.historialPeso;
+    let lastRegistroEstatura = { index: 0, value: 0 };
+    let lastRegistroPeso = { index: 0, value: 0 };
+
+    var historialEstatura = [];
+    var historialPeso = [];
+
+    //Conversión de Json historico estatura en formato de data para gráfico
+    registrosEstatura.forEach((value) => {
+      let parts = value.fechaRegistro.split("-");
+      let fechaRegistro = new Date(parts[2], parts[1] - 1, parts[1]);
+
+      let Difference_In_Time = fechaRegistro.getTime() - fechaZero.getTime();
+      let Difference_In_Days = Difference_In_Time / (1000 * 3600 * 24);
+
+      if (lastRegistroEstatura.index <= Difference_In_Days) {
+        lastRegistroEstatura.index = Difference_In_Days;
+        lastRegistroEstatura.value = value.estatura;
+      }
+
+      historialEstatura[Difference_In_Days] = value.estatura;
+    });
+
+    //Conversión de Json historico peso en formato de data para gráfico
+    registrosPeso.forEach((value) => {
+      let parts = value.fechaRegistro.split("-");
+      let fechaRegistro = new Date(parts[2], parts[1] - 1, parts[1]);
+
+      let Difference_In_Time = fechaRegistro.getTime() - fechaZero.getTime();
+      let Difference_In_Days = Difference_In_Time / (1000 * 3600 * 24);
+
+      if (lastRegistroPeso.index <= Difference_In_Days) {
+        lastRegistroPeso.index = Difference_In_Days;
+        lastRegistroPeso.value = value.peso;
+      }
+
+      historialPeso[Difference_In_Days] = value.peso;
+    });
+
+    return {
+      lastRegistroEstatura: lastRegistroEstatura,
+      lastRegistroPeso: lastRegistroPeso,
+      historicoEstatura: historialEstatura,
+      historicoPeso: historialPeso,
+      nombre: childDataTest.nombre,
+    };
   };
 
-  state = {
-    sangre: ""
-  };
-
-  state = {
-    data: ""
-  };
-
-
-  constructor() {
-    super()
-    this.state = {
-      Nino: ""
-    }
-    try {
-      AsyncStorage.getItem('database_ninoinfo1').then((value) => {
-        this.setState({
-          Nino: JSON.parse(value)
-        })
-      })
-    } catch (err) {
-      console.log(err)
-    }
-  }
-  parseData() {
-    if (this.state.Nino) {
-      return this.state.Nino.map((dataNino, i) => {
-        return (
-          <View
-            //MOSTRANDO LA DATA RECOLECTADA DEL NIÑO
-            style={styles.infoCard}
-            key={i}>
-
+  return (
+    <ScrollView style={styles.container}>
+      <View style={styles.containerCards}>
+        <View style={styles.infoCard}>
+          <View style={styles.rowCard}>
             <View>
-              <Text
-                style={{ textAlign: 'center', backgroundColor: '#05A4AC', padding: 6, color: '#fff', textTransform: 'uppercase' }}
-              >{dataNino.name} </Text>
+              <Image
+                source={require("../recursos/imagenes/logoSanitos.png")}
+                style={{ width: 100, height: 100 }}
+              />
             </View>
+            <View style={styles.paddingCard}>
+              <Text>{user.name} </Text>
+              <Text>Edad: {user.birthday} </Text>
+              <Text>Tipo de sangre: {user.bloodType}</Text>
+              <Text>Sexo: {user.gender} </Text>
+            </View>
+          </View>
+        </View>
+      </View>
 
-            <View
-              style={{ flexDirection: 'row' }}
+      <View>
+        <View style={styles.boxIconos}>
+          <View style={styles.containerIconos}>
+            <TouchableOpacity
+              onPress={() => {
+                navigation.navigate("Peso", { idPesos: user });
+              }}
             >
-              <View>
-                <Image
-                  source={require('../recursos/imagenes/logoSanitos.png')}
-                  style={{ width: 70, height: 70 }}
-                />
-              </View>
-              <View
-                style={{ padding: 10 }}
-              >
-                <Text>{dataNino.escolaridade} </Text>
-                <Text>{dataNino.sangre} </Text>
-                <Text>{dataNino.data} </Text>
-
-              </View>
-
-
-            </View>
-
+              <Image
+                resizeMode="contain"
+                source={require("../recursos/imagenes/peso.png")}
+                style={styles.iconCenter}
+              />
+              <Text style={styles.textIcon}>Peso</Text>
+            </TouchableOpacity>
           </View>
 
-        )
-      })
-    }
-  }
-
-  render() {
-
-    LayoutAnimation.easeInEaseOut();
-
-    return (
-
-      <ScrollView
-        style={styles.container}
-      >
-
-
-        <View style={styles.containerCards}>
-          {this.parseData()}
+          <View style={styles.containerIconos}>
+            <TouchableOpacity
+              onPress={() => {
+                navigation.navigate("Estatura", { idPesos: user });
+              }}
+            >
+              <Image
+                resizeMode="contain"
+                source={require("../recursos/imagenes/estatura.png")}
+                style={styles.iconCenter}
+              />
+              <Text style={styles.textIcon}>Estatura</Text>
+            </TouchableOpacity>
+          </View>
         </View>
 
-        <View>
-
-          <View
-            style={{ flexDirection: 'row', justifyContent:'space-around', marginTop:22}}
-          >
-            <View
-              style={styles.containerIconos}
+        <View style={styles.containerIcon2}>
+          <View style={styles.containerIconos}>
+            <TouchableOpacity
+              onPress={() => {
+                let data = getRecordChild();
+                navigation.navigate("ChildChart", data);
+              }}
             >
-
-
-              <TouchableOpacity
-                onPress={() => this.props.navigation.navigate('Peso')}
-              ><Image
-                  resizeMode='contain'
-                  source={require('../recursos/imagenes/peso.png')}
-                  style={{ width: 50, height: 50, alignSelf: 'center' }}
-                />
-                <Text
-                  style={{ display: 'flex', alignItems: 'flex-start', textAlign: 'center', marginTop: 10, color:'#1D96A3' }}
-                  >Peso</Text>
-              </TouchableOpacity>
-            </View>
-
-            <View
-              style={styles.containerIconos}
-            >
-
-              <TouchableOpacity
-                onPress={() => this.props.navigation.navigate('Estatura')}
-              ><Image
-                  resizeMode='contain'
-                  source={require('../recursos/imagenes/estatura.png')}
-                  style={{ width: 50, height: 50, alignSelf: 'center' }}
-                />
-                <Text
-                  style={{ display: 'flex', alignItems: 'flex-start', textAlign: 'center', marginTop: 10, color:'#1D96A3' }}
-                  >Estatura</Text>
-              </TouchableOpacity>
-            </View>
+              <Image
+                resizeMode="contain"
+                source={require("../recursos/imagenes/crecimiento.png")}
+                style={styles.iconCenter}
+              />
+              <Text style={styles.textIcon}>Estadistica</Text>
+            </TouchableOpacity>
           </View>
 
-          <View
-            style={{ flexDirection: 'row', justifyContent:'space-around',marginTop:22 }}
-          >
-            <View
-              style={styles.containerIconos}
+          <View style={styles.containerIconos}>
+            <TouchableOpacity
+              onPress={() => {
+                navigation.navigate("Vacunas", { idPesos: user });
+              }}
             >
-
-              <TouchableOpacity
-
-                onPress={() => this.props.navigation.navigate('Vacunas')}
-
-              >
-                <Image
-                  resizeMode='contain'
-                  source={require('../recursos/imagenes/crecimiento.png')}
-                  style={{ width: 50, height: 50, alignSelf: 'center' }}
-                />
-                <Text
-                  style={{ display: 'flex', alignItems: 'flex-start', textAlign: 'center', marginTop: 10, color:'#1D96A3' }}
-                  >Estadistica</Text>
-
-              </TouchableOpacity>
-            </View>
-
-
-            <View
-              style={styles.containerIconos}
-            >
-
-              <TouchableOpacity
-                onPress={() => this.props.navigation.navigate('Vacunas')}
-              >
-                <Image
-                  resizeMode='contain'
-                  source={require('../recursos/imagenes/vacunas.png')}
-                  style={{ width: 50, height: 50,  alignSelf: 'center' }}
-                />
-                <Text
-                  style={{ display: 'flex', alignItems: 'flex-start', textAlign: 'center', marginTop: 10, color:'#1D96A3' }}
-                  >Vacunas</Text>
-              </TouchableOpacity>
-            </View>
+              <Image
+                resizeMode="contain"
+                source={require("../recursos/imagenes/vacunas.png")}
+                style={styles.iconCenter}
+              />
+              <Text style={styles.textIcon}>Vacunas</Text>
+            </TouchableOpacity>
           </View>
+        </View>
+      </View>
+    </ScrollView>
+  );
+};
 
-
-        </View >
-
-
-
-
-      </ScrollView >
-
-
-
-
-    );
-  }
-}
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 30,
-  },
-  infoCard: {
-    marginBottom: 24,
-    borderWidth: 1,
-    borderColor: '#05A4AC',
-    borderRadius: 4,
-    width: 300,
-    left: 30,
-  },
-  containerCards: {
-    marginTop: 30,
-  },
-  containerIconos: {
-    backgroundColor: '#fff',
-    borderColor: '#05A4AC',
-    borderWidth: 2,
-    borderRadius: 4,
-    width: 106,
-    height: 106,
-    alignContent: 'center',
-    justifyContent: 'center'
-  }
-
-
-});
+export default PerfilNinoScreen;

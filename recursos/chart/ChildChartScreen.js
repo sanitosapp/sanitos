@@ -11,7 +11,7 @@ import {
   pesoSD0,
   pesoSD2,
   pesoSD3,
-} from "../../utilitarios/Constants";
+} from "../utils/const";
 import HighchartsReactNative from "@highcharts/highcharts-react-native";
 import {
   Grid,
@@ -28,8 +28,9 @@ import {
   Footer,
 } from "native-base";
 
-class Screen extends React.Component {
+class ChildChartScreen extends React.Component {
   constructor(props) {
+    // console.log("ChildChartScreen:PROPS:", props);
     super(props);
 
     this.state = {
@@ -108,8 +109,8 @@ class Screen extends React.Component {
             color: "#000000",
           },
           {
-            name: props.navigation.state.params.nombre,
-            data: props.navigation.state.params.historicoEstatura,
+            name: props.route.params.nombre,
+            data: props.route.params.historicoEstatura,
             color: "#1C96A3",
           },
         ],
@@ -201,8 +202,8 @@ class Screen extends React.Component {
             color: "#000000",
           },
           {
-            name: props.navigation.state.params.nombre,
-            data: props.navigation.state.params.historicoPeso,
+            name: props.route.params.nombre,
+            data: props.route.params.historicoPeso,
             color: "#1C96A3",
           },
         ],
@@ -231,23 +232,17 @@ class Screen extends React.Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    console.log("TEST:prevProps:", prevProps);
-    //   if (prevProps.route.params !== this.props.route.params) {
-    //     this.checkParams();
-    //   }
+    // console.log("TEST:prevProps:", prevProps);
   }
 
   checkParams() {
-    const { navigation } = this.props;
-    const lastRegistroEstatura = navigation.getParam("lastRegistroEstatura");
-    const lastRegistroPeso = navigation.getParam("lastRegistroPeso");
-
+    const { lastRegistroEstatura, lastRegistroPeso } = this.props.route.params;
+    // const { navigation } = this.props;
+    // const lastRegistroEstatura = navigation.getParam("lastRegistroEstatura");
+    // const lastRegistroPeso = navigation.getParam("lastRegistroPeso");
     this.validEstaturaPesoChild(lastRegistroEstatura, lastRegistroPeso);
-
     console.log("TEST:lastRegistroEstatura:", lastRegistroEstatura);
     console.log("TEST:lastRegistroPeso:", lastRegistroPeso);
-
-    // const ctipoChart = navigation.getParam("ctipoChart", "");
   }
 
   validEstaturaPesoChild(estaturaRecord, pesoRecord) {
@@ -305,38 +300,39 @@ class Screen extends React.Component {
                   styles={styles.container}
                   options={this.state.pesoChartOptions}
                 />
+                <Grid>
+                  {this.state.pesoCorrecto ? (
+                    <Row style={{ backgroundColor: "#75d98f" }}>
+                      <Text
+                        style={{
+                          fontSize: 15,
+                          color: "#FFF",
+                          width: 350,
+                          textAlign: "center",
+                          textAlignVertical: "center",
+                        }}
+                      >
+                        ¡Felicitaciones! Peso dentro del rango normal de
+                        crecimiento.
+                      </Text>
+                    </Row>
+                  ) : (
+                    <Row style={{ backgroundColor: "#d97575" }}>
+                      <Text
+                        style={{
+                          fontSize: 15,
+                          color: "#FFF",
+                          width: 350,
+                          textAlign: "center",
+                          textAlignVertical: "center",
+                        }}
+                      >
+                        ¡Alerta! Peso fuera del rango normal de crecimiento.
+                      </Text>
+                    </Row>
+                  )}
+                </Grid>
               </Content>
-
-              {this.state.pesoCorrecto ? (
-                <Footer style={{ backgroundColor: "#75d98f" }}>
-                  <Text
-                    style={{
-                      fontSize: 15,
-                      color: "#FFF",
-                      width: 350,
-                      textAlign: "center",
-                      textAlignVertical: "center",
-                    }}
-                  >
-                    ¡Felicitaciones! Peso dentro del rango normal de
-                    crecimiento.
-                  </Text>
-                </Footer>
-              ) : (
-                <Footer style={{ backgroundColor: "#d97575" }}>
-                  <Text
-                    style={{
-                      fontSize: 15,
-                      color: "#FFF",
-                      width: 350,
-                      textAlign: "center",
-                      textAlignVertical: "center",
-                    }}
-                  >
-                    ¡Alerta! Peso fuera del rango normal de crecimiento.
-                  </Text>
-                </Footer>
-              )}
             </Container>
           </Tab>
           <Tab
@@ -359,38 +355,39 @@ class Screen extends React.Component {
                   styles={styles.container}
                   options={this.state.alturaChartOptions}
                 />
+                <Grid>
+                  {this.state.estaturaCorrecta ? (
+                    <Row style={{ backgroundColor: "#75d98f" }}>
+                      <Text
+                        style={{
+                          fontSize: 15,
+                          color: "#FFF",
+                          width: 350,
+                          textAlign: "center",
+                          textAlignVertical: "center",
+                        }}
+                      >
+                        ¡Felicitaciones! Estatura dentro del rango normal de
+                        crecimiento.
+                      </Text>
+                    </Row>
+                  ) : (
+                    <Row style={{ backgroundColor: "#d97575" }}>
+                      <Text
+                        style={{
+                          fontSize: 15,
+                          color: "#FFF",
+                          width: 350,
+                          textAlign: "center",
+                          textAlignVertical: "center",
+                        }}
+                      >
+                        ¡Alerta! Estatura fuera del rango normal de crecimiento.
+                      </Text>
+                    </Row>
+                  )}
+                </Grid>
               </Content>
-
-              {this.state.estaturaCorrecta ? (
-                <Footer style={{ backgroundColor: "#75d98f" }}>
-                  <Text
-                    style={{
-                      fontSize: 15,
-                      color: "#FFF",
-                      width: 350,
-                      textAlign: "center",
-                      textAlignVertical: "center",
-                    }}
-                  >
-                    ¡Felicitaciones! Estatura dentro del rango normal de
-                    crecimiento.
-                  </Text>
-                </Footer>
-              ) : (
-                <Footer style={{ backgroundColor: "#d97575" }}>
-                  <Text
-                    style={{
-                      fontSize: 15,
-                      color: "#FFF",
-                      width: 350,
-                      textAlign: "center",
-                      textAlignVertical: "center",
-                    }}
-                  >
-                    ¡Alerta! Estatura fuera del rango normal de crecimiento.
-                  </Text>
-                </Footer>
-              )}
             </Container>
           </Tab>
         </Tabs>
@@ -401,11 +398,11 @@ class Screen extends React.Component {
 
 const styles = StyleSheet.create({
   container: {
-    height: 670,
+    height: 638,
     // height: 200,
     backgroundColor: "#fff",
     justifyContent: "center",
     flex: 1,
   },
 });
-export default Screen;
+export default ChildChartScreen;
