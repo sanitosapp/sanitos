@@ -9,11 +9,15 @@ import {
     TouchableOpacity,
     YellowBox,
 } from "react-native";
+import * as Notifications from 'expo-notifications';
+import * as Permissions from 'expo-permissions';
+import Constants from 'expo-constants';
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { MaterialIcons } from "@expo/vector-icons";
 import "moment/locale/es";
 import { firebase } from "./utils/firebase";
 import styles from "./styles/stylesVacunasInfoScreen";
+import { auth } from "firebase";
 
 const VacunasInfoScreen = ({ route, navigation }) => {
 
@@ -37,6 +41,10 @@ const VacunasInfoScreen = ({ route, navigation }) => {
         setUserId(uid)
         const { vacunaId } = route.params;
         setVacunaInfo(vacunaId);
+    }, []);
+
+    useEffect(() => {
+        (() => registerForPushNotificationsAsync())();
     }, []);
 
     const changeEstado = (estado) => {
@@ -72,9 +80,9 @@ const VacunasInfoScreen = ({ route, navigation }) => {
                 userId,
                 state: parseInt(estado)
             };
-            console.log("sasa",userId),
-            console.log("fechaaa",date)
-            console.log("estadoo",estado)
+            console.log("sasa", userId),
+                console.log("fechaaa", date)
+            console.log("estadoo", estado)
             handleAddVaccine(documentVaccine)
         } else {
             alert("Llene todo los campos");
@@ -102,8 +110,72 @@ const VacunasInfoScreen = ({ route, navigation }) => {
             .catch(function (error) {
                 console.error("Error adding document: ", error);
             });
-            console.log(ref)
+        console.log(ref)
     };
+
+    const sendNoti = async (token) => {
+            const message = {
+              to: token,
+              sound: 'default',
+              title: 'PROBANDO',
+              body: 'Hola mundoooooo',
+              data: { data: 'goes here' },
+            };
+          
+            await fetch('https://exp.host/--/api/v2/push/send', {
+              method: 'POST',
+              headers: {
+                Accept: 'application/json',
+                'Accept-encoding': 'gzip, deflate',
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify(message),
+            });
+    }
+
+    const sendNotificationToAllUsers = async () => {
+        const users = await firebase.firestore().collection("usuarios").get();
+        users.docs.map((user) => sendNoti(user.data().token));
+    }
+
+    const registerForPushNotificationsAsync = async () => {
+        let token;
+        if (Constants.isDevice) {
+            const { status: existingStatus } = await Permissions.getAsync(Permissions.NOTIFICATIONS);
+            let finalStatus = existingStatus;
+            if (existingStatus !== 'granted') {
+                const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
+                finalStatus = status;
+            }
+            if (finalStatus !== 'granted') {
+                alert('Failed to get push token for push notification!');
+                return;
+            }
+            token = (await Notifications.getExpoPushTokenAsync()).data;
+            console.log(token);
+        } else {
+            alert('Must use physical device for Push Notifications');
+        }
+
+        if (token) {
+            const res = await firebase
+                .firestore()
+                .collection("usuarios")
+                .doc(firebase.auth().currentUser.uid)
+                .set({ token }, { merge: true });
+        }
+
+        if (Platform.OS === 'android') {
+            Notifications.setNotificationChannelAsync('default', {
+                name: 'default',
+                importance: Notifications.AndroidImportance.MAX,
+                vibrationPattern: [0, 250, 250, 250],
+                lightColor: '#FF231F7C',
+            });
+        }
+
+        return token;
+    }
 
     return (
         <View>
@@ -149,6 +221,12 @@ const VacunasInfoScreen = ({ route, navigation }) => {
                 </View>
 
                 <View>
+                <TouchableOpacity
+                        style={{position:"absolute", top:200, backgroundColor:"red"}}
+                        onPress={sendNotificationToAllUsers}
+                    >
+                        <Text style={styles.textButtonVacuna}>Notii</Text>
+                    </TouchableOpacity>
                     <TouchableOpacity
                         style={styles.buttonVacuna}
                         onPress={() => {

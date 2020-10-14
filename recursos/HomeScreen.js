@@ -60,6 +60,7 @@ const HomeScreen = ({ navigation }) => {
           birthday: formatoFecha,
           id: doc.id,
         });
+        console.log("cumpleaños", birthday)
       });
 
       if (children.length > 0) {
@@ -131,6 +132,7 @@ const HomeScreen = ({ navigation }) => {
     const currentDate = selectedDate || date;
     setShow(Platform.OS === "ios");
     setDate(currentDate);
+    console.log("asaasasasasassa", selectedDate)
   };
 
   const showMode = (currentMode) => {
