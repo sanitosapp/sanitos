@@ -100,53 +100,70 @@ export default class HomeScreen extends React.Component {
     isVisible: false,
   };
 
-  consultarHistoriaHijo(hijoId, callback) {
+  consultarHistorialChild(childId) {
+    //let historiaHijoTest = this.getHistorialByChild(childId)
+
     let partsZero = historiaHijoTest.fechaNacimiento.split("-");
     let fechaZero = new Date(partsZero[2], partsZero[1] - 1, partsZero[1]);
-
     let registrosEstatura = historiaHijoTest.historialEstatura;
     let registrosPeso = historiaHijoTest.historialPeso;
+    let lastRegistroEstatura = { index: 0, value: 0 };
+    let lastRegistroPeso = { index: 0, value: 0 };
 
     var historialEstatura = [];
     var historialPeso = [];
 
+    //Conversión de Json historico estatura en formato de data para gráfico
     registrosEstatura.forEach((value) => {
       let parts = value.fechaRegistro.split("-");
       let fechaRegistro = new Date(parts[2], parts[1] - 1, parts[1]);
 
-      var Difference_In_Time = fechaRegistro.getTime() - fechaZero.getTime();
-      var Difference_In_Days = Difference_In_Time / (1000 * 3600 * 24);
+      let Difference_In_Time = fechaRegistro.getTime() - fechaZero.getTime();
+      let Difference_In_Days = Difference_In_Time / (1000 * 3600 * 24);
+
+      if (lastRegistroEstatura.index <= Difference_In_Days) {
+        lastRegistroEstatura.index = Difference_In_Days;
+        lastRegistroEstatura.value = value.estatura;
+      }
 
       historialEstatura[Difference_In_Days] = value.estatura;
     });
 
+    //Conversión de Json historico peso en formato de data para gráfico
     registrosPeso.forEach((value) => {
       let parts = value.fechaRegistro.split("-");
       let fechaRegistro = new Date(parts[2], parts[1] - 1, parts[1]);
 
-      var Difference_In_Time = fechaRegistro.getTime() - fechaZero.getTime();
-      var Difference_In_Days = Difference_In_Time / (1000 * 3600 * 24);
+      let Difference_In_Time = fechaRegistro.getTime() - fechaZero.getTime();
+      let Difference_In_Days = Difference_In_Time / (1000 * 3600 * 24);
+
+      if (lastRegistroPeso.index <= Difference_In_Days) {
+        lastRegistroPeso.index = Difference_In_Days;
+        lastRegistroPeso.value = value.peso;
+      }
 
       historialPeso[Difference_In_Days] = value.peso;
     });
 
     return {
-      historialEstatura: historialEstatura,
-      historialPeso: historialPeso,
-      primerNombreApellido: historiaHijoTest.primerNombreApellido,
+      lastRegistroEstatura: lastRegistroEstatura,
+      lastRegistroPeso: lastRegistroPeso,
+      historicoEstatura: historialEstatura,
+      historicoPeso: historialPeso,
+      nombre: historiaHijoTest.nombre,
     };
   }
 
   goToChart = () => {
-    let dataHistorial = this.consultarHistoriaHijo();
+    let dataHistorial = this.consultarHistorialChild();
 
-    let parametro = {
-      ctipoChart: "Altura",
-      historicoPeso: dataHistorial.historialPeso,
-      historicoEstatura: dataHistorial.historialEstatura,
-      primerNombreApellido: dataHistorial.primerNombreApellido,
-    };
-    this.props.navigation.navigate("ChildChart", parametro);
+    // let parametro = {
+    //   ctipoChart: "Altura",
+    //   historicoPeso: dataHistorial.historialPeso,
+    //   historicoEstatura: dataHistorial.historialEstatura,
+    //   primerNombreApellido: dataHistorial.primerNombreApellido,
+    // };
+    this.props.navigation.navigate("ChildChart", dataHistorial);
   };
 
   modalHandler = () => {

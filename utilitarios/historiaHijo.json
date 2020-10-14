@@ -1,8 +1,12 @@
 {
    "idHijo":1,
-   "primerNombreApellido":"Thomas Ruiz",
+   "nombre":"Thomas",
    "fechaNacimiento":"01-01-2020",
    "historialPeso":[
+      {
+         "fechaRegistro":"01-01-2020",
+         "peso":4.031
+      },
       {
          "fechaRegistro":"05-02-2020",
          "peso":5.031
@@ -46,9 +50,17 @@
       {
          "fechaRegistro":"18-12-2020",
          "peso":14.231
+      },
+      {
+         "fechaRegistro":"18-01-2021",
+         "peso":10
       }
    ],
    "historialEstatura":[
+      {
+         "fechaRegistro":"01-01-2020",
+         "estatura":43.031
+      },
       {
          "fechaRegistro":"05-02-2020",
          "estatura":46.031
@@ -67,15 +79,15 @@
       },
       {
          "fechaRegistro":"01-06-2020",
-         "peso":70.031
+         "estatura":70.031
       },
       {
          "fechaRegistro":"25-07-2020",
-         "peso":74.031
+         "estatura":74.031
       },
       {
          "fechaRegistro":"30-08-2020",
-         "peso":79.031
+         "estatura":79.031
       },
       {
          "fechaRegistro":"13-09-2020",
@@ -83,15 +95,20 @@
       },
       {
          "fechaRegistro":"01-10-2020",
-         "peso":84.031
+         "estatura":84.031
       },
       {
          "fechaRegistro":"25-11-2020",
-         "peso":86.031
+         "estatura":86.031
       },
       {
          "fechaRegistro":"30-12-2020",
-         "peso":90.031
+         "estatura":90.031
+      },
+      {
+         "fechaRegistro":"30-01-2021",
+         "estatura":79.031
       }
    ]
 }
+
