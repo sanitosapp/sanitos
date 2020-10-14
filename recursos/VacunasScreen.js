@@ -11,6 +11,7 @@ import {
 } from "react-native";
 import DatePicker from "react-native-datepicker";
 import { MaterialIcons } from "@expo/vector-icons";
+import moment from "moment";
 import "moment/locale/es";
 import { firebase } from "./utils/firebase";
 import styles from "./styles/stylesVacunasScreen";
@@ -42,7 +43,6 @@ const VacunasScreen = ({ route, navigation }) => {
   }, []);
 
   const vacunas = async (uid, childId) => {
-    const arrayVacunas = [];
     const querySnapshot = firebase
       .firestore()
       .collection("usuarios")
@@ -50,18 +50,20 @@ const VacunasScreen = ({ route, navigation }) => {
       .collection("childUsers")
       .doc(childId)
       .collection("vacunas");
-
-    const vacunaId = await querySnapshot.get();
-    vacunaId.forEach((doc) => {
-      arrayVacunas.push({
-        ...doc.data(),
-        id: doc.id,
+    querySnapshot.onSnapshot((querySnapshot) => {
+      const arrayVacunas = [];
+      querySnapshot.forEach((doc) => {
+        arrayVacunas.push({
+          ...doc.data(),
+          id: doc.id,
+        });
       });
-    });
-    if (arrayVacunas.length > 0) {
+      if (arrayVacunas.length > 0) {
       setVacunaEstado(arrayVacunas);
       setDataVacuna(arrayVacunas);
     }
+    });
+    
   };
 
   const filterVaccinesPending = () => {
@@ -130,7 +132,7 @@ const VacunasScreen = ({ route, navigation }) => {
       </View>
 
       {vacunaEstado.map((doc, index) => {
-        const { dose, state, vaccine, reinforcement } = doc;
+        const { dose, state, vaccine, reinforcement, time, diseases, administration, vaccinebrands, effect, date} = doc;
         return (
           <View style={styles.boxVacunas} key={index}>
             <TouchableOpacity
@@ -141,9 +143,12 @@ const VacunasScreen = ({ route, navigation }) => {
             >
               <View style={styles.targetVacunas}>
                 <View style={styles.targetTitle}>
-                  <Text style={styles.titleStyle}>{vaccine}</Text>
+                  <Text style={styles.titleStyle}>{vaccine} </Text>
                 </View>
                 <View style={styles.paddingCard}>
+                  <Text style={styles.textVacuna}>
+                    {time}
+                  </Text>
                   <Text style={styles.textVacuna}>
                     {dose === "no tiene" ? null : dose}
                     {reinforcement === "no tiene" ? null : reinforcement}{" "}

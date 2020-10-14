@@ -64,8 +64,10 @@ const styles = StyleSheet.create({
     buttonVacuna: {
         alignItems: "center",
         justifyContent: "center",
-        marginTop: 350,
+        marginTop: 250,
         marginHorizontal: 30,
+        width:"85%",
+        paddingHorizontal:"20%",
         backgroundColor: "#1D96A3",
         fontSize: 14,
         textAlign: "center",
