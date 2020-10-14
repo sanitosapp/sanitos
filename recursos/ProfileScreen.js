@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -13,13 +13,16 @@ import styles from "./styles/stylesProfileScreen";
 
 //VISTA PERFIL USUARIO
 
-export default class ProfileScreen extends React.Component {
-  state = {
+const ProfileScreen = () => {
+  /* state = { 
     currentPassword: "",
     newPassword: "",
-  };
+  }; */
+  const [currentPassword,setCurrentPassword] = useState("");
+  const [newPassword,setNewPassword] = useState("");
 
-  reauthenticate = () => {
+
+ const reauthenticate = () => {
     var user = firebase.auth().currentUser;
     var cred = firebase.auth.EmailAuthProvider.credential(
       user,
@@ -28,12 +31,12 @@ export default class ProfileScreen extends React.Component {
     return user.reauthenticateWithCredential(cred);
   };
 
-  onChangePasswordPress = () => {
-    this.reauthenticate(this.state.currentPassword)
+ const onChangePasswordPress = () => {
+    reauthenticate(currentPassword)
       .then(() => {
         var user = firebase.auth().currentUser;
         user
-          .updatePassword(this.state.newPassword)
+          .updatePassword(newPassword)
           .then(() => {
             Alert.alert("Se cambio la contraseña");
           })
@@ -46,8 +49,10 @@ export default class ProfileScreen extends React.Component {
       });
   };
 
-  render() {
-    LayoutAnimation.easeInEaseOut();
+ const signOutUser = () => {
+    firebase.auth().signOut();
+};
+
     return (
       <View style={styles.container}>
         <Text
@@ -64,33 +69,36 @@ export default class ProfileScreen extends React.Component {
           <TextInput
             placeholder="Contraseña actual"
             style={styles.input}
-            value={this.state.currentPassword}
+            value={currentPassword}
             autoCapitalize="none"
             secureTextEntry={true}
             onChangeText={(text) => {
-              this.setState({ currentPassword: text });
+             setState({ currentPassword: text });
             }}
           ></TextInput>
           <TextInput
             placeholder="Contraseña nueva"
             style={styles.input}
-            value={this.state.newPassword}
+            value={newPassword}
             autoCapitalize="none"
             secureTextEntry={true}
             onChangeText={(text) => {
-              this.setState({ newPassword: text });
+              setState({ newPassword: text });
             }}
           ></TextInput>
         </View>
 
         <TouchableOpacity
           style={styles.button2}
-          onPress={this.onChangePasswordPress}
+          onPress={onChangePasswordPress}
         >
           <Text style={styles.buttonText}>Editar</Text>
         </TouchableOpacity>
-        
+        <TouchableOpacity style={styles.button} onPress={() => signOutUser()}>
+                <Text style={styles.buttonText}>Salir</Text>
+            </TouchableOpacity>
       </View>
     );
-  }
-}
+};
+
+export default ProfileScreen;
