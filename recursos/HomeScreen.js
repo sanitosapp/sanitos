@@ -154,7 +154,7 @@ const HomeScreen = ({ navigation }) => {
       <View style={styles.containerCards}>
         <CardChildUsers childUsers={childUsers} navigation={navigation} />
 
-        <View style={styles.infoCard}>
+        <View style={styles.infoCard1}>
           <TouchableOpacity
             onPress={() => {
               setModalVisible(true);
@@ -185,8 +185,8 @@ const HomeScreen = ({ navigation }) => {
                 <Text style={styles.titleModal}>Agregar niña/o</Text>
               </View>
 
-              <View 
-              style={styles.input1}
+              <View
+                style={styles.input1}
               >
                 <TextInput
                   style={styles.input}
@@ -198,7 +198,7 @@ const HomeScreen = ({ navigation }) => {
               </View>
 
               <View
-              style={styles.pickerBox}
+                style={styles.pickerBox}
               >
                 <Picker
                   style={styles.picker}
@@ -211,9 +211,11 @@ const HomeScreen = ({ navigation }) => {
                 </Picker>
               </View>
 
-              <View>
+              <View
+                style={styles.pickerBox}
+              >
                 <Picker
-                  style={styles.pickerComponent}
+                  style={styles.picker}
                   selectedValue={sangre}
                   onValueChange={(itemValor) => setSangre(itemValor)}
                 >
@@ -231,18 +233,15 @@ const HomeScreen = ({ navigation }) => {
 
               <View>
                 <View>
-                  <View
-                    style={{
-                      color: "#ffffff",
-                      fontWeight: "500",
-                      marginTop: 10,
-                    }}
-                  >
-                    <Button
+                    <TouchableOpacity
                       onPress={showDatepicker}
-                      title="fecha de nacimiento"
-                    />
-                  </View>
+                      style={styles.inputBirthday}>
+                      <Text style={styles.textAgregar1}
+                      >
+                        Fecha de nacimiento
+                      </Text>
+                    </TouchableOpacity>
+
 
                   {show && (
                     <DateTimePicker
@@ -262,10 +261,9 @@ const HomeScreen = ({ navigation }) => {
                 onPress={() => buttonPressed()}
               >
                 <Text style={{ color: "#ffffff", fontWeight: "500" }}>
-                  AGREGAR
+                  Agregar
                 </Text>
               </TouchableOpacity>
-              <View></View>
             </View>
           </View>
         </View>

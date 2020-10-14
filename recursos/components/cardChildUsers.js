@@ -21,22 +21,25 @@ const CardChildUsers = ({ childUsers, navigation }) => {
         </View>
 
         <View style={styles.rowCard}>
+          <View style={{ flexDirection: "row" }}>
+            <View>
+              <Image
+                source={require("../../recursos/imagenes/logoSanitos.png")}
+                style={{ width: 70, height: 60, margin: 6 }}
+              />
+            </View>
+            <View style={styles.paddingCard}>
+              <Text style={styles.textCardChild} >Nombre: <Text style={styles.textCardChildName}>{name}</Text> </Text>
+              <Text style={styles.textCardChild}>Edad: {birthday} </Text>
+              <Text style={styles.textCardChild}>Tipo de sangre: {bloodType}</Text>
+              <Text style={styles.textCardChild}>Sexo: {gender} </Text>
+            </View>
+          </View>
           <View>
-            <Image
-              source={require("../../recursos/imagenes/logoSanitos.png")}
-              style={{ width: 70, height: 60, margin:6 }}
-            />
-          </View>
-          <View style={styles.paddingCard}>
-            <Text style={styles.textCardChild} >Nombre: <Text style={styles.textCardChildName}>{name}</Text> </Text>
-            <Text style={styles.textCardChild}>Edad: {birthday} </Text>
-            <Text style={styles.textCardChild}>Tipo de sangre: {bloodType}</Text>
-            <Text style={styles.textCardChild}>Sexo: {gender} </Text>
-          </View>
-        </View>
-        <View>
             <Text style={styles.textCard}> + Presiona aqui para ver mas </Text>
+          </View>
         </View>
+
       </TouchableOpacity>
     );
   });

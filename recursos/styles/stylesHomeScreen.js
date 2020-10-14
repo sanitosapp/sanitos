@@ -5,7 +5,12 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#F4F4F4",
   },
-  infoCard: {
+  infoCard:{
+    width:"85%",
+  },
+  infoCard1: {
+    flexDirection: "column",
+    marginTop:4,
     backgroundColor: "#fff",
     marginBottom: 24,
     elevation: 16,
@@ -32,31 +37,64 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   buttonModal: {
-    backgroundColor: "#E9446A",
-    borderRadius: 4,
-    height: 35,
     alignItems: "center",
     justifyContent: "center",
-    marginTop: 25,
+    marginTop: 30,
+    marginHorizontal: 30,
+    backgroundColor: "#E9446A",
+    fontSize: 14,
+    textAlign: "center",
+    padding: 6,
+    color: "#fff",
+    textTransform: "uppercase",
+    elevation: 16,
+    shadowOpacity: 1,
+    shadowRadius: 50,
+    shadowColor: "#000",
+    shadowOffset: {
+      widht: 1,
+      height: 1
+    },
+    borderRadius: 4,
+    height:40,
   },
   textWelcome: {
     marginTop: 30,
     marginHorizontal: 30,
-    fontSize: 16,
-    color: '#B0B0B0',
+    fontSize: 15,
+    color: '#838383',
   },
   textName: {
     fontSize: 14,
     textAlign: "center",
-    backgroundColor: "#7DB3B9",
+    backgroundColor: "#1D96A3",
     padding: 6,
     color: "#fff",
     textTransform: "uppercase",
-    borderTopLeftRadius:4,
-    borderTopRightRadius:4,
+    elevation: 16,
+    shadowOpacity: 1,
+    shadowRadius: 50,
+    shadowColor: "#000",
+    shadowOffset: {
+      widht: 1,
+      height: 1
+    },
+    borderRadius: 4,
   },
   rowCard: {
-    flexDirection: "row",
+    flexDirection: "column",
+    marginTop:4,
+    backgroundColor: "#fff",
+    marginBottom: 24,
+    elevation: 16,
+    shadowOpacity: 1,
+    shadowRadius: 50,
+    shadowColor: "#000",
+    shadowOffset: {
+      widht: 1,
+      height: 1
+    },
+    borderRadius: 4,
   },
   paddingCard: {
     padding: 10,
@@ -78,6 +116,10 @@ const styles = StyleSheet.create({
     textAlign: "center",
     padding: 20,
     fontSize: 14,
+    color: "#C4C4C4",
+  },
+  textAgregar1: {
+    fontSize: 16,
     color: "#C4C4C4",
   },
   modalStyle: {
@@ -120,7 +162,8 @@ const styles = StyleSheet.create({
     color:"#B0B0B0",
   },
   iconBox: {
-    marginHorizontal: 30,
+    marginHorizontal:20,
+    marginVertical:15,
     textAlign:'right',
     color:"#B0B0B0"
   },
@@ -133,8 +176,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 30,
     borderRadius: 4,
     height: 40,
-    width:"85%",
-    fontSize: 14,
+    fontSize: 16,
     color: "#B0B0B0",
     padding: 10,
     backgroundColor:"#fff",
@@ -153,10 +195,25 @@ const styles = StyleSheet.create({
   pickerBox:{
     justifyContent: "center",
     marginHorizontal: 30,
+    marginTop:10,
     borderRadius: 4,
     height: 40,
-    width:"85%",
-    fontSize: 14,
+    backgroundColor:"#fff",
+    elevation: 5,
+    shadowOpacity: 1,
+    shadowRadius: 10,
+    shadowColor: "#000",
+    shadowOffset: {
+      widht: -1,
+      height: -1
+    }
+  },
+  inputBirthday: {
+    marginTop:10,
+    marginHorizontal: 30,
+    borderRadius: 4,
+    height: 40,
+    fontSize: 16,
     color: "#B0B0B0",
     padding: 10,
     backgroundColor:"#fff",
@@ -170,7 +227,9 @@ const styles = StyleSheet.create({
     }
   },
   picker:{
-    color:"#B0B0B0"
+    color:"#B0B0B0",
+    fontSize:14,
+    padding: 10,
   }
 });
 
