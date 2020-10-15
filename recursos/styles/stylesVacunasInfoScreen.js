@@ -8,6 +8,28 @@ const styles = StyleSheet.create({
     form: {
         alignItems: "center",
     },
+    inputBirthday: {
+        marginTop:10,
+        marginHorizontal: 30,
+        borderRadius: 4,
+        height: 40,
+        fontSize: 16,
+        color: "#B0B0B0",
+        padding: 10,
+        backgroundColor:"#fff",
+        elevation: 5,
+        shadowOpacity: 1,
+        shadowRadius: 10,
+        shadowColor: "#000",
+        shadowOffset: {
+          widht: -1,
+          height: -1
+        }
+      },
+      textAgregar1: {
+        fontSize: 16,
+        color: "#C4C4C4",
+      },
     button: {
         backgroundColor: "#4DA6AF",
         height: 40,
@@ -94,11 +116,14 @@ const styles = StyleSheet.create({
         fontSize: 14,
         color: "#C4C4C4",
     },
+    boxVacuna1:{
+        flexDirection: "row", justifyContent: "space-around"
+    },
     titleModal: {
-        fontSize: 14,
+        fontSize: 16,
         textAlign: "center",
-        textTransform: "uppercase",
         marginHorizontal: 30,
+        marginVertical:10,
         color:"#B0B0B0",
       },
       pickerBox:{

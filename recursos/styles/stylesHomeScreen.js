@@ -97,7 +97,9 @@ const styles = StyleSheet.create({
     borderRadius: 4,
   },
   paddingCard: {
-    padding: 10,
+    paddingHorizontal: 18,
+    justifyContent:"center",
+    alignContent:"center"
   },
   textCardChild:{
     color:"#838383",
@@ -155,9 +157,8 @@ const styles = StyleSheet.create({
     elevation: 16,
   },
   titleModal: {
-    fontSize: 14,
+    fontSize: 16,
     textAlign: "center",
-    textTransform: "uppercase",
     marginHorizontal: 30,
     color:"#B0B0B0",
   },

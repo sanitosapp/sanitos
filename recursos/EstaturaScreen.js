@@ -31,6 +31,7 @@ const EstaturaScreen = ({ route, navigation }) => {
   const [userId, setUserId] = useState('');
   const [estaturaRegister, setEstaturaRegister] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
+  const [time, setTime] = useState(new Date());
 
   const changeEstatura = (estatura) => {
     setEstatura(estatura);
@@ -64,7 +65,7 @@ const EstaturaScreen = ({ route, navigation }) => {
           id: doc.id
         })
       });
-      
+
       if (arrayEstatura.length > 0) {
         setEstaturaRegister(arrayEstatura)
         console.log("arrayestatura", arrayEstatura);
@@ -73,9 +74,25 @@ const EstaturaScreen = ({ route, navigation }) => {
   };
 
   const onChange = (event, selectedDate) => {
-    const currentDate = selectedDate || date;
     setShow(Platform.OS === "ios");
-    setDate(currentDate);
+    if (mode == "date") {
+      const currentDate = selectedDate || date;
+      setDate(currentDate);
+      setShow(Platform.OS === "ios");
+    } else {
+      const selectedTime = selectedValue || new Date();
+      setTime(selectedTime);
+      setShow(Platform.OS === 'ios');
+      setMode('date');
+    }
+
+
+    console.log("asaasasasasassa", selectedDate)
+  };
+
+  const formatDate = (date, time) => {
+    return `${date.getDate()}/${date.getMonth() +
+      1}/${date.getFullYear()}`;
   };
 
   const showMode = (currentMode) => {
@@ -140,7 +157,7 @@ const EstaturaScreen = ({ route, navigation }) => {
         style={styles.boxTitle}
       >
         <Text style={styles.textWhite}>Fecha</Text>
-        <Text style={styles.textWhite}>Estatura</Text>
+        <Text style={styles.textWhite}>Estatura(cm)</Text>
       </View>
 
       <View style={styles.containerCards}>
@@ -151,6 +168,7 @@ const EstaturaScreen = ({ route, navigation }) => {
 
               <Text>{date}</Text>
               <Text>{height} </Text>
+              <TouchableOpacity><Feather name="edit" size={24} color="black" /></TouchableOpacity>
             </View>
           )
         }
@@ -160,7 +178,7 @@ const EstaturaScreen = ({ route, navigation }) => {
       <View>
         <TouchableOpacity style={styles.button} onPress={() => { setModalVisible(true) }}>
           <Text style={styles.textButton}>
-              + Agregue nueva medida
+            + Agregar estatura
             </Text>
         </TouchableOpacity>
       </View>
@@ -184,8 +202,11 @@ const EstaturaScreen = ({ route, navigation }) => {
               <View>
                 <TextInput
                   style={styles.input}
-                  placeholder="Estatura"
+                  placeholder="Estatura (cm)"
                   autoCapitalize="none"
+                  keyboardType="decimal-pad"
+                  returnKeyType="next"
+                  maxLength={6}
                   onChangeText={(estatura) => changeEstatura(estatura)}
                   value={estatura}
                 ></TextInput>
@@ -200,10 +221,15 @@ const EstaturaScreen = ({ route, navigation }) => {
                       marginTop: 10,
                     }}
                   >
-                    <Button
-                      onPress={showDatepicker}
-                      title="Fecha"
-                    />
+                    <TouchableOpacity
+                    onPress={showDatepicker}
+                    style={styles.inputBirthday}>
+                    <Text style={styles.textAgregar1}
+                    >
+                      {formatDate(date)}
+
+                    </Text>
+                  </TouchableOpacity>
                   </View>
 
                   {show && (

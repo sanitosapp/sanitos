@@ -56,9 +56,25 @@ const VacunasInfoScreen = ({ route, navigation }) => {
     };
 
     const onChange = (event, selectedDate) => {
-        const currentDate = selectedDate || date;
         setShow(Platform.OS === "ios");
-        setDate(currentDate);
+        if (mode == "date") {
+            const currentDate = selectedDate || date;
+            setDate(currentDate);
+            setShow(Platform.OS === "ios");
+        } else {
+            const selectedTime = selectedValue || new Date();
+            setTime(selectedTime);
+            setShow(Platform.OS === 'ios');
+            setMode('date');
+        }
+
+
+        console.log("asaasasasasassa", selectedDate)
+    };
+
+    const formatDate = (date, time) => {
+        return `${date.getDate()}/${date.getMonth() +
+            1}/${date.getFullYear()}`;
     };
 
     const showMode = (currentMode) => {
@@ -114,23 +130,23 @@ const VacunasInfoScreen = ({ route, navigation }) => {
     };
 
     const sendNoti = async (token) => {
-            const message = {
-              to: token,
-              sound: 'default',
-              title: 'PROBANDO',
-              body: 'Hola mundoooooo',
-              data: { data: 'goes here' },
-            };
-          
-            await fetch('https://exp.host/--/api/v2/push/send', {
-              method: 'POST',
-              headers: {
+        const message = {
+            to: token,
+            sound: 'default',
+            title: 'PROBANDO',
+            body: 'Hola mundoooooo',
+            data: { data: 'goes here' },
+        };
+
+        await fetch('https://exp.host/--/api/v2/push/send', {
+            method: 'POST',
+            headers: {
                 Accept: 'application/json',
                 'Accept-encoding': 'gzip, deflate',
                 'Content-Type': 'application/json',
-              },
-              body: JSON.stringify(message),
-            });
+            },
+            body: JSON.stringify(message),
+        });
     }
 
     const sendNotificationToAllUsers = async () => {
@@ -185,16 +201,26 @@ const VacunasInfoScreen = ({ route, navigation }) => {
                         <Text style={styles.titleStyle}>{vacunaInfo.vaccine}</Text>
                     </View>
                     <View style={styles.paddingCard}>
-                        <Text style={styles.textVacuna}>
-                            {vacunaInfo.time}
-                        </Text>
-                        <Text style={styles.textVacuna}>
-                            {vacunaInfo.dose === "no tiene" ? null : vacunaInfo.dose}
-                            {vacunaInfo.reinforcement === "no tiene" ? null : vacunaInfo.reinforcement}{" "}
-                        </Text>
-                        <Text style={styles.textVacuna}>
-                            {vacunaInfo.state ? "Vacuna aplicada" : "Vacuna pendiente"}
-                        </Text>
+                        <View style={styles.boxVacuna1}>
+                            <Text style={styles.textVacuna}>
+                                {vacunaInfo.time}
+                            </Text>
+                            <Text style={styles.textVacuna}>
+                                {vacunaInfo.dose === "no tiene" ? null : vacunaInfo.dose}
+                                {vacunaInfo.reinforcement === "no tiene" ? null : vacunaInfo.reinforcement}{" "}
+                            </Text>
+                        </View>
+                        <View style={styles.boxVacuna1}>
+                            <Text style={styles.textVacuna}>
+                                {vacunaInfo.state ? "Vacuna aplicada" : "Vacuna pendiente"}
+                            </Text>
+                            <Text style={styles.textVacuna}>
+                                {vacunaInfo.date}
+                            </Text>
+                        </View>
+
+
+
                     </View>
                 </View>
                 <View>
@@ -221,8 +247,8 @@ const VacunasInfoScreen = ({ route, navigation }) => {
                 </View>
 
                 <View>
-                <TouchableOpacity
-                        style={{position:"absolute", top:200, backgroundColor:"red"}}
+                    <TouchableOpacity
+                        style={{ position: "absolute", top: 200, backgroundColor: "red" }}
                         onPress={sendNotificationToAllUsers}
                     >
                         <Text style={styles.textButtonVacuna}>Notii</Text>
@@ -275,10 +301,11 @@ const VacunasInfoScreen = ({ route, navigation }) => {
                                     <View>
                                         <TouchableOpacity
                                             onPress={showDatepicker}
-                                            style={styles.inputDate}>
+                                            style={styles.inputBirthday}>
                                             <Text style={styles.textAgregar1}
                                             >
-                                                Fecha de vacuna
+                                                {formatDate(date)}
+
                                             </Text>
                                         </TouchableOpacity>
 
@@ -289,7 +316,7 @@ const VacunasInfoScreen = ({ route, navigation }) => {
                                                 value={date}
                                                 mode={mode}
                                                 is24Hour={true}
-                                                display="default"
+                                                display="spinner"
                                                 onChange={onChange}
                                             />
                                         )}

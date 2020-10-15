@@ -59,11 +59,11 @@ const VacunasScreen = ({ route, navigation }) => {
         });
       });
       if (arrayVacunas.length > 0) {
-      setVacunaEstado(arrayVacunas);
-      setDataVacuna(arrayVacunas);
-    }
+        setVacunaEstado(arrayVacunas);
+        setDataVacuna(arrayVacunas);
+      }
     });
-    
+
   };
 
   const filterVaccinesPending = () => {
@@ -132,7 +132,7 @@ const VacunasScreen = ({ route, navigation }) => {
       </View>
 
       {vacunaEstado.map((doc, index) => {
-        const { dose, state, vaccine, reinforcement, time, diseases, administration, vaccinebrands, effect, date} = doc;
+        const { dose, state, vaccine, reinforcement, time, diseases, administration, vaccinebrands, effect, date } = doc;
         return (
           <View style={styles.boxVacunas} key={index}>
             <TouchableOpacity
@@ -146,6 +146,12 @@ const VacunasScreen = ({ route, navigation }) => {
                   <Text style={styles.titleStyle}>{vaccine} </Text>
                 </View>
                 <View style={styles.paddingCard}>
+                <View>
+
+                </View>
+                <View>
+                  
+                </View>
                   <Text style={styles.textVacuna}>
                     {time}
                   </Text>
@@ -156,12 +162,6 @@ const VacunasScreen = ({ route, navigation }) => {
                   <Text style={styles.textVacuna}>
                     {state ? "Vacuna aplicada" : "Vacuna pendiente"}
                   </Text>
-                  <View>
-                    <Text style={styles.textCard}>
-                      {" "}
-                    + Presiona aqui para ver mas{" "}
-                    </Text>
-                  </View>
                 </View>
 
                 {/* <TouchableOpacity

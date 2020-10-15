@@ -47,7 +47,7 @@ class ChildChartScreen extends React.Component {
         },
         yAxis: {
           title: {
-            text: "(cm)",
+            text: "Estatura(cm)",
           },
         },
         xAxis: {
@@ -140,7 +140,7 @@ class ChildChartScreen extends React.Component {
         },
         yAxis: {
           title: {
-            text: "(kg)",
+            text: "Peso(kg)",
           },
         },
         xAxis: {

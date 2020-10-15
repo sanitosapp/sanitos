@@ -8,7 +8,7 @@ import {
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 
-import { Ionicons } from "@expo/vector-icons";
+import {MaterialCommunityIcons, FontAwesome5 } from "@expo/vector-icons";
 
 import HomeScreen from "../HomeScreen";
 import LoadingScreen from "../LoadingScreen";
@@ -34,15 +34,22 @@ const SignInStack = () => {
             let iconName;
 
             if (route.name === "Home") {
-              iconName = focused ? "ios-home" : "ios-home";
+              iconName = focused ? "home" : "home";
+            } else if (route.name === "Peso") {
+              iconName = focused ? "weight" : "weight";
             } else if (route.name === "Profile") {
-              iconName = focused ? "ios-person" : "ios-person";
-            } else if (route.name === "Post") {
-              iconName = focused ? "ios-add-circle" : "ios-add-circle";
+              iconName = focused ? "account" : "account";
+            } else if (route.name === "Vacuna") {
+              iconName = focused ? "ammunition" : "ammunition";
+            }else if (route.name === "Estatura") {
+              iconName = focused ? "human-male-height" : "human-male-height";
+            }else if (route.name === "Crecimiento") {
+              iconName = focused ? "chart-areaspline-variant" : "chart-areaspline-variant";
             }
 
             // You can return any component that you like here!
-            return <Ionicons name={iconName} size={size} color={color} />;
+  
+            return <MaterialCommunityIcons name={iconName} size={size} color={color} />
           },
         })}
         tabBarOptions={{
@@ -56,9 +63,24 @@ const SignInStack = () => {
           options={{ title: "Home" }}
         />
         <Tabs.Screen
-          name="Post"
-          component={PostStackScreen}
-          options={{ title: "Agregar" }}
+          name="Peso"
+          component={PesoStackScreen}
+          options={{ title: "Peso" }}
+        />
+        <Tabs.Screen
+          name="Estatura"
+          component={EstaturaStackScreen}
+          options={{ title: "Estatura" }}
+        />
+        <Tabs.Screen
+          name="Vacuna"
+          component={VacunaStackScreen}
+          options={{ title: "Vacuna" }}
+        />
+        <Tabs.Screen
+          name="Crecimiento"
+          component={CrecimientoStackScreen}
+          options={{ title: "Crecimiento" }}
         />
         <Tabs.Screen
           name="Profile"
@@ -185,7 +207,7 @@ const HomeStackScreen = () => {
         name="ChildChart"
         component={ChildChartScreen}
         options={{
-          title: "Gráfico",
+          title: "Curva de crecimiento",
           headerStyle: {
             backgroundColor: "#1D96A3",
           },
@@ -200,6 +222,38 @@ const HomeStackScreen = () => {
 };
 
 const ProfileStackScreen = () => {
+  return (
+    <ProfileStack.Navigator headerMode="none">
+      <ProfileStack.Screen name="Profile" component={ProfileScreen} />
+    </ProfileStack.Navigator>
+  );
+};
+
+const VacunaStackScreen = () => {
+  return (
+    <ProfileStack.Navigator headerMode="none">
+      <ProfileStack.Screen name="Profile" component={ProfileScreen} />
+    </ProfileStack.Navigator>
+  );
+};
+
+const PesoStackScreen = () => {
+  return (
+    <ProfileStack.Navigator headerMode="none">
+      <ProfileStack.Screen name="Profile" component={ProfileScreen} />
+    </ProfileStack.Navigator>
+  );
+};
+
+const EstaturaStackScreen = () => {
+  return (
+    <ProfileStack.Navigator headerMode="none">
+      <ProfileStack.Screen name="Profile" component={ProfileScreen} />
+    </ProfileStack.Navigator>
+  );
+};
+
+const CrecimientoStackScreen = () => {
   return (
     <ProfileStack.Navigator headerMode="none">
       <ProfileStack.Screen name="Profile" component={ProfileScreen} />

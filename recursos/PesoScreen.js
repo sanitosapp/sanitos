@@ -13,7 +13,7 @@ import {
 import DateTimePicker from "@react-native-community/datetimepicker";
 import moment from "moment";
 import "moment/locale/es";
-import { MaterialIcons } from "@expo/vector-icons";
+import { MaterialIcons, Feather } from "@expo/vector-icons";
 import { firebase } from "./utils/firebase";
 import styles from "./styles/stylesPesoScreen";
 
@@ -31,6 +31,8 @@ const PesoScreen = ({ route, navigation }) => {
   const [selectDate, setSelectDate] = useState(false);
   const [childId, setChildId] = useState('');
   const [userId, setUserId] = useState('');
+  const [time, setTime] = useState(new Date());
+
 
   const changePeso = (peso) => {
     setPeso(peso);
@@ -73,9 +75,25 @@ const PesoScreen = ({ route, navigation }) => {
   };
 
   const onChange = (event, selectedDate) => {
-    const currentDate = selectedDate || date;
     setShow(Platform.OS === "ios");
-    setDate(currentDate);
+    if (mode == "date") {
+      const currentDate = selectedDate || date;
+      setDate(currentDate);
+      setShow(Platform.OS === "ios");
+    } else {
+      const selectedTime = selectedValue || new Date();
+      setTime(selectedTime);
+      setShow(Platform.OS === 'ios');
+      setMode('date');
+    }
+
+
+    console.log("asaasasasasassa", selectedDate)
+  };
+
+  const formatDate = (date, time) => {
+    return `${date.getDate()}/${date.getMonth() +
+      1}/${date.getFullYear()}`;
   };
 
   const showMode = (currentMode) => {
@@ -142,7 +160,7 @@ const PesoScreen = ({ route, navigation }) => {
         style={styles.boxTitle}
       >
         <Text style={styles.textWhite}>Fecha</Text>
-        <Text style={styles.textWhite}>Peso</Text>
+        <Text style={styles.textWhite}>Peso(kg) </Text>
       </View>
 
       <View style={styles.containerCards}>
@@ -152,6 +170,7 @@ const PesoScreen = ({ route, navigation }) => {
             <View style={styles.boxWeight}>
               <Text>{date}</Text>
               <Text>{weight} </Text>
+              <TouchableOpacity><Feather name="edit" size={24} color="black" /></TouchableOpacity>
             </View>
           )
         }
@@ -162,7 +181,7 @@ const PesoScreen = ({ route, navigation }) => {
 
         <TouchableOpacity style={styles.button} onPress={() => { setModalVisible(true) }}>
           <Text style={styles.textButton}>
-            + Agregue nueva medida
+            + Agregar peso
             </Text>
         </TouchableOpacity>
       </View>
@@ -181,14 +200,17 @@ const PesoScreen = ({ route, navigation }) => {
 
             <View style={styles.form}>
               <View>
-                <Text style={styles.title1}>Peso</Text>
-              </View>
+                <Text style={styles.title1}>Peso </Text>
+              </View> 
 
               <View>
                 <TextInput
                   style={styles.input}
-                  placeholder="Peso"
+                  placeholder="Peso (kg) "
                   autoCapitalize="none"
+                  keyboardType="decimal-pad"
+                  returnKeyType="next"
+                  maxLength={6}
                   onChangeText={(peso) => changePeso(peso)}
                   value={peso}
                 />
@@ -203,10 +225,16 @@ const PesoScreen = ({ route, navigation }) => {
                       marginTop: 10,
                     }}
                   >
-                    <Button
-                      onPress={showDatepicker}
-                      title="Fecha"
-                    />
+                    <TouchableOpacity
+                    onPress={showDatepicker}
+                    style={styles.inputBirthday}>
+                    <Text style={styles.textAgregar1}
+                    >
+                      {formatDate(date)}
+
+                    </Text>
+                  </TouchableOpacity>
+                    
                   </View>
 
                   {show && (
@@ -215,7 +243,7 @@ const PesoScreen = ({ route, navigation }) => {
                       value={date}
                       mode={mode}
                       is24Hour={true}
-                      display="default"
+                      display="spinner"
                       onChange={onChange}
                     />
                   )}

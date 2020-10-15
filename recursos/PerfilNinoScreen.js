@@ -94,7 +94,7 @@ const PerfilNinoScreen = ({ route, navigation }) => {
             </View>
             <View style={styles.paddingCard}>
               <Text>{user.name} </Text>
-              <Text>Edad: {user.birthday} </Text>
+              <Text>Fecha nacimiento: {user.birthday} </Text>
               <Text>Tipo de sangre: {user.bloodType}</Text>
               <Text>Sexo: {user.gender} </Text>
             </View>
@@ -148,7 +148,7 @@ const PerfilNinoScreen = ({ route, navigation }) => {
                 source={require("../recursos/imagenes/crecimiento.png")}
                 style={styles.iconCenter}
               />
-              <Text style={styles.textIcon}>Estadistica</Text>
+              <Text style={styles.textIcon}>Curva de crecimiento</Text>
             </TouchableOpacity>
           </View>
 

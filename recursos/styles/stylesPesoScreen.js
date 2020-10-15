@@ -12,6 +12,28 @@ const styles = StyleSheet.create({
       width: 300,
       left: 30,
     },
+    inputBirthday: {
+      marginTop:10,
+      marginHorizontal: 30,
+      borderRadius: 4,
+      height: 40,
+      fontSize: 16,
+      color: "#B0B0B0",
+      padding: 10,
+      backgroundColor:"#fff",
+      elevation: 5,
+      shadowOpacity: 1,
+      shadowRadius: 10,
+      shadowColor: "#000",
+      shadowOffset: {
+        widht: -1,
+        height: -1
+      }
+    },
+    textAgregar1: {
+      fontSize: 16,
+      color: "#C4C4C4",
+    },
     containerCards: {
       marginTop: 30,
     },
@@ -45,7 +67,6 @@ const styles = StyleSheet.create({
      title1: {
     fontSize: 16,
     textAlign: "center",
-    textTransform: "uppercase",
     marginVertical: 10,
   },
     button: {
