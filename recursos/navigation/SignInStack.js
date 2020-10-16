@@ -1,5 +1,5 @@
 import React from "react";
-import { Image, View, Button } from "react-native";
+import { Image, View, Button,TouchableOpacity,Text } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import {
   createStackNavigator,
@@ -8,7 +8,7 @@ import {
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 
-import {MaterialCommunityIcons, FontAwesome5 } from "@expo/vector-icons";
+import {MaterialCommunityIcons, Feather } from "@expo/vector-icons";
 
 import HomeScreen from "../HomeScreen";
 import LoadingScreen from "../LoadingScreen";
@@ -18,7 +18,7 @@ import PesoScreen from "../PesoScreen";
 import PostScreen from "../PostScreen";
 import PerfilNinoScreen from "../PerfilNinoScreen";
 import ProfileScreen from "../ProfileScreen";
-import SingOutScreen from "../SingOutScreen";
+import CuentaScreen from "../CuentaScreen";
 import VacunasInfoScreen from "../VacunasInfoScreen";
 import ChildChartScreen from "../chart/ChildChartScreen";
 
@@ -60,7 +60,7 @@ const SignInStack = () => {
         <Tabs.Screen
           name="Home"
           component={HomeStackScreen}
-          options={{ title: "Home" }}
+          options={{ title: "Inicio" }}
         />
         <Tabs.Screen
           name="Peso"
@@ -223,8 +223,34 @@ const HomeStackScreen = () => {
 
 const ProfileStackScreen = () => {
   return (
-    <ProfileStack.Navigator headerMode="none">
-      <ProfileStack.Screen name="Profile" component={ProfileScreen} />
+    <ProfileStack.Navigator>
+      <ProfileStack.Screen name="Profile" component={ProfileScreen} options={{
+          title: "Perfil",
+          headerTitleAlign: "center",
+          headerStyle: {
+            backgroundColor:"#C13273",
+          },
+          headerTintColor: "#fff",
+          headerTitleStyle: {
+            fontWeight: "normal",
+          },
+        }} />
+      <ProfileStack.Screen name="Cuentaa" component={CuentaScreen} options={{
+          title: "Cuenta",
+          headerTitleAlign: "center",
+          headerStyle: {
+            backgroundColor:"#C13273",
+          },
+          headerTintColor: "#fff",
+          headerTitleStyle: {
+            fontWeight: "normal",
+          },
+          headerRight: () => (
+            <TouchableOpacity>
+                    <Feather name="edit" size={24} color="#fff" style={{marginRight:20}} />
+                </TouchableOpacity>
+          ),
+        }}  />
     </ProfileStack.Navigator>
   );
 };

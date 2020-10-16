@@ -3,54 +3,77 @@ import { StyleSheet } from "react-native";
 const styles = StyleSheet.create({
     container: {
       flex: 1,
+      backgroundColor: '#F4F4F4'
     },
     input: {
-      marginBottom: 18,
-      left: 30,
-      borderColor: "#C4C4C4",
-      borderWidth: 1,
+      alignItems: "center",
+      justifyContent: "center",
+      marginHorizontal: 30,
       borderRadius: 4,
       height: 40,
-      width: 300,
-      fontSize: 16,
-      color: "#C4C4C4",
+      fontSize: 14,
+      color: "#B0B0B0",
       padding: 10,
+      backgroundColor:"#fff",
+      elevation: 5,
+      shadowOpacity: 1,
+      shadowRadius: 10,
+      shadowColor: "#000",
+      shadowOffset: {
+        widht: -1,
+        height: -1
+      }
     },
     button: {
-      position: "absolute",
-      top: 522,
-      left: 30,
-      backgroundColor: "#E9446A",
-      borderRadius: 4,
-      height: 40,
-      width: 300,
+      backgroundColor: '#C13273',
       alignItems: "center",
       justifyContent: "center",
-    },
-    button2: {
-      position: "absolute",
-      top: 464,
-      left: 30,
-      backgroundColor: "#E9446A",
-      borderRadius: 4,
+      marginHorizontal: 30,
       height: 40,
-      width: 300,
-      alignItems: "center",
-      justifyContent: "center",
+      borderRadius: 4,
+      elevation: 16,
+      shadowOpacity: 1,
+      shadowRadius: 50,
+      shadowColor: "#000",
+      shadowOffset: {
+        widht: 1,
+        height: 1
+      }
     },
     titleProfile: {
-        marginTop: 60,
+        marginTop: 40,
         textAlign: "center",
-        color: "#424242",
+        color: "#B0B0B0",
         fontSize: 16,
-        textTransform:'uppercase'
     },
+    titleProfilec: {
+      textAlign: "center",
+      color: "#B0B0B0",
+      fontSize: 16,
+  },
     marginContainer: { 
         marginTop: 32 
-    },
+    },                                                                                                                                                                                                                                                                                                                                                                                              
     buttonText: { 
         color: "#fff", 
-        fontSize: 16 
+        fontSize: 14 
+    },
+    cardCuenta:{
+      backgroundColor:"#fff",
+      padding:8,
+      flexDirection:"row",
+      justifyContent:"space-around",
+      alignContent:"center",
+      marginHorizontal:30,
+      borderRadius:4,
+      elevation: 16,
+      shadowOpacity: 1,
+      shadowRadius: 50,
+      shadowColor: "#000",
+      shadowOffset: {
+        widht: 1,
+        height: 1
+      }
     }
   });
   

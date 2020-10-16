@@ -25,6 +25,7 @@ const PesoScreen = ({ route, navigation }) => {
   const [peso, setPeso] = useState('');
   const [weightRegister, setWeightRegister] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
+  const [modalVisibleChange, setModalVisibleChange] = useState(false);
   const [date, setDate] = useState(new Date());
   const [mode, setMode] = useState("date");
   const [show, setShow] = useState(false);
@@ -170,7 +171,7 @@ const PesoScreen = ({ route, navigation }) => {
             <View style={styles.boxWeight}>
               <Text>{date}</Text>
               <Text>{weight} </Text>
-              <TouchableOpacity><Feather name="edit" size={24} color="black" /></TouchableOpacity>
+              <TouchableOpacity onPress={() => { setModalVisibleChange(true) }}><Feather name="edit" size={24} color="black" /></TouchableOpacity>
             </View>
           )
         }
@@ -201,6 +202,84 @@ const PesoScreen = ({ route, navigation }) => {
             <View style={styles.form}>
               <View>
                 <Text style={styles.title1}>Peso </Text>
+              </View> 
+
+              <View>
+                <TextInput
+                  style={styles.input}
+                  placeholder="Peso (kg) "
+                  autoCapitalize="none"
+                  keyboardType="decimal-pad"
+                  returnKeyType="next"
+                  maxLength={6}
+                  onChangeText={(peso) => changePeso(peso)}
+                  value={peso}
+                />
+              </View>
+
+              <View>
+                <View>
+                  <View
+                    style={{
+                      color: "#ffffff",
+                      fontWeight: "500",
+                      marginTop: 10,
+                    }}
+                  >
+                    <TouchableOpacity
+                    onPress={showDatepicker}
+                    style={styles.inputBirthday}>
+                    <Text style={styles.textAgregar1}
+                    >
+                      {formatDate(date)}
+
+                    </Text>
+                  </TouchableOpacity>
+                    
+                  </View>
+
+                  {show && (
+                    <DateTimePicker
+                      testID="dateTimePicker"
+                      value={date}
+                      mode={mode}
+                      is24Hour={true}
+                      display="spinner"
+                      onChange={onChange}
+                    />
+                  )}
+                </View>
+              </View>
+
+              <TouchableOpacity
+                style={styles.buttonModal}
+                onPress={() => handleOnChange()}
+              >
+                <Text style={{ color: "#ffffff", fontWeight: "500" }}>
+                  Agregar
+                    </Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </Modal>
+
+      {/* MODAL DE CAMBIAR INFO */}
+      <Modal visible={modalVisibleChange} transparent={true} animationType="fade">
+        <View style={styles.centeredViews}>
+          <View
+            style={styles.modalView}
+          >
+            <MaterialIcons
+              name="close"
+              size={24}
+              onPress={() => { setModalVisibleChange(!modalVisibleChange) }}
+              style={styles.iconBox}
+            />
+
+            <View style={styles.form}>
+              <View>
+                <Text style={styles.title1}>Modificar peso </Text>
               </View> 
 
               <View>

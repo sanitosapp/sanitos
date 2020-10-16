@@ -20,6 +20,8 @@ import { firebase } from "./utils/firebase";
 import styles from "./styles/stylesHomeScreen";
 import CardChildUsers from "./components/cardChildUsers";
 import { vaccines } from "./utils/const";
+import AwesomeAlert from "react-native-awesome-alerts";
+
 
 //VISTA HOME PRINCIPAL
 const HomeScreen = ({ navigation }) => {
@@ -36,6 +38,8 @@ const HomeScreen = ({ navigation }) => {
   const [selectDate, setSelectDate] = useState(false);
   const [uidUser, setUidUser] = useState("");
   const [time, setTime] = useState(new Date());
+  const [showAlert, setShowAlert] = useState(false);
+
 
   useEffect(() => {
     YellowBox.ignoreWarnings(["Setting a timer"]);
@@ -86,7 +90,7 @@ const HomeScreen = ({ navigation }) => {
       };
       handleAddChildUser(documentChildUser);
     } else {
-      alert("Llene todo los campos");
+      setShowAlert(true);
     }
   };
 
@@ -207,7 +211,7 @@ const HomeScreen = ({ navigation }) => {
 
             <View>
               <View>
-                <Text style={styles.titleModal}>Agregar niña/o</Text>
+                <Text style={styles.titleModal}>Registrar niñ@</Text>
               </View>
 
               <View
@@ -286,13 +290,32 @@ const HomeScreen = ({ navigation }) => {
                 onPress={() => buttonPressed()}
               >
                 <Text style={{ color: "#ffffff", fontWeight: "500" }}>
-                  Agregar
+                  Registrar
                 </Text>
               </TouchableOpacity>
             </View>
           </View>
         </View>
       </Modal>
+      <AwesomeAlert
+        show={showAlert}
+        showProgress={false}
+        title="Importante"
+        message="Debe llenar todos los campos para registrar a su niño."
+        closeOnTouchOutside={true}
+        closeOnHardwareBackPress={false}
+        showCancelButton={false}
+        showConfirmButton={true}
+        cancelText="Cancelar"
+        confirmText="Aceptar"
+        confirmButtonColor='#C13273'
+        onCancelPressed={() => {
+          setShowAlert(false);
+        }}
+        onConfirmPressed={() => {
+          setShowAlert(false);
+        }}
+      />
     </ScrollView>
   );
 };

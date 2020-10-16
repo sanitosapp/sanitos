@@ -3,29 +3,36 @@ import { StyleSheet } from "react-native";
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 30,
-  },
-  infoCard: {
-    marginBottom: 24,
-    borderWidth: 1,
-    borderColor: "#05A4AC",
-    borderRadius: 4,
-    width:'100%',
-    left: 30,
-    backgroundColor:'red'
   },
   containerCards: {
-    marginTop: 30,
+    marginTop: 50,
+  },
+  textCard:{
+    textTransform:"capitalize",
+    color: '#838383',
+    paddingTop:6,
+  },
+  textCard1:{
+    textTransform:"capitalize",
+    color: '#838383',
+    paddingTop:6,
+    paddingBottom:6,
   },
   containerIconos: {
     backgroundColor: "#fff",
-    borderColor: "#05A4AC",
-    borderWidth: 2,
     borderRadius: 4,
     width: 106,
     height: 106,
     alignContent: "center",
     justifyContent: "center",
+    elevation: 5,
+    shadowOpacity: 1,
+    shadowRadius: 50,
+    shadowColor: "#000",
+    shadowOffset: {
+      widht: 0,
+      height: 1
+    },
   },
   boxIconos: {
     flexDirection: "row",
@@ -33,8 +40,6 @@ const styles = StyleSheet.create({
     marginTop: 22,
   },
   iconCenter: {
-    width: 50,
-    height: 50,
     alignSelf: "center"
   },
   textIcon: {
@@ -50,11 +55,20 @@ const styles = StyleSheet.create({
     marginTop: 22,
   },
   infoCard: {
-    marginBottom: 24,
-    borderWidth: 1,
-    borderColor: "#05A4AC",
+    marginBottom: 20,
+    marginHorizontal:30,
+    backgroundColor:"#fff",
     borderRadius: 4,
-    width: '100%',
+    elevation: 16,
+    shadowOpacity: 1,
+    shadowRadius: 50,
+    shadowColor: "#000",
+    shadowOffset: {
+      widht: 1,
+      height: 1
+    },
+    justifyContent:"center",
+    alignContent:"center"
   },
   textName: {
     fontSize: 16,
@@ -65,10 +79,11 @@ const styles = StyleSheet.create({
     textTransform: "uppercase",
   },
   rowCard: {
-    flexDirection: "row"
+    flexDirection: "row",
+    justifyContent:"space-around",
   },
   paddingCard: {
-    padding: 10
+    paddingVertical: 10
   },
 
 });
