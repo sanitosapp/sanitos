@@ -60,7 +60,6 @@ const HomeScreen = ({ navigation }) => {
           birthday: formatoFecha,
           id: doc.id,
         });
-        console.log("cumpleaños", birthday)
       });
 
       if (children.length > 0) {
@@ -84,13 +83,20 @@ const HomeScreen = ({ navigation }) => {
         name,
       };
       handleAddChildUser(documentChildUser);
+
+      const vaccinesArray = vaccines();
+      vaccinesArray.forEach((Element) => {
+        const { days } = Element;
+        const vaccinationDate = moment(now).add(days, "days");
+        console.log("fechas de la vacuna", vaccinationDate);
+      });
     } else {
       alert("Llene todo los campos");
     }
   };
 
   const handleAddChildUser = (documentChildUser) => {
-    const ref = firebase
+    /*   const ref = firebase
       .firestore()
       .collection("usuarios")
       .doc(uidUser)
@@ -109,14 +115,14 @@ const HomeScreen = ({ navigation }) => {
       })
       .catch(function (error) {
         console.error("Error adding document: ", error);
-      });
+      }); */
   };
 
   const handleAddVaccines = (ref, id) => {
     const refChild = ref.doc(id).collection("vacunas");
     const vaccinesArray = vaccines();
     vaccinesArray.forEach((Element) => {
-      refChild
+      const { days } = refChild
         .add(Element)
         .then((docRef) => {
           const { id } = docRef;
@@ -132,7 +138,6 @@ const HomeScreen = ({ navigation }) => {
     const currentDate = selectedDate || date;
     setShow(Platform.OS === "ios");
     setDate(currentDate);
-    console.log("asaasasasasassa", selectedDate)
   };
 
   const showMode = (currentMode) => {
@@ -187,9 +192,7 @@ const HomeScreen = ({ navigation }) => {
                 <Text style={styles.titleModal}>Agregar niña/o</Text>
               </View>
 
-              <View
-                style={styles.input1}
-              >
+              <View style={styles.input1}>
                 <TextInput
                   style={styles.input}
                   placeholder="Nombre"
@@ -199,9 +202,7 @@ const HomeScreen = ({ navigation }) => {
                 />
               </View>
 
-              <View
-                style={styles.pickerBox}
-              >
+              <View style={styles.pickerBox}>
                 <Picker
                   style={styles.picker}
                   selectedValue={gender}
@@ -213,9 +214,7 @@ const HomeScreen = ({ navigation }) => {
                 </Picker>
               </View>
 
-              <View
-                style={styles.pickerBox}
-              >
+              <View style={styles.pickerBox}>
                 <Picker
                   style={styles.picker}
                   selectedValue={sangre}
@@ -235,15 +234,12 @@ const HomeScreen = ({ navigation }) => {
 
               <View>
                 <View>
-                    <TouchableOpacity
-                      onPress={showDatepicker}
-                      style={styles.inputBirthday}>
-                      <Text style={styles.textAgregar1}
-                      >
-                        Fecha de nacimiento
-                      </Text>
-                    </TouchableOpacity>
-
+                  <TouchableOpacity
+                    onPress={showDatepicker}
+                    style={styles.inputBirthday}
+                  >
+                    <Text style={styles.textAgregar1}>Fecha de nacimiento</Text>
+                  </TouchableOpacity>
 
                   {show && (
                     <DateTimePicker
