@@ -8,9 +8,9 @@ const styles = StyleSheet.create({
   form: {
     alignItems: "center",
   },
-  boxVacuna1: {
+  boxVacuna1:{
     flexDirection: "row", justifyContent: "space-around"
-  },
+},
   button: {
     backgroundColor: "#4DA6AF",
     height: 40,

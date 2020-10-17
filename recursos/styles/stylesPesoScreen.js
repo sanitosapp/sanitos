@@ -2,7 +2,6 @@ import { StyleSheet } from "react-native";
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     backgroundColor: "#F4F4F4",
   },
   infoCard: {
@@ -44,14 +43,15 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: "rgba(212, 228, 231, 0.5)",
   },
+  textPeso:{
+    color:"#b0b0b0",
+    fontSize:14,
+  },
   modalView: {
-    margin: 20,
-    width: 300,
-    height: 350,
+    width: "85%",
+    height: "48%",
     backgroundColor: "white",
     borderRadius: 4,
-    padding: 30,
-
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
@@ -59,16 +59,23 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
-    elevation: 5,
+    elevation: 16,
   },
 
   iconBox: {
-    marginLeft: 220,
+    marginHorizontal:20,
+    marginVertical:15,
+    textAlign:'right',
+    color:"#B0B0B0"
   },
-  title1: {
+  titleModal: {
     fontSize: 16,
     textAlign: "center",
-    marginVertical: 10,
+    marginHorizontal: 30,
+    color:"#B0B0B0",
+  },
+  input1:{
+    marginTop:20,
   },
   button: {
     backgroundColor: '#C13273',
@@ -77,23 +84,34 @@ const styles = StyleSheet.create({
     marginHorizontal: 30,
     height: 40,
     borderRadius: 4,
-    elevation: 16,
+    elevation: 5,
     shadowOpacity: 1,
     shadowRadius: 50,
     shadowColor: "#000",
     shadowOffset: {
       widht: 1,
       height: 1
-    }
+    },
+    marginBottom:20,
   },
   input: {
-    borderColor: "#ccc",
-    borderWidth: 1,
+    alignItems: "center",
+    justifyContent: "center",
+    marginHorizontal: 30,
     borderRadius: 4,
     height: 40,
-    fontSize: 15,
-    color: "#161F3D",
+    fontSize: 16,
+    color: "#B0B0B0",
     padding: 10,
+    backgroundColor:"#fff",
+    elevation: 5,
+    shadowOpacity: 1,
+    shadowRadius: 10,
+    shadowColor: "#000",
+    shadowOffset: {
+      widht: -1,
+      height: -1
+    }
   },
   breadCrumb: {
     marginTop: 40,
@@ -156,12 +174,21 @@ const styles = StyleSheet.create({
     borderRadius: 4,
   },
   buttonModal: {
-    backgroundColor: "#E9446A",
-    borderRadius: 4,
-    height: 35,
+    backgroundColor: '#C13273',
     alignItems: "center",
     justifyContent: "center",
-    marginTop: 25,
+    marginHorizontal: 30,
+    marginTop: 30,
+    height: 40,
+    borderRadius: 4,
+    elevation: 5,
+    shadowOpacity: 1,
+    shadowRadius: 50,
+    shadowColor: "#000",
+    shadowOffset: {
+      widht: 1,
+      height: 1
+    }
   },
 });
 

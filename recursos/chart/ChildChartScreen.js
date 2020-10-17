@@ -274,7 +274,7 @@ class ChildChartScreen extends React.Component {
           locked
           tabContainerStyle={{ height: 40 }}
           tabBarUnderlineStyle={{
-            backgroundColor: "black",
+            backgroundColor: "white",
             height: 5,
           }}
           initialPage={this.state.initialPage}
@@ -284,7 +284,7 @@ class ChildChartScreen extends React.Component {
             heading={
               <TabHeading style={{ backgroundColor: "#A4D4DB" }}>
                 <Text
-                  style={{ fontSize: 15, color: "black" }}
+                  style={{ fontSize: 15, color: "white" }}
                   onPress={() => {
                     this.setState({ tabactivo: 0 });
                   }}
@@ -305,11 +305,12 @@ class ChildChartScreen extends React.Component {
                     <Row style={{ backgroundColor: "#75d98f" }}>
                       <Text
                         style={{
-                          fontSize: 15,
+                          fontSize: 14,
                           color: "#FFF",
                           width: 350,
                           textAlign: "center",
                           textAlignVertical: "center",
+                          padding:6,
                         }}
                       >
                         ¡Felicitaciones! Peso dentro del rango normal de
@@ -317,20 +318,21 @@ class ChildChartScreen extends React.Component {
                       </Text>
                     </Row>
                   ) : (
-                    <Row style={{ backgroundColor: "#d97575" }}>
-                      <Text
-                        style={{
-                          fontSize: 15,
-                          color: "#FFF",
-                          width: 350,
-                          textAlign: "center",
-                          textAlignVertical: "center",
-                        }}
-                      >
-                        ¡Alerta! Peso fuera del rango normal de crecimiento.
+                      <Row style={{ backgroundColor: "#d97575" }}>
+                        <Text
+                          style={{
+                            fontSize: 14,
+                            padding:6,
+                            color: "#FFF",
+                            width: 350,
+                            textAlign: "center",
+                            textAlignVertical: "center",
+                          }}
+                        >
+                          ¡Alerta! Peso fuera del rango normal de crecimiento.
                       </Text>
-                    </Row>
-                  )}
+                      </Row>
+                    )}
                 </Grid>
               </Content>
             </Container>
@@ -339,7 +341,7 @@ class ChildChartScreen extends React.Component {
             heading={
               <TabHeading style={{ backgroundColor: "#A4D4DB" }}>
                 <Text
-                  style={{ fontSize: 15, color: "black" }}
+                  style={{ fontSize: 15, color: "white" }}
                   onPress={() => {
                     this.setState({ tabactivo: 1 });
                   }}
@@ -360,7 +362,8 @@ class ChildChartScreen extends React.Component {
                     <Row style={{ backgroundColor: "#75d98f" }}>
                       <Text
                         style={{
-                          fontSize: 15,
+                          fontSize: 14,
+                          padding:6,
                           color: "#FFF",
                           width: 350,
                           textAlign: "center",
@@ -372,20 +375,21 @@ class ChildChartScreen extends React.Component {
                       </Text>
                     </Row>
                   ) : (
-                    <Row style={{ backgroundColor: "#d97575" }}>
-                      <Text
-                        style={{
-                          fontSize: 15,
-                          color: "#FFF",
-                          width: 350,
-                          textAlign: "center",
-                          textAlignVertical: "center",
-                        }}
-                      >
-                        ¡Alerta! Estatura fuera del rango normal de crecimiento.
+                      <Row style={{ backgroundColor: "#d97575" }}>
+                        <Text
+                          style={{
+                            fontSize: 14,
+                          padding:6,
+                            color: "#FFF",
+                            width: 350,
+                            textAlign: "center",
+                            textAlignVertical: "center",
+                          }}
+                        >
+                          ¡Alerta! Estatura fuera del rango normal de crecimiento.
                       </Text>
-                    </Row>
-                  )}
+                      </Row>
+                    )}
                 </Grid>
               </Content>
             </Container>

@@ -16,6 +16,7 @@ import "moment/locale/es";
 import { MaterialIcons, Feather } from "@expo/vector-icons";
 import { firebase } from "./utils/firebase";
 import styles from "./styles/stylesEstaturaScreen";
+import AwesomeAlert from "react-native-awesome-alerts";
 
 
 //VISTA HOME PRINCIPAL
@@ -32,6 +33,7 @@ const EstaturaScreen = ({ route, navigation }) => {
   const [estaturaRegister, setEstaturaRegister] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
   const [time, setTime] = useState(new Date());
+  const [showAlert, setShowAlert] = useState(false);
 
   const changeEstatura = (estatura) => {
     setEstatura(estatura);
@@ -116,7 +118,7 @@ const EstaturaScreen = ({ route, navigation }) => {
       };
       handleAddHeight(documentChildHeight)
     } else {
-      alert("Llene todo los campos");
+      setShowAlert(true);
     }
   };
 
@@ -168,7 +170,7 @@ const EstaturaScreen = ({ route, navigation }) => {
 
               <Text>{date}</Text>
               <Text>{height} </Text>
-              <TouchableOpacity><Feather name="edit" size={24} color="black" /></TouchableOpacity>
+              <TouchableOpacity><Feather name="edit" size={24} color="#b0b0b0" /></TouchableOpacity>
             </View>
           )
         }
@@ -189,17 +191,18 @@ const EstaturaScreen = ({ route, navigation }) => {
         >
           <View style={styles.modalView}>
             <MaterialIcons
+              style={styles.iconBox}
               name="close"
               size={24}
               onPress={() => { setModalVisible(!modalVisible) }}
             ></MaterialIcons>
 
-            <View style={styles.form}>
+            <View>
               <View>
-                <Text style={styles.title1}>Estatura</Text>
+                <Text style={styles.titleModal}>Estatura</Text>
               </View>
 
-              <View>
+              <View style={styles.input1}>
                 <TextInput
                   style={styles.input}
                   placeholder="Estatura (cm)"
@@ -213,51 +216,59 @@ const EstaturaScreen = ({ route, navigation }) => {
               </View>
 
               <View>
-                <View>
-                  <View
-                    style={{
-                      color: "#ffffff",
-                      fontWeight: "500",
-                      marginTop: 10,
-                    }}
+                <TouchableOpacity
+                  onPress={showDatepicker}
+                  style={styles.inputBirthday}>
+                  <Text style={styles.textAgregar1}
                   >
-                    <TouchableOpacity
-                    onPress={showDatepicker}
-                    style={styles.inputBirthday}>
-                    <Text style={styles.textAgregar1}
-                    >
-                      {formatDate(date)}
+                    {formatDate(date)}
 
-                    </Text>
-                  </TouchableOpacity>
-                  </View>
+                  </Text>
+                </TouchableOpacity>
 
-                  {show && (
-                    <DateTimePicker
-                      testID="dateTimePicker"
-                      value={date}
-                      mode={mode}
-                      is24Hour={true}
-                      display="default"
-                      onChange={onChange}
-                    />
-                  )}
-                </View>
+                {show && (
+                  <DateTimePicker
+                    testID="dateTimePicker"
+                    value={date}
+                    mode={mode}
+                    is24Hour={true}
+                    display="spinner"
+                    onChange={onChange}
+                  />
+                )}
               </View>
 
               <TouchableOpacity
                 style={styles.buttonModal}
                 onPress={() => handleOnChange()}
               >
-                <Text style={styles.textAgregar}>
+                <Text style={{ color: "#ffffff", fontWeight: "500" }}>
                   Agregar
                     </Text>
               </TouchableOpacity>
-
             </View>
           </View>
         </View>
       </Modal>
+      <AwesomeAlert
+          show={showAlert}
+          showProgress={false}
+          title="Importante"
+          message="Debe llenar todos los campos para registrar estatura."
+          closeOnTouchOutside={true}
+          closeOnHardwareBackPress={false}
+          showCancelButton={false}
+          showConfirmButton={true}
+          cancelText="Cancelar"
+          confirmText="Aceptar"
+          confirmButtonColor='#C13273'
+          onCancelPressed={() => {
+            setShowAlert(false);
+          }}
+          onConfirmPressed={() => {
+            setShowAlert(false);
+          }}
+        />
     </ScrollView>
   );
 };

@@ -284,6 +284,13 @@ const HomeScreen = ({ navigation }) => {
 
                 </View>
               </View>
+              <TouchableOpacity
+                style={styles.buttonFoto}
+              >
+                <Text style={{ color: "#B0B0B0", fontWeight: "500", textAlign:"center", textDecorationLine:"underline" }}>
+                  Agregar foto
+                </Text>
+              </TouchableOpacity>
 
               <TouchableOpacity
                 style={styles.buttonModal}

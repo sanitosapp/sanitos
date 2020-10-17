@@ -146,30 +146,26 @@ const VacunasScreen = ({ route, navigation }) => {
                   <Text style={styles.titleStyle}>{vaccine} </Text>
                 </View>
                 <View style={styles.paddingCard}>
-                <View>
+                  <View style={styles.boxVacuna1}>
+                    <Text style={styles.textVacuna}>
+                      {time}
+                    </Text>
+                    <Text style={styles.textVacuna}>
+                      {dose === "no tiene" ? null : dose}
+                      {reinforcement === "no tiene" ? null : reinforcement}{" "}
+                    </Text>
+                  </View>
+                  <View style={styles.boxVacuna1}>
+                    <Text style={styles.textVacuna}>
+                      {state ? "Vacuna aplicada" : "Vacuna pendiente"}
+                    </Text>
+                    <Text style={styles.textVacuna}>
+                      {date}
+                    </Text>
+                  </View>
+
 
                 </View>
-                <View>
-                  
-                </View>
-                  <Text style={styles.textVacuna}>
-                    {time}
-                  </Text>
-                  <Text style={styles.textVacuna}>
-                    {dose === "no tiene" ? null : dose}
-                    {reinforcement === "no tiene" ? null : reinforcement}{" "}
-                  </Text>
-                  <Text style={styles.textVacuna}>
-                    {state ? "Vacuna aplicada" : "Vacuna pendiente"}
-                  </Text>
-                </View>
-
-                {/* <TouchableOpacity
-                  onPress={() => { setModalVisible(true) }}
-                  style={styles.col3}
-                >
-                  <MaterialIcons name="add" size={20} color="black" />
-                </TouchableOpacity> */}
               </View>
             </TouchableOpacity>
           </View>

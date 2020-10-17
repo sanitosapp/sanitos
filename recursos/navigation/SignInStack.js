@@ -19,6 +19,7 @@ import PostScreen from "../PostScreen";
 import PerfilNinoScreen from "../PerfilNinoScreen";
 import ProfileScreen from "../ProfileScreen";
 import CuentaScreen from "../CuentaScreen";
+import CuentaEditScreen from "../CuentaEditScreen";
 import VacunasInfoScreen from "../VacunasInfoScreen";
 import ChildChartScreen from "../chart/ChildChartScreen";
 
@@ -236,6 +237,22 @@ const ProfileStackScreen = () => {
           },
         }} />
       <ProfileStack.Screen name="Cuentaa" component={CuentaScreen} options={{
+          title: "Cuenta",
+          headerTitleAlign: "center",
+          headerStyle: {
+            backgroundColor:"#C13273",
+          },
+          headerTintColor: "#fff",
+          headerTitleStyle: {
+            fontWeight: "normal",
+          },
+          headerRight: ({ navigation }) => (
+            <TouchableOpacity onPress={() => navigation.push("CuentaEdit")}>
+                    <Feather name="edit" size={24} color="#fff" style={{marginRight:20}} />
+                </TouchableOpacity>
+          ),
+        }}  />
+        <ProfileStack.Screen name="CuentaEdit" component={CuentaEditScreen} options={{
           title: "Cuenta",
           headerTitleAlign: "center",
           headerStyle: {

@@ -62,7 +62,8 @@ const styles = StyleSheet.create({
         textTransform: "uppercase",
     },
     targetVacunas: {
-        width: "85%",
+        marginTop:20,
+        marginHorizontal:30,
     },
     paddingCard: {
         marginTop: 4,
@@ -86,9 +87,8 @@ const styles = StyleSheet.create({
     buttonVacuna: {
         alignItems: "center",
         justifyContent: "center",
-        marginTop: 250,
+        marginTop: "75%",
         marginHorizontal: 30,
-        width:"85%",
         paddingHorizontal:"20%",
         backgroundColor: "#1D96A3",
         fontSize: 14,
@@ -146,7 +146,6 @@ const styles = StyleSheet.create({
     targetTitle: {
         backgroundColor: "#1D96A3",
         shadowColor: "#000",
-        width: "100%",
         padding: 6,
         borderRadius: 4,
         elevation: 10,
@@ -269,7 +268,7 @@ const styles = StyleSheet.create({
     },
     modalView: {
         width: "85%",
-        height: "50%",
+        height: "55%",
         backgroundColor: "white",
         borderRadius: 4,
         shadowColor: "#000",
