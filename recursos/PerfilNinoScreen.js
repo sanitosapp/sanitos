@@ -78,6 +78,7 @@ const PerfilNinoScreen = ({ route, navigation }) => {
       historicoEstatura: historialEstatura,
       historicoPeso: historialPeso,
       nombre: childDataTest.nombre,
+      child: user
     };
   };
 
