@@ -300,38 +300,40 @@ class ChildChartScreen extends React.Component {
                   styles={styles.container}
                   options={this.state.pesoChartOptions}
                 />
-                <Grid>
-                  {this.state.pesoCorrecto ? (
-                    <Row style={{ backgroundColor: "#75d98f" }}>
-                      <Text
-                        style={{
-                          fontSize: 15,
-                          color: "#FFF",
-                          width: 350,
-                          textAlign: "center",
-                          textAlignVertical: "center",
-                        }}
-                      >
-                        ¡Felicitaciones! Peso dentro del rango normal de
-                        crecimiento.
-                      </Text>
-                    </Row>
-                  ) : (
-                    <Row style={{ backgroundColor: "#d97575" }}>
-                      <Text
-                        style={{
-                          fontSize: 15,
-                          color: "#FFF",
-                          width: 350,
-                          textAlign: "center",
-                          textAlignVertical: "center",
-                        }}
-                      >
-                        ¡Alerta! Peso fuera del rango normal de crecimiento.
-                      </Text>
-                    </Row>
-                  )}
-                </Grid>
+                {this.props.route.params.historicoPeso.length > 0 ? (
+                  <Grid>
+                    {this.state.pesoCorrecto ? (
+                      <Row style={{ backgroundColor: "#75d98f" }}>
+                        <Text
+                          style={{
+                            fontSize: 15,
+                            color: "#FFF",
+                            width: 350,
+                            textAlign: "center",
+                            textAlignVertical: "center",
+                          }}
+                        >
+                          ¡Felicitaciones! Peso dentro del rango normal de
+                          crecimiento.
+                        </Text>
+                      </Row>
+                    ) : (
+                      <Row style={{ backgroundColor: "#d97575" }}>
+                        <Text
+                          style={{
+                            fontSize: 15,
+                            color: "#FFF",
+                            width: 350,
+                            textAlign: "center",
+                            textAlignVertical: "center",
+                          }}
+                        >
+                          ¡Alerta! Peso fuera del rango normal de crecimiento.
+                        </Text>
+                      </Row>
+                    )}
+                  </Grid>
+                ) : null}
               </Content>
             </Container>
           </Tab>
@@ -355,38 +357,42 @@ class ChildChartScreen extends React.Component {
                   styles={styles.container}
                   options={this.state.alturaChartOptions}
                 />
-                <Grid>
-                  {this.state.estaturaCorrecta ? (
-                    <Row style={{ backgroundColor: "#75d98f" }}>
-                      <Text
-                        style={{
-                          fontSize: 15,
-                          color: "#FFF",
-                          width: 350,
-                          textAlign: "center",
-                          textAlignVertical: "center",
-                        }}
-                      >
-                        ¡Felicitaciones! Estatura dentro del rango normal de
-                        crecimiento.
-                      </Text>
-                    </Row>
-                  ) : (
-                    <Row style={{ backgroundColor: "#d97575" }}>
-                      <Text
-                        style={{
-                          fontSize: 15,
-                          color: "#FFF",
-                          width: 350,
-                          textAlign: "center",
-                          textAlignVertical: "center",
-                        }}
-                      >
-                        ¡Alerta! Estatura fuera del rango normal de crecimiento.
-                      </Text>
-                    </Row>
-                  )}
-                </Grid>
+
+                {this.props.route.params.historicoEstatura.length > 0 ? (
+                  <Grid>
+                    {this.state.estaturaCorrecta ? (
+                      <Row style={{ backgroundColor: "#75d98f" }}>
+                        <Text
+                          style={{
+                            fontSize: 15,
+                            color: "#FFF",
+                            width: 350,
+                            textAlign: "center",
+                            textAlignVertical: "center",
+                          }}
+                        >
+                          ¡Felicitaciones! Estatura dentro del rango normal de
+                          crecimiento.
+                        </Text>
+                      </Row>
+                    ) : (
+                      <Row style={{ backgroundColor: "#d97575" }}>
+                        <Text
+                          style={{
+                            fontSize: 15,
+                            color: "#FFF",
+                            width: 350,
+                            textAlign: "center",
+                            textAlignVertical: "center",
+                          }}
+                        >
+                          ¡Alerta! Estatura fuera del rango normal de
+                          crecimiento.
+                        </Text>
+                      </Row>
+                    )}
+                  </Grid>
+                ) : null}
               </Content>
             </Container>
           </Tab>
