@@ -17,7 +17,6 @@ import { MaterialIcons, Feather } from "@expo/vector-icons";
 import { firebase } from "./utils/firebase";
 import styles from "./styles/stylesEstaturaScreen";
 
-
 //VISTA HOME PRINCIPAL
 const EstaturaScreen = ({ route, navigation }) => {
   LayoutAnimation.easeInEaseOut();
@@ -27,14 +26,14 @@ const EstaturaScreen = ({ route, navigation }) => {
   const [mode, setMode] = useState("date");
   const [show, setShow] = useState(false);
   const [selectDate, setSelectDate] = useState(false);
-  const [childId, setChildId] = useState('');
-  const [userId, setUserId] = useState('');
+  const [childId, setChildId] = useState("");
+  const [userId, setUserId] = useState("");
   const [estaturaRegister, setEstaturaRegister] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
 
   const changeEstatura = (estatura) => {
     setEstatura(estatura);
-  }
+  };
 
   useEffect(() => {
     const { idPesos } = route.params;
@@ -56,18 +55,17 @@ const EstaturaScreen = ({ route, navigation }) => {
     querySnapshot.onSnapshot((querySnapshot) => {
       const arrayEstatura = [];
       querySnapshot.forEach((doc) => {
-        const { date } = doc.data()
-        const formatoFecha = moment(date.toDate()).format('LL')
+        const { date } = doc.data();
+        const formatoFecha = moment(date.toDate()).format("LL");
         arrayEstatura.push({
           ...doc.data(),
           date: formatoFecha,
-          id: doc.id
-        })
+          id: doc.id,
+        });
       });
-      
+
       if (arrayEstatura.length > 0) {
-        setEstaturaRegister(arrayEstatura)
-        console.log("arrayestatura", arrayEstatura);
+        setEstaturaRegister(arrayEstatura);
       }
     });
   };
@@ -95,9 +93,9 @@ const EstaturaScreen = ({ route, navigation }) => {
         childId,
         date: firebase.firestore.Timestamp.fromDate(now),
         userId,
-        height: parseInt(estatura)
+        height: parseInt(estatura),
       };
-      handleAddHeight(documentChildHeight)
+      handleAddHeight(documentChildHeight);
     } else {
       alert("Llene todo los campos");
     }
@@ -113,9 +111,8 @@ const EstaturaScreen = ({ route, navigation }) => {
       .add(documentChildHeight)
       .then((docRef) => {
         const { id } = docRef;
-        console.log("adding document: ", id)
         setModalVisible(false);
-        setEstatura('');
+        setEstatura("");
         setSelectDate(false);
       })
       .catch(function (error) {
@@ -136,9 +133,7 @@ const EstaturaScreen = ({ route, navigation }) => {
         </Text>
       </TouchableOpacity> */}
 
-      <View
-        style={styles.boxTitle}
-      >
+      <View style={styles.boxTitle}>
         <Text style={styles.textWhite}>Fecha</Text>
         <Text style={styles.textWhite}>Estatura</Text>
       </View>
@@ -148,32 +143,33 @@ const EstaturaScreen = ({ route, navigation }) => {
           const { date, height, id } = doc;
           return (
             <View style={styles.boxHeight}>
-
               <Text>{date}</Text>
               <Text>{height} </Text>
             </View>
-          )
-        }
-        )}
+          );
+        })}
       </View>
 
       <View>
-        <TouchableOpacity style={styles.button} onPress={() => { setModalVisible(true) }}>
-          <Text style={styles.textButton}>
-              + Agregue nueva medida
-            </Text>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => {
+            setModalVisible(true);
+          }}
+        >
+          <Text style={styles.textButton}>+ Agregue nueva medida</Text>
         </TouchableOpacity>
       </View>
 
       <Modal visible={modalVisible} transparent={true} animationType="fade">
-        <View
-          style={styles.centeredViews}
-        >
+        <View style={styles.centeredViews}>
           <View style={styles.modalView}>
             <MaterialIcons
               name="close"
               size={24}
-              onPress={() => { setModalVisible(!modalVisible) }}
+              onPress={() => {
+                setModalVisible(!modalVisible);
+              }}
             ></MaterialIcons>
 
             <View style={styles.form}>
@@ -200,10 +196,7 @@ const EstaturaScreen = ({ route, navigation }) => {
                       marginTop: 10,
                     }}
                   >
-                    <Button
-                      onPress={showDatepicker}
-                      title="Fecha"
-                    />
+                    <Button onPress={showDatepicker} title="Fecha" />
                   </View>
 
                   {show && (
@@ -223,11 +216,8 @@ const EstaturaScreen = ({ route, navigation }) => {
                 style={styles.buttonModal}
                 onPress={() => handleOnChange()}
               >
-                <Text style={styles.textAgregar}>
-                  Agregar
-                    </Text>
+                <Text style={styles.textAgregar}>Agregar</Text>
               </TouchableOpacity>
-
             </View>
           </View>
         </View>
@@ -237,4 +227,3 @@ const EstaturaScreen = ({ route, navigation }) => {
 };
 
 export default EstaturaScreen;
-

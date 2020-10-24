@@ -7,6 +7,7 @@ const vaccines = () => [
     time: "Recién nacido",
     date: "",
     days: 1,
+    reminder: false,
   },
   {
     dose: "Única dosis",
@@ -16,6 +17,7 @@ const vaccines = () => [
     time: "Recién nacido",
     date: "",
     days: 2,
+    reminder: false,
   },
   {
     dose: "1ra dosis",
@@ -25,6 +27,7 @@ const vaccines = () => [
     time: "2 meses",
     date: "",
     days: 3,
+    reminder: false,
   },
   {
     dose: "1ra dosis",
@@ -35,6 +38,7 @@ const vaccines = () => [
     time: "2 meses",
     date: "",
     days: 4,
+    reminder: false,
   },
   {
     dose: "1ra dosis",
@@ -43,6 +47,7 @@ const vaccines = () => [
     vaccine: "Rotavirus",
     time: "2 meses",
     days: 5,
+    reminder: false,
     date: "",
     diseases:
       "Esta vacuna previene la gastroenteritis aguda por rotavirus, cuya complicación más común es la deshidratación. Suele presentarse con más frecuencia a bebés y niños pequeños. Este virus se transmite de forma fecal-oral. El contagio se produce por contacto con personas enfermas, generalmente a través de las manos.",
@@ -60,6 +65,7 @@ const vaccines = () => [
     time: "2 meses",
     date: "",
     days: 6,
+    reminder: false,
   },
   {
     dose: "2da dosis",
@@ -68,6 +74,7 @@ const vaccines = () => [
     vaccine: "Pentavalente",
     time: "4 meses",
     days: 7,
+    reminder: false,
     date: "",
   },
   {
@@ -86,6 +93,7 @@ const vaccines = () => [
     vaccine: "Rotavirus",
     time: "4 meses",
     days: 9,
+    reminder: false,
     date: "",
   },
   {
@@ -95,6 +103,7 @@ const vaccines = () => [
     vaccine: "Neumococo",
     time: "4 meses",
     days: 10,
+    reminder: false,
     date: "",
   },
   {
@@ -113,6 +122,7 @@ const vaccines = () => [
     vaccine: "Polio oral",
     time: "6 meses",
     days: 12,
+    reminder: false,
     date: "",
   },
   {
@@ -122,6 +132,7 @@ const vaccines = () => [
     vaccine: "Influenza",
     time: "6 meses",
     days: 13,
+    reminder: false,
     date: "",
   },
   {
@@ -140,6 +151,7 @@ const vaccines = () => [
     vaccine: "Neumococo",
     time: "12 meses",
     days: 15,
+    reminder: false,
     date: "",
   },
   {
@@ -149,6 +161,7 @@ const vaccines = () => [
     vaccine: "SPR",
     time: "12 meses",
     days: 16,
+    reminder: false,
     date: "",
   },
   {
@@ -157,6 +170,7 @@ const vaccines = () => [
     state: false,
     vaccine: "Varicela",
     time: "12 meses",
+    reminder: false,
     days: 17,
     date: "",
   },
@@ -167,6 +181,7 @@ const vaccines = () => [
     vaccine: "Influenza",
     time: "12 meses",
     days: 18,
+    reminder: false,
     date: "",
   },
   {
@@ -176,6 +191,7 @@ const vaccines = () => [
     vaccine: "Fiebre amarilla",
     time: "15 meses",
     days: 19,
+    reminder: false,
     date: "",
   },
   {
@@ -185,6 +201,7 @@ const vaccines = () => [
     vaccine: "SRP",
     time: "18 meses",
     days: 20,
+    reminder: false,
     date: "",
   },
   {
@@ -194,6 +211,7 @@ const vaccines = () => [
     vaccine: "DTP",
     time: "18 meses",
     days: 21,
+    reminder: false,
     date: "",
   },
   {
@@ -203,6 +221,7 @@ const vaccines = () => [
     vaccine: "Polio oral",
     time: "18 meses",
     days: 22,
+    reminder: false,
     date: "",
   },
   {
@@ -212,6 +231,7 @@ const vaccines = () => [
     vaccine: "DTP",
     time: "4 años",
     days: 23,
+    reminder: false,
     date: "",
   },
   {
@@ -221,6 +241,7 @@ const vaccines = () => [
     vaccine: "Polio oral",
     time: "4 años",
     days: 24,
+    reminder: false,
     date: "",
   },
 ];

@@ -34,6 +34,7 @@ const HomeScreen = ({ navigation }) => {
   const [show, setShow] = useState(false);
   const [selectDate, setSelectDate] = useState(false);
   const [uidUser, setUidUser] = useState("");
+  const [labelDate, setLabelDate] = useState("Fecha de nacimiento");
 
   useEffect(() => {
     YellowBox.ignoreWarnings(["Setting a timer"]);
@@ -87,7 +88,6 @@ const HomeScreen = ({ navigation }) => {
       vaccinesArray.forEach((Element) => {
         const { days } = Element;
         const vaccinationDate = moment(now).add(days, "days");
-        console.log("fechas de la vacuna", vaccinationDate);
       });
     } else {
       alert("Llene todo los campos");
@@ -95,7 +95,7 @@ const HomeScreen = ({ navigation }) => {
   };
 
   const handleAddChildUser = (documentChildUser) => {
-    /*   const ref = firebase
+    const ref = firebase
       .firestore()
       .collection("usuarios")
       .doc(uidUser)
@@ -109,23 +109,23 @@ const HomeScreen = ({ navigation }) => {
         setName("");
         setGender("");
         setSangre("");
+        setLabelDate('"Fecha de nacimiento"');
         setSelectDate(false);
         handleAddVaccines(ref, id);
       })
       .catch(function (error) {
         console.error("Error adding document: ", error);
-      }); */
+      });
   };
 
   const handleAddVaccines = (ref, id) => {
     const refChild = ref.doc(id).collection("vacunas");
     const vaccinesArray = vaccines();
     vaccinesArray.forEach((Element) => {
-      const { days } = refChild
+      refChild
         .add(Element)
         .then((docRef) => {
           const { id } = docRef;
-          console.log(" adding document: ", id);
         })
         .catch(function (error) {
           console.error("Error adding document: ", error);
@@ -134,9 +134,11 @@ const HomeScreen = ({ navigation }) => {
   };
 
   const onChange = (event, selectedDate) => {
+    const dateFormat = moment(selectedDate).format("LL");
     const currentDate = selectedDate || date;
     setShow(Platform.OS === "ios");
     setDate(currentDate);
+    setLabelDate(dateFormat);
   };
 
   const showMode = (currentMode) => {
@@ -237,7 +239,7 @@ const HomeScreen = ({ navigation }) => {
                     onPress={showDatepicker}
                     style={styles.inputBirthday}
                   >
-                    <Text style={styles.textAgregar1}>Fecha de nacimiento</Text>
+                    <Text style={styles.textAgregar1}>{labelDate}</Text>
                   </TouchableOpacity>
 
                   {show && (
