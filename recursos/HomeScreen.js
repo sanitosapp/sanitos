@@ -10,7 +10,6 @@ import {
   LayoutAnimation,
   Modal,
   YellowBox,
-  Button,
 } from "react-native";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import moment from "moment";

@@ -3,6 +3,7 @@ import Constants from "expo-constants";
 import * as Notifications from "expo-notifications";
 import * as Permissions from "expo-permissions";
 import AuthNavigator from "./recursos/navigation/AuthNavigator";
+import { setPhoneToken } from "./recursos/commons/user";
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
@@ -13,15 +14,13 @@ Notifications.setNotificationHandler({
 });
 
 const App = () => {
-  const [expoPushToken, setExpoPushToken] = useState("");
   const [notification, setNotification] = useState(false);
   const notificationListener = useRef();
   const responseListener = useRef();
 
   useEffect(() => {
     registerForPushNotificationsAsync().then((token) => {
-      console.log("token", token);
-      setExpoPushToken(token);
+      setPhoneToken(token);
     });
 
     // This listener is fired whenever a notification is received while the app is foregrounded
