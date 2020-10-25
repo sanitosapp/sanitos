@@ -2,27 +2,21 @@ import React, { useState, useEffect } from "react";
 import {
   Picker,
   Modal,
-  ScrollView,
   Text,
-  StatusBar,
   View,
   TouchableOpacity,
   YellowBox,
+  Switch,
 } from "react-native";
-import * as Notifications from "expo-notifications";
-import * as Permissions from "expo-permissions";
-import Constants from "expo-constants";
+
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { MaterialIcons } from "@expo/vector-icons";
-import "moment/locale/es";
 import { firebase } from "./utils/firebase";
 import styles from "./styles/stylesVacunasInfoScreen";
-import { auth } from "firebase";
+import moment from "moment";
+import "moment/locale/es";
 
 const VacunasInfoScreen = ({ route, navigation }) => {
-  const [vacuna, setVacuna] = useState([]);
-  const [vacunaEstado, setVacunaEstado] = useState([]);
-  const [data, setData] = useState("");
   const [date, setDate] = useState(new Date());
   const [estado, setEstado] = useState("");
   const [modalVisible, setModalVisible] = useState(false);
@@ -32,27 +26,31 @@ const VacunasInfoScreen = ({ route, navigation }) => {
   const [selectDate, setSelectDate] = useState("date");
   const [childId, setChildId] = useState("");
   const [userId, setUserId] = useState("");
+  const [labelDate, setLabelDate] = useState("Fecha de vacuna");
+
+  const [isEnabled, setIsEnabled] = useState(false);
 
   useEffect(() => {
     YellowBox.ignoreWarnings(["Setting a timer"]);
-    const { uid } = firebase.auth().currentUser;
+    const { vacunaId, childId, uid } = route.params;
+    setChildId(childId);
     setUserId(uid);
-    const { vacunaId } = route.params;
     setVacunaInfo(vacunaId);
+    setIsEnabled(vacunaInfo.state);
   }, []);
 
   const changeEstado = (estado) => {
     setEstado(estado);
   };
 
-  const changeDate = (valor) => {
-    setData(valor);
-  };
+  const toggleSwitch = () => setIsEnabled((previousState) => !previousState);
 
   const onChange = (event, selectedDate) => {
+    const dateFormat = moment(selectedDate).format("LL");
     const currentDate = selectedDate || date;
     setShow(Platform.OS === "ios");
     setDate(currentDate);
+    setLabelDate(dateFormat);
   };
 
   const showMode = (currentMode) => {
@@ -69,40 +67,16 @@ const VacunasInfoScreen = ({ route, navigation }) => {
     if (selectDate && estado !== "") {
       let now = new Date(date);
       const documentVaccine = {
+        idVaccine: vacunaInfo.id,
         childId,
-        date: firebase.firestore.Timestamp.fromDate(now),
         userId,
-        state: parseInt(estado),
+        date: firebase.firestore.Timestamp.fromDate(now),
+        state: estado,
       };
-      handleAddVaccine(documentVaccine);
+      console.log("documentVaccine", documentVaccine);
     } else {
-console.log("vacunaInfo", vacunaInfo);
       alert("Llene todo los campos");
     }
-  };
-
-  const handleAddVaccine = (documentVaccine) => {
-    const { uid } = firebase.auth().currentUser;
-    const ref = firebase
-      .firestore()
-      .collection("usuarios")
-      .doc(uid)
-      .collection("childUsers")
-      .doc(childId)
-      .collection("vacunas");
-    ref
-      .set(documentVaccine)
-      .then((docRef) => {
-        const { id } = docRef;
-        console.log("AGREGANDOESTAD", id);
-        setModalVisible(false);
-        setEstado("");
-        setSelectDate(false);
-      })
-      .catch(function (error) {
-        console.error("Error adding document: ", error);
-      });
-    console.log(ref);
   };
 
   return (
@@ -120,9 +94,20 @@ console.log("vacunaInfo", vacunaInfo);
                 ? null
                 : vacunaInfo.reinforcement}{" "}
             </Text>
-            <Text style={styles.textVacuna}>
-              {vacunaInfo.state ? "Vacuna aplicada" : "Vacuna pendiente"}
-            </Text>
+            <View style={styles.containerStateVaccine}>
+              <Text style={{ ...styles.textVacuna, fontWeight: "bold" }}>
+                {isEnabled ? "Vacuna aplicada" : "Vacuna pendiente"}
+              </Text>
+              <View style={styles.container}>
+                <Switch
+                  trackColor={{ false: "#767577", true: "#1D96A3" }}
+                  thumbColor={isEnabled ? "#fff" : "#f4f3f4"}
+                  ios_backgroundColor="#3e3e3e"
+                  onValueChange={toggleSwitch}
+                  value={isEnabled}
+                />
+              </View>
+            </View>
           </View>
         </View>
         <View>
@@ -140,24 +125,23 @@ console.log("vacunaInfo", vacunaInfo);
           </View>
         </View>
 
-        <View>
-          {!vacunaInfo.state ? (
-            <TouchableOpacity
-              style={styles.buttonVacuna}
-              onPress={() => {
-                setModalVisible(true);
-              }}
-            >
-              <Text style={styles.textButtonVacuna}>Programar vacuna</Text>
-            </TouchableOpacity>
-          ) : (
-            <TouchableOpacity style={styles.buttonVacuna}>
-              <Text style={styles.textButtonVacuna}>
-                Esta vacuna ya fue aplicada
-              </Text>
-            </TouchableOpacity>
-          )}
-        </View>
+        {!vacunaInfo.state ? (
+          <TouchableOpacity
+            style={styles.buttonVacuna}
+            onPress={() => {
+              setModalVisible(true);
+            }}
+          >
+            <Text style={styles.textButtonVacuna}>Programar vacuna</Text>
+          </TouchableOpacity>
+        ) : (
+          <TouchableOpacity style={styles.buttonVacuna}>
+            <Text style={styles.textButtonVacuna}>
+              Esta vacuna ya fue aplicada
+            </Text>
+          </TouchableOpacity>
+        )}
+
         <Modal animationType="fade" transparent={true} visible={modalVisible}>
           <View style={styles.centeredViews}>
             <View style={styles.modalView}>
@@ -182,8 +166,8 @@ console.log("vacunaInfo", vacunaInfo);
                     onValueChange={(estado, itemIndex) => changeEstado(estado)}
                   >
                     <Picker.Item label="Estado" value="0" />
-                    <Picker.Item label="Aplicada" value={"true"} />
-                    <Picker.Item label="Pendiente" value={"false"} />
+                    <Picker.Item label="Aplicada" value={true} />
+                    <Picker.Item label="Pendiente" value={false} />
                   </Picker>
                 </View>
 
@@ -193,7 +177,7 @@ console.log("vacunaInfo", vacunaInfo);
                       onPress={showDatepicker}
                       style={styles.inputDate}
                     >
-                      <Text style={styles.textAgregar1}>Fecha de vacuna</Text>
+                      <Text style={styles.textAgregar1}>{labelDate}</Text>
                     </TouchableOpacity>
 
                     {show && (

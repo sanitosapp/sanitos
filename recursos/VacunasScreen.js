@@ -26,7 +26,8 @@ const VacunasScreen = ({ route, navigation }) => {
   const [activeAll, setActiveAll] = useState(true);
   const [activeSlopes, setActiveSlopes] = useState(false);
   const [activeApplied, setActiveApplied] = useState(false);
-
+  const [uid, setUid] = useState("");
+  const [childId, setChildId] = useState("");
   const changeEstado = (estado) => {
     setEstado(estado);
   };
@@ -39,6 +40,8 @@ const VacunasScreen = ({ route, navigation }) => {
     YellowBox.ignoreWarnings(["Setting a timer"]);
     const { idPesos } = route.params;
     const { uid } = firebase.auth().currentUser;
+    setUid(uid);
+    setChildId(idPesos.id);
     vacunas(uid, idPesos.id);
   }, []);
 
@@ -59,11 +62,10 @@ const VacunasScreen = ({ route, navigation }) => {
         });
       });
       if (arrayVacunas.length > 0) {
-      setVacunaEstado(arrayVacunas);
-      setDataVacuna(arrayVacunas);
-    }
+        setVacunaEstado(arrayVacunas);
+        setDataVacuna(arrayVacunas);
+      }
     });
-    
   };
 
   const filterVaccinesPending = () => {
@@ -132,13 +134,17 @@ const VacunasScreen = ({ route, navigation }) => {
       </View>
 
       {vacunaEstado.map((doc, index) => {
-        const { dose, state, vaccine, reinforcement, time, diseases, administration, vaccinebrands, effect, date} = doc;
+        const { dose, state, vaccine, reinforcement, time, id } = doc;
         return (
           <View style={styles.boxVacunas} key={index}>
             <TouchableOpacity
               style={{ width: "85%" }}
               onPress={() => {
-                navigation.navigate("VacunasInfo", { vacunaId: doc });
+                navigation.navigate("VacunasInfo", {
+                  vacunaId: doc,
+                  uid,
+                  childId,
+                });
               }}
             >
               <View style={styles.targetVacunas}>
@@ -146,9 +152,7 @@ const VacunasScreen = ({ route, navigation }) => {
                   <Text style={styles.titleStyle}>{vaccine} </Text>
                 </View>
                 <View style={styles.paddingCard}>
-                  <Text style={styles.textVacuna}>
-                    {time}
-                  </Text>
+                  <Text style={styles.textVacuna}>{time}</Text>
                   <Text style={styles.textVacuna}>
                     {dose === "no tiene" ? null : dose}
                     {reinforcement === "no tiene" ? null : reinforcement}{" "}
@@ -159,7 +163,7 @@ const VacunasScreen = ({ route, navigation }) => {
                   <View>
                     <Text style={styles.textCard}>
                       {" "}
-                    + Presiona aqui para ver mas{" "}
+                      + Presiona aqui para ver mas{" "}
                     </Text>
                   </View>
                 </View>

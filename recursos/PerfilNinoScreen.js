@@ -26,7 +26,7 @@ const PerfilNinoScreen = ({ route, navigation }) => {
   }, []);
 
   useEffect(() => {
-    const Api = `https://us-central1-sanitosapp-d0b5f.cloudfunctions.net/getDataCharts`;
+    /*  const Api = `https://us-central1-sanitosapp-d0b5f.cloudfunctions.net/getDataCharts`;
 
     fetch(Api, {
       method: "POST",
@@ -37,7 +37,7 @@ const PerfilNinoScreen = ({ route, navigation }) => {
       }),
     })
       .then((response) => response.json())
-      .then((data) => console.log("data", data));
+      .then((data) => console.log("data", data)); */
   }, []);
 
   /* const getDataTarget {user.name}= async (id) => {

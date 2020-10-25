@@ -41,11 +41,14 @@ const styles = StyleSheet.create({
   targetVacunas: {
     width: "85%",
     marginTop: 50,
+    height: 160,
   },
   paddingCard: {
+    paddingTop: 20,
     marginTop: 4,
     padding: 6,
     backgroundColor: "#fff",
+    height: 160,
     borderRadius: 4,
     elevation: 10,
     shadowOpacity: 0.5,
@@ -64,10 +67,10 @@ const styles = StyleSheet.create({
   buttonVacuna: {
     alignItems: "center",
     justifyContent: "center",
-    marginTop: 250,
+    marginTop: 20,
     marginHorizontal: 30,
-    width: "85%",
-    paddingHorizontal: "20%",
+    width: "80%",
+
     backgroundColor: "#1D96A3",
     fontSize: 14,
     textAlign: "center",
@@ -88,6 +91,10 @@ const styles = StyleSheet.create({
   textButtonVacuna: {
     color: "#fff",
   },
+  containerStateVaccine: {
+    marginTop: 20,
+  },
+
   textCard: {
     textAlign: "center",
     marginTop: 6,
@@ -322,6 +329,10 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 12,
     textAlign: "center",
+  },
+  container: {
+    flex: 1,
+    alignItems: "center",
   },
 });
 
