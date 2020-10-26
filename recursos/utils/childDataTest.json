@@ -1,113 +1,33 @@
 {
     "idHijo":1,
-    "nombre":"Thomas",
+    "nombre":"Mariana",
     "fechaNacimiento":"01-01-2020",
     "historialPeso":[
        {
-          "fechaRegistro":"01-01-2020",
-          "peso":4.031
+          "fechaRegistro":"01-08-2020",
+          "peso":9.031
        },
        {
-          "fechaRegistro":"05-02-2020",
-          "peso":5.031
-       },
-       {
-          "fechaRegistro":"11-03-2020",
-          "peso":7.031
-       },
-       {
-          "fechaRegistro":"21-04-2020",
-          "peso":8.031
-       },
-       {
-          "fechaRegistro":"08-05-2020",
+          "fechaRegistro":"01-09-2020",
           "peso":10.031
        },
        {
-          "fechaRegistro":"21-06-2020",
+          "fechaRegistro":"14-10-2020",
           "peso":11.031
-       },
-       {
-          "fechaRegistro":"26-07-2020",
-          "peso":12.031
-       },
-       {
-          "fechaRegistro":"18-08-2020",
-          "peso":13.031
-       },
-       {
-          "fechaRegistro":"18-09-2020",
-          "peso":13.531
-       },
-       {
-          "fechaRegistro":"18-10-2020",
-          "peso":13.831
-       },
-       {
-          "fechaRegistro":"18-11-2020",
-          "peso":14.031
-       },
-       {
-          "fechaRegistro":"18-12-2020",
-          "peso":14.231
-       },
-       {
-          "fechaRegistro":"18-01-2021",
-          "peso":10
        }
     ],
     "historialEstatura":[
        {
-          "fechaRegistro":"01-01-2020",
-          "estatura":43.031
+          "fechaRegistro":"01-08-2020",
+          "estatura":73.031
        },
        {
-          "fechaRegistro":"05-02-2020",
-          "estatura":46.031
-       },
-       {
-          "fechaRegistro":"11-03-2020",
-          "estatura":51.031
-       },
-       {
-          "fechaRegistro":"21-04-2020",
-          "estatura":57.031
-       },
-       {
-          "fechaRegistro":"13-05-2020",
-          "estatura":61.031
-       },
-       {
-          "fechaRegistro":"01-06-2020",
-          "estatura":70.031
-       },
-       {
-          "fechaRegistro":"25-07-2020",
+          "fechaRegistro":"01-09-2020",
           "estatura":74.031
        },
        {
-          "fechaRegistro":"30-08-2020",
-          "estatura":79.031
-       },
-       {
-          "fechaRegistro":"13-09-2020",
-          "estatura":80.031
-       },
-       {
-          "fechaRegistro":"01-10-2020",
-          "estatura":84.031
-       },
-       {
-          "fechaRegistro":"25-11-2020",
-          "estatura":86.031
-       },
-       {
-          "fechaRegistro":"30-12-2020",
-          "estatura":90.031
-       },
-       {
-          "fechaRegistro":"30-01-2021",
-          "estatura":79.031
+          "fechaRegistro":"14-10-2020",
+          "estatura":75.031
        }
     ]
  }

@@ -8,12 +8,30 @@ const styles = StyleSheet.create({
   infoCard:{
     width:"85%",
   },
+  buttonFoto:{
+    marginTop:10,
+    backgroundColor:"#fff",
+    elevation: 5,
+    shadowOpacity: 1,
+    shadowRadius: 50,
+    shadowColor: "#000",
+    shadowOffset: {
+      widht: 1,
+      height: 1
+    },
+    height:80,
+    borderRadius:4,
+
+    justifyContent:"center",
+    alignContent:"center",
+    marginHorizontal:30
+  },
   infoCard1: {
     flexDirection: "column",
     marginTop:4,
     backgroundColor: "#fff",
     marginBottom: 24,
-    elevation: 16,
+    elevation: 5,
     shadowOpacity: 1,
     shadowRadius: 50,
     shadowColor: "#000",
@@ -41,13 +59,12 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     marginTop: 30,
     marginHorizontal: 30,
-    backgroundColor: "#E9446A",
+    backgroundColor: '#C13273',
     fontSize: 14,
     textAlign: "center",
-    padding: 6,
     color: "#fff",
     textTransform: "uppercase",
-    elevation: 16,
+    elevation: 5,
     shadowOpacity: 1,
     shadowRadius: 50,
     shadowColor: "#000",
@@ -86,7 +103,7 @@ const styles = StyleSheet.create({
     marginTop:4,
     backgroundColor: "#fff",
     marginBottom: 24,
-    elevation: 16,
+    elevation: 5,
     shadowOpacity: 1,
     shadowRadius: 50,
     shadowColor: "#000",
@@ -97,7 +114,9 @@ const styles = StyleSheet.create({
     borderRadius: 4,
   },
   paddingCard: {
-    padding: 10,
+    paddingHorizontal: 18,
+    justifyContent:"center",
+    alignContent:"center"
   },
   textCardChild:{
     color:"#838383",
@@ -142,7 +161,7 @@ const styles = StyleSheet.create({
   },
   modalView: {
     width: "85%",
-    height: "65%",
+    height: "78%",
     backgroundColor: "white",
     borderRadius: 4,
     shadowColor: "#000",
@@ -155,9 +174,8 @@ const styles = StyleSheet.create({
     elevation: 16,
   },
   titleModal: {
-    fontSize: 14,
+    fontSize: 16,
     textAlign: "center",
-    textTransform: "uppercase",
     marginHorizontal: 30,
     color:"#B0B0B0",
   },

@@ -13,11 +13,12 @@ import * as Notifications from 'expo-notifications';
 import * as Permissions from 'expo-permissions';
 import Constants from 'expo-constants';
 import DateTimePicker from "@react-native-community/datetimepicker";
-import { MaterialIcons } from "@expo/vector-icons";
+import { MaterialIcons, Ionicons } from "@expo/vector-icons";
 import "moment/locale/es";
 import { firebase } from "./utils/firebase";
 import styles from "./styles/stylesVacunasInfoScreen";
 import { auth } from "firebase";
+import AwesomeAlert from "react-native-awesome-alerts";
 
 const VacunasInfoScreen = ({ route, navigation }) => {
 
@@ -30,9 +31,10 @@ const VacunasInfoScreen = ({ route, navigation }) => {
     const [vacunaInfo, setVacunaInfo] = useState({});
     const [mode, setMode] = useState("date");
     const [show, setShow] = useState(false);
-    const [selectDate, setSelectDate] = useState("date");
+    const [selectDate, setSelectDate] = useState(false);
     const [childId, setChildId] = useState('');
     const [userId, setUserId] = useState('');
+    const [showAlert, setShowAlert] = useState(false);
 
     useEffect(() => {
         YellowBox.ignoreWarnings(["Setting a timer"]);
@@ -41,6 +43,7 @@ const VacunasInfoScreen = ({ route, navigation }) => {
         setUserId(uid)
         const { vacunaId } = route.params;
         setVacunaInfo(vacunaId);
+        vacunas(uid, vacunaId);
     }, []);
 
     useEffect(() => {
@@ -56,9 +59,25 @@ const VacunasInfoScreen = ({ route, navigation }) => {
     };
 
     const onChange = (event, selectedDate) => {
-        const currentDate = selectedDate || date;
         setShow(Platform.OS === "ios");
-        setDate(currentDate);
+        if (mode == "date") {
+            const currentDate = selectedDate || date;
+            setDate(currentDate);
+            setShow(Platform.OS === "ios");
+        } else {
+            const selectedTime = selectedValue || new Date();
+            setTime(selectedTime);
+            setShow(Platform.OS === 'ios');
+            setMode('date');
+        }
+
+
+        console.log("asaasasasasassa", selectedDate)
+    };
+
+    const formatDate = (date, time) => {
+        return `${date.getDate()}/${date.getMonth() +
+            1}/${date.getFullYear()}`;
     };
 
     const showMode = (currentMode) => {
@@ -71,7 +90,31 @@ const VacunasInfoScreen = ({ route, navigation }) => {
         showMode("date");
     };
 
-    const handleOnChange = () => {
+    const vacunas = async (uid, childId) => {
+        const querySnapshot = firebase
+            .firestore()
+            .collection("usuarios")
+            .doc(uid)
+            .collection("childUsers")
+            .doc(childId)
+            .collection("vacunas");
+        querySnapshot.onSnapshot((querySnapshot) => {
+            const arrayVacunas = [];
+            querySnapshot.forEach((doc) => {
+                arrayVacunas.push({
+                    ...doc.data(),
+                    id: doc.id,
+                });
+            });
+            if (arrayVacunas.length > 0) {
+                setVacunaEstado(arrayVacunas);
+                setDataVacuna(arrayVacunas);
+            }
+        });
+
+    };
+
+    const buttonPressed = () => {
         if (selectDate && estado !== "") {
             let now = new Date(date);
             const documentVaccine = {
@@ -85,12 +128,13 @@ const VacunasInfoScreen = ({ route, navigation }) => {
             console.log("estadoo", estado)
             handleAddVaccine(documentVaccine)
         } else {
-            alert("Llene todo los campos");
+            setShowAlert(true);
         }
     };
 
     const handleAddVaccine = (documentVaccine) => {
         const { uid } = firebase.auth().currentUser;
+        console.log("proa", userId)
         const ref = firebase
             .firestore()
             .collection("usuarios")
@@ -114,23 +158,23 @@ const VacunasInfoScreen = ({ route, navigation }) => {
     };
 
     const sendNoti = async (token) => {
-            const message = {
-              to: token,
-              sound: 'default',
-              title: 'PROBANDO',
-              body: 'Hola mundoooooo',
-              data: { data: 'goes here' },
-            };
-          
-            await fetch('https://exp.host/--/api/v2/push/send', {
-              method: 'POST',
-              headers: {
+        const message = {
+            to: token,
+            sound: 'default',
+            title: 'PROBANDO',
+            body: 'Hola mundoooooo',
+            data: { data: 'goes here' },
+        };
+
+        await fetch('https://exp.host/--/api/v2/push/send', {
+            method: 'POST',
+            headers: {
                 Accept: 'application/json',
                 'Accept-encoding': 'gzip, deflate',
                 'Content-Type': 'application/json',
-              },
-              body: JSON.stringify(message),
-            });
+            },
+            body: JSON.stringify(message),
+        });
     }
 
     const sendNotificationToAllUsers = async () => {
@@ -178,23 +222,33 @@ const VacunasInfoScreen = ({ route, navigation }) => {
     }
 
     return (
-        <View>
-            <View style={styles.boxVacunas}>
+        <View style={styles.container}>
+            <View>
                 <View style={styles.targetVacunas}>
                     <View style={styles.targetTitle}>
                         <Text style={styles.titleStyle}>{vacunaInfo.vaccine}</Text>
                     </View>
                     <View style={styles.paddingCard}>
-                        <Text style={styles.textVacuna}>
-                            {vacunaInfo.time}
-                        </Text>
-                        <Text style={styles.textVacuna}>
-                            {vacunaInfo.dose === "no tiene" ? null : vacunaInfo.dose}
-                            {vacunaInfo.reinforcement === "no tiene" ? null : vacunaInfo.reinforcement}{" "}
-                        </Text>
-                        <Text style={styles.textVacuna}>
-                            {vacunaInfo.state ? "Vacuna aplicada" : "Vacuna pendiente"}
-                        </Text>
+                        <View style={styles.boxVacuna1}>
+                            <Text style={styles.textVacuna}>
+                                {vacunaInfo.time}
+                            </Text>
+                            <Text style={styles.textVacuna}>
+                                {vacunaInfo.dose === "no tiene" ? null : vacunaInfo.dose}
+                                {vacunaInfo.reinforcement === "no tiene" ? null : vacunaInfo.reinforcement}{" "}
+                            </Text>
+                        </View>
+                        <View style={styles.boxVacuna1}>
+                            <Text style={styles.textVacuna}>
+                                {vacunaInfo.state ? "Vacuna aplicada" : "Vacuna pendiente"}
+                            </Text>
+                            <Text style={styles.textVacuna}>
+                                {vacunaInfo.date}
+                            </Text>
+                        </View>
+
+
+
                     </View>
                 </View>
                 <View>
@@ -221,12 +275,12 @@ const VacunasInfoScreen = ({ route, navigation }) => {
                 </View>
 
                 <View>
-                <TouchableOpacity
-                        style={{position:"absolute", top:200, backgroundColor:"red"}}
+                    {/* <TouchableOpacity
+                        style={{ position: "absolute", top: 200, backgroundColor: "red" }}
                         onPress={sendNotificationToAllUsers}
                     >
                         <Text style={styles.textButtonVacuna}>Notii</Text>
-                    </TouchableOpacity>
+                    </TouchableOpacity> */}
                     <TouchableOpacity
                         style={styles.buttonVacuna}
                         onPress={() => {
@@ -275,10 +329,11 @@ const VacunasInfoScreen = ({ route, navigation }) => {
                                     <View>
                                         <TouchableOpacity
                                             onPress={showDatepicker}
-                                            style={styles.inputDate}>
+                                            style={styles.inputBirthday}>
                                             <Text style={styles.textAgregar1}
                                             >
-                                                Fecha de vacuna
+                                                {formatDate(date)}
+
                                             </Text>
                                         </TouchableOpacity>
 
@@ -289,16 +344,24 @@ const VacunasInfoScreen = ({ route, navigation }) => {
                                                 value={date}
                                                 mode={mode}
                                                 is24Hour={true}
-                                                display="default"
+                                                display="spinner"
                                                 onChange={onChange}
                                             />
                                         )}
                                     </View>
                                 </View>
+                                <TouchableOpacity
+                                    style={{ flexDirection: "row", marginHorizontal: 30, justifyContent: "space-between", marginTop: 20 }}
+                                >
+                                    <Text style={{ color: "#b0b0b0", fontWeight: "500", textDecorationLine: "underline" }}>
+                                        Activar notificación
+                                    </Text>
+                                    <Ionicons name="ios-notifications" size={24} color="#1D96A3" />
+                                </TouchableOpacity>
 
                                 <TouchableOpacity
                                     style={styles.buttonModal}
-                                    onPress={() => handleOnChange()}
+                                    onPress={() => buttonPressed()}
                                 >
                                     <Text style={{ color: "#ffffff", fontWeight: "500" }}>
                                         Agregar
@@ -309,6 +372,25 @@ const VacunasInfoScreen = ({ route, navigation }) => {
                     </View>
                 </Modal>
             </View>
+            <AwesomeAlert
+                show={showAlert}
+                showProgress={false}
+                title="Importante"
+                message="Debe llenar todos los campos para registrar una vacuna."
+                closeOnTouchOutside={true}
+                closeOnHardwareBackPress={false}
+                showCancelButton={false}
+                showConfirmButton={true}
+                cancelText="Cancelar"
+                confirmText="Aceptar"
+                confirmButtonColor="#1D96A3"
+                onCancelPressed={() => {
+                    setShowAlert(false);
+                }}
+                onConfirmPressed={() => {
+                    setShowAlert(false);
+                }}
+            />
         </View>
     );
 };

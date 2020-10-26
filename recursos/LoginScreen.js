@@ -70,7 +70,7 @@ const LoginScreen = ({ navigation }) => {
         </View>
       </View>
       <TouchableOpacity onPress={() => navigation.push("")}>
-        <Text style={styles.textForgotPass}>¿Olvido su contraseña?</Text>
+        <Text style={styles.textForgotPass}>¿Olvidó su contraseña?</Text>
       </TouchableOpacity>
 
       <View
@@ -106,7 +106,7 @@ const LoginScreen = ({ navigation }) => {
         <Text style={{ color: "#B0B0B0", fontSize: 12 }}>
           ¿No tiene cuenta?{" "}
           <Text style={{ fontWeight: "500", color: "#1D96A3" }}>
-            Registrese aquí
+            Regístrese aquí
           </Text>
         </Text>
       </TouchableOpacity>

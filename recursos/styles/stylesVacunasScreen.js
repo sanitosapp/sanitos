@@ -3,11 +3,14 @@ import { StyleSheet } from "react-native";
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor:"#EDEDED",
+    backgroundColor: "#EDEDED",
   },
   form: {
     alignItems: "center",
   },
+  boxVacuna1:{
+    flexDirection: "row", justifyContent: "space-around"
+},
   button: {
     backgroundColor: "#4DA6AF",
     height: 40,
@@ -42,11 +45,11 @@ const styles = StyleSheet.create({
   targetVacunas: {
     width: "100%",
   },
-  paddingCard:{
-    marginTop:4,
-    padding:6,
-    backgroundColor:"#fff",
-    borderRadius:4,
+  paddingCard: {
+    marginTop: 4,
+    padding: 6,
+    backgroundColor: "#fff",
+    borderRadius: 4,
     elevation: 10,
     shadowOpacity: 0.5,
     shadowRadius: 2,
@@ -63,7 +66,7 @@ const styles = StyleSheet.create({
   },
   textCard: {
     textAlign: "center",
-    marginTop:6,
+    marginTop: 6,
     fontSize: 14,
     color: "#C4C4C4",
   },
@@ -72,7 +75,7 @@ const styles = StyleSheet.create({
     shadowColor: "#000",
     width: "100%",
     padding: 6,
-    borderRadius:4,
+    borderRadius: 4,
     elevation: 10,
     shadowOpacity: 0.5,
     shadowRadius: 2,
@@ -84,8 +87,8 @@ const styles = StyleSheet.create({
   },
   textVacuna: {
     fontSize: 14,
-    textAlign:"center",
-    color:"#838383"
+    textAlign: "center",
+    color: "#838383"
   },
   titleStyle: {
     fontSize: 14,
@@ -103,7 +106,7 @@ const styles = StyleSheet.create({
     width: 200,
   },
   titleBtnFilter: {
-    fontSize:14,
+    fontSize: 14,
     paddingHorizontal: 10,
     textAlign: "center",
     color: "#fff",
@@ -175,8 +178,8 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   buttonBox: {
-    borderTopWidth:1,
-    borderTopColor:"#fff",
+    borderTopWidth: 1,
+    borderTopColor: "#fff",
     flexDirection: "row",
     justifyContent: "space-evenly",
   },

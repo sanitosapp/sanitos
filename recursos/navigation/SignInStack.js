@@ -1,5 +1,5 @@
 import React from "react";
-import { Image, View, Button } from "react-native";
+import { Image, View, Button,TouchableOpacity,Text } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import {
   createStackNavigator,
@@ -8,7 +8,7 @@ import {
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 
-import { Ionicons } from "@expo/vector-icons";
+import {MaterialCommunityIcons, Feather } from "@expo/vector-icons";
 
 import HomeScreen from "../HomeScreen";
 import LoadingScreen from "../LoadingScreen";
@@ -18,7 +18,8 @@ import PesoScreen from "../PesoScreen";
 import PostScreen from "../PostScreen";
 import PerfilNinoScreen from "../PerfilNinoScreen";
 import ProfileScreen from "../ProfileScreen";
-import SingOutScreen from "../SingOutScreen";
+import CuentaScreen from "../CuentaScreen";
+import CuentaEditScreen from "../CuentaEditScreen";
 import VacunasInfoScreen from "../VacunasInfoScreen";
 import ChildChartScreen from "../chart/ChildChartScreen";
 
@@ -34,15 +35,22 @@ const SignInStack = () => {
             let iconName;
 
             if (route.name === "Home") {
-              iconName = focused ? "ios-home" : "ios-home";
+              iconName = focused ? "home" : "home";
+            } else if (route.name === "Peso") {
+              iconName = focused ? "weight" : "weight";
             } else if (route.name === "Profile") {
-              iconName = focused ? "ios-person" : "ios-person";
-            } else if (route.name === "Post") {
-              iconName = focused ? "ios-add-circle" : "ios-add-circle";
+              iconName = focused ? "account" : "account";
+            } else if (route.name === "Vacuna") {
+              iconName = focused ? "ammunition" : "ammunition";
+            }else if (route.name === "Estatura") {
+              iconName = focused ? "human-male-height" : "human-male-height";
+            }else if (route.name === "Crecimiento") {
+              iconName = focused ? "chart-areaspline-variant" : "chart-areaspline-variant";
             }
 
             // You can return any component that you like here!
-            return <Ionicons name={iconName} size={size} color={color} />;
+  
+            return <MaterialCommunityIcons name={iconName} size={size} color={color} />
           },
         })}
         tabBarOptions={{
@@ -53,12 +61,27 @@ const SignInStack = () => {
         <Tabs.Screen
           name="Home"
           component={HomeStackScreen}
-          options={{ title: "Home" }}
+          options={{ title: "Inicio" }}
         />
         <Tabs.Screen
-          name="Post"
-          component={PostStackScreen}
-          options={{ title: "Agregar" }}
+          name="Peso"
+          component={PesoStackScreen}
+          options={{ title: "Peso" }}
+        />
+        <Tabs.Screen
+          name="Estatura"
+          component={EstaturaStackScreen}
+          options={{ title: "Estatura" }}
+        />
+        <Tabs.Screen
+          name="Vacuna"
+          component={VacunaStackScreen}
+          options={{ title: "Vacuna" }}
+        />
+        <Tabs.Screen
+          name="Crecimiento"
+          component={CrecimientoStackScreen}
+          options={{ title: "Crecimiento" }}
         />
         <Tabs.Screen
           name="Profile"
@@ -185,7 +208,7 @@ const HomeStackScreen = () => {
         name="ChildChart"
         component={ChildChartScreen}
         options={{
-          title: "Gráfico",
+          title: "Curva de crecimiento",
           headerStyle: {
             backgroundColor: "#1D96A3",
           },
@@ -200,6 +223,80 @@ const HomeStackScreen = () => {
 };
 
 const ProfileStackScreen = () => {
+  return (
+    <ProfileStack.Navigator>
+      <ProfileStack.Screen name="Profile" component={ProfileScreen} options={{
+          title: "Perfil",
+          headerTitleAlign: "center",
+          headerStyle: {
+            backgroundColor:"#C13273",
+          },
+          headerTintColor: "#fff",
+          headerTitleStyle: {
+            fontWeight: "normal",
+          },
+        }} />
+      <ProfileStack.Screen name="Cuentaa" component={CuentaScreen} options={{
+          title: "Cuenta",
+          headerTitleAlign: "center",
+          headerStyle: {
+            backgroundColor:"#C13273",
+          },
+          headerTintColor: "#fff",
+          headerTitleStyle: {
+            fontWeight: "normal",
+          },
+          headerRight: ({ navigation }) => (
+            <TouchableOpacity onPress={() => navigation.push("CuentaEdit")}>
+                    <Feather name="edit" size={24} color="#fff" style={{marginRight:20}} />
+                </TouchableOpacity>
+          ),
+        }}  />
+        <ProfileStack.Screen name="CuentaEdit" component={CuentaEditScreen} options={{
+          title: "Cuenta",
+          headerTitleAlign: "center",
+          headerStyle: {
+            backgroundColor:"#C13273",
+          },
+          headerTintColor: "#fff",
+          headerTitleStyle: {
+            fontWeight: "normal",
+          },
+          headerRight: () => (
+            <TouchableOpacity>
+                    <Feather name="edit" size={24} color="#fff" style={{marginRight:20}} />
+                </TouchableOpacity>
+          ),
+        }}  />
+    </ProfileStack.Navigator>
+  );
+};
+
+const VacunaStackScreen = () => {
+  return (
+    <ProfileStack.Navigator headerMode="none">
+      <ProfileStack.Screen name="Profile" component={ProfileScreen} />
+    </ProfileStack.Navigator>
+  );
+};
+
+const PesoStackScreen = () => {
+  return (
+    <ProfileStack.Navigator headerMode="none">
+      <ProfileStack.Screen name="Profile" component={ProfileScreen} />
+    </ProfileStack.Navigator>
+  );
+};
+
+const EstaturaStackScreen = () => {
+  return (
+    <ProfileStack.Navigator headerMode="none">
+      <ProfileStack.Screen name="Profile" component={ProfileScreen} />
+    </ProfileStack.Navigator>
+  );
+};
+
+const CrecimientoStackScreen = () => {
   return (
     <ProfileStack.Navigator headerMode="none">
       <ProfileStack.Screen name="Profile" component={ProfileScreen} />

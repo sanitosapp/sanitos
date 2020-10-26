@@ -47,7 +47,7 @@ class ChildChartScreen extends React.Component {
         },
         yAxis: {
           title: {
-            text: "(cm)",
+            text: "Estatura(cm)",
           },
         },
         xAxis: {
@@ -140,7 +140,7 @@ class ChildChartScreen extends React.Component {
         },
         yAxis: {
           title: {
-            text: "(kg)",
+            text: "Peso(kg)",
           },
         },
         xAxis: {
@@ -274,7 +274,7 @@ class ChildChartScreen extends React.Component {
           locked
           tabContainerStyle={{ height: 40 }}
           tabBarUnderlineStyle={{
-            backgroundColor: "black",
+            backgroundColor: "white",
             height: 5,
           }}
           initialPage={this.state.initialPage}
@@ -284,7 +284,7 @@ class ChildChartScreen extends React.Component {
             heading={
               <TabHeading style={{ backgroundColor: "#A4D4DB" }}>
                 <Text
-                  style={{ fontSize: 15, color: "black" }}
+                  style={{ fontSize: 15, color: "white" }}
                   onPress={() => {
                     this.setState({ tabactivo: 0 });
                   }}
@@ -306,11 +306,12 @@ class ChildChartScreen extends React.Component {
                       <Row style={{ backgroundColor: "#75d98f" }}>
                         <Text
                           style={{
-                            fontSize: 15,
+                            fontSize: 14,
                             color: "#FFF",
                             width: 350,
                             textAlign: "center",
                             textAlignVertical: "center",
+                            padding:6,
                           }}
                         >
                           ¡Felicitaciones! Peso dentro del rango normal de
@@ -321,7 +322,8 @@ class ChildChartScreen extends React.Component {
                       <Row style={{ backgroundColor: "#d97575" }}>
                         <Text
                           style={{
-                            fontSize: 15,
+                            fontSize: 14,
+                            padding:6,
                             color: "#FFF",
                             width: 350,
                             textAlign: "center",
@@ -341,7 +343,7 @@ class ChildChartScreen extends React.Component {
             heading={
               <TabHeading style={{ backgroundColor: "#A4D4DB" }}>
                 <Text
-                  style={{ fontSize: 15, color: "black" }}
+                  style={{ fontSize: 15, color: "white" }}
                   onPress={() => {
                     this.setState({ tabactivo: 1 });
                   }}
@@ -357,14 +359,14 @@ class ChildChartScreen extends React.Component {
                   styles={styles.container}
                   options={this.state.alturaChartOptions}
                 />
-
                 {this.props.route.params.historicoEstatura.length > 0 ? (
                   <Grid>
                     {this.state.estaturaCorrecta ? (
                       <Row style={{ backgroundColor: "#75d98f" }}>
                         <Text
                           style={{
-                            fontSize: 15,
+                            fontSize: 14,
+                            padding:6,
                             color: "#FFF",
                             width: 350,
                             textAlign: "center",
@@ -379,7 +381,8 @@ class ChildChartScreen extends React.Component {
                       <Row style={{ backgroundColor: "#d97575" }}>
                         <Text
                           style={{
-                            fontSize: 15,
+                            fontSize: 14,
+                            padding:6,
                             color: "#FFF",
                             width: 350,
                             textAlign: "center",

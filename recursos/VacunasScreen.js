@@ -59,11 +59,11 @@ const VacunasScreen = ({ route, navigation }) => {
         });
       });
       if (arrayVacunas.length > 0) {
-      setVacunaEstado(arrayVacunas);
-      setDataVacuna(arrayVacunas);
-    }
+        setVacunaEstado(arrayVacunas);
+        setDataVacuna(arrayVacunas);
+      }
     });
-    
+
   };
 
   const filterVaccinesPending = () => {
@@ -132,7 +132,7 @@ const VacunasScreen = ({ route, navigation }) => {
       </View>
 
       {vacunaEstado.map((doc, index) => {
-        const { dose, state, vaccine, reinforcement, time, diseases, administration, vaccinebrands, effect, date} = doc;
+        const { dose, state, vaccine, reinforcement, time, diseases, administration, vaccinebrands, effect, date } = doc;
         return (
           <View style={styles.boxVacunas} key={index}>
             <TouchableOpacity
@@ -146,30 +146,26 @@ const VacunasScreen = ({ route, navigation }) => {
                   <Text style={styles.titleStyle}>{vaccine} </Text>
                 </View>
                 <View style={styles.paddingCard}>
-                  <Text style={styles.textVacuna}>
-                    {time}
-                  </Text>
-                  <Text style={styles.textVacuna}>
-                    {dose === "no tiene" ? null : dose}
-                    {reinforcement === "no tiene" ? null : reinforcement}{" "}
-                  </Text>
-                  <Text style={styles.textVacuna}>
-                    {state ? "Vacuna aplicada" : "Vacuna pendiente"}
-                  </Text>
-                  <View>
-                    <Text style={styles.textCard}>
-                      {" "}
-                    + Presiona aqui para ver mas{" "}
+                  <View style={styles.boxVacuna1}>
+                    <Text style={styles.textVacuna}>
+                      {time}
+                    </Text>
+                    <Text style={styles.textVacuna}>
+                      {dose === "no tiene" ? null : dose}
+                      {reinforcement === "no tiene" ? null : reinforcement}{" "}
                     </Text>
                   </View>
-                </View>
+                  <View style={styles.boxVacuna1}>
+                    <Text style={styles.textVacuna}>
+                      {state ? "Vacuna aplicada" : "Vacuna pendiente"}
+                    </Text>
+                    <Text style={styles.textVacuna}>
+                      {date}
+                    </Text>
+                  </View>
 
-                {/* <TouchableOpacity
-                  onPress={() => { setModalVisible(true) }}
-                  style={styles.col3}
-                >
-                  <MaterialIcons name="add" size={20} color="black" />
-                </TouchableOpacity> */}
+
+                </View>
               </View>
             </TouchableOpacity>
           </View>

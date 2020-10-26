@@ -10,95 +10,30 @@ import {
 } from "react-native";
 import { firebase } from "./utils/firebase";
 import styles from "./styles/stylesProfileScreen";
+import { MaterialCommunityIcons } from '@expo/vector-icons'; 
 
 //VISTA PERFIL USUARIO
 
-const ProfileScreen = () => {
-  /* state = { 
-    currentPassword: "",
-    newPassword: "",
-  }; */
-  const [currentPassword,setCurrentPassword] = useState("");
-  const [newPassword,setNewPassword] = useState("");
-
-
- const reauthenticate = () => {
-    var user = firebase.auth().currentUser;
-    var cred = firebase.auth.EmailAuthProvider.credential(
-      user,
-      currentPassword
-    );
-    return user.reauthenticateWithCredential(cred);
-  };
-
- const onChangePasswordPress = () => {
-    reauthenticate(currentPassword)
-      .then(() => {
-        var user = firebase.auth().currentUser;
-        user
-          .updatePassword(newPassword)
-          .then(() => {
-            Alert.alert("Se cambio la contraseña");
-          })
-          .catch((error) => {
-            Alert.alert(error.message);
-          });
-      })
-      .catch((error) => {
-        Alert.alert(error.message);
-      });
-  };
-
- const signOutUser = () => {
+const ProfileScreen = ({navigation}) => {
+  const signOutUser = () => {
     firebase.auth().signOut();
-};
+  };
 
-    return (
-      <View style={styles.container}>
-        <Text
-          style={styles.titleProfile}
-        >
-          Mi perfil
-        </Text>
-
-        <View style={styles.marginContainer}>
-          <TextInput style={styles.input}>Hola! </TextInput>
-          <TextInput style={styles.input}>Hola </TextInput>
-          <TextInput style={styles.input}>Hola! </TextInput>
-
-          <TextInput
-            placeholder="Contraseña actual"
-            style={styles.input}
-            value={currentPassword}
-            autoCapitalize="none"
-            secureTextEntry={true}
-            onChangeText={(text) => {
-             setState({ currentPassword: text });
-            }}
-          ></TextInput>
-          <TextInput
-            placeholder="Contraseña nueva"
-            style={styles.input}
-            value={newPassword}
-            autoCapitalize="none"
-            secureTextEntry={true}
-            onChangeText={(text) => {
-              setState({ newPassword: text });
-            }}
-          ></TextInput>
-        </View>
-
-        <TouchableOpacity
-          style={styles.button2}
-          onPress={onChangePasswordPress}
-        >
-          <Text style={styles.buttonText}>Editar</Text>
+  return (
+    <View style={styles.container}>
+      <View style={{marginTop:30}}>
+        <TouchableOpacity style={styles.cardCuenta} onPress={() => navigation.navigate("Cuentaa")}>
+          <Text style={{ fontSize:16, color:"#c4c4c4"}} >Ver mi cuenta</Text>
+          <MaterialCommunityIcons name="keyboard-tab" size={24} color="#c4c4c4" />
         </TouchableOpacity>
-        <TouchableOpacity style={styles.button} onPress={() => signOutUser()}>
-                <Text style={styles.buttonText}>Salir</Text>
-            </TouchableOpacity>
       </View>
-    );
+      <View style={{marginTop:380}}>
+      <TouchableOpacity style={styles.button} onPress={() => signOutUser()}>
+        <Text style={styles.buttonText}>Salir</Text>
+      </TouchableOpacity>
+      </View>
+    </View>
+  );
 };
 
 export default ProfileScreen;

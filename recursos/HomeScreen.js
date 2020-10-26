@@ -20,6 +20,8 @@ import { firebase } from "./utils/firebase";
 import styles from "./styles/stylesHomeScreen";
 import CardChildUsers from "./components/cardChildUsers";
 import { vaccines } from "./utils/const";
+import AwesomeAlert from "react-native-awesome-alerts";
+
 
 //VISTA HOME PRINCIPAL
 const HomeScreen = ({ navigation }) => {
@@ -35,6 +37,9 @@ const HomeScreen = ({ navigation }) => {
   const [show, setShow] = useState(false);
   const [selectDate, setSelectDate] = useState(false);
   const [uidUser, setUidUser] = useState("");
+  const [time, setTime] = useState(new Date());
+  const [showAlert, setShowAlert] = useState(false);
+
 
   useEffect(() => {
     YellowBox.ignoreWarnings(["Setting a timer"]);
@@ -85,7 +90,7 @@ const HomeScreen = ({ navigation }) => {
       };
       handleAddChildUser(documentChildUser);
     } else {
-      alert("Llene todo los campos");
+      setShowAlert(true);
     }
   };
 
@@ -128,14 +133,31 @@ const HomeScreen = ({ navigation }) => {
     });
   };
 
-  const onChange = (event, selectedDate) => {
+  /* const onChange = (event, selectedDate) => {
     const currentDate = selectedDate || date;
     setShow(Platform.OS === "ios");
     setDate(currentDate);
     console.log("asaasasasasassa", selectedDate)
+  }; */
+
+  const onChange = (event, selectedDate) => {
+    setShow(Platform.OS === "ios");
+    if (mode == "date") {
+      const currentDate = selectedDate || date;
+      setDate(currentDate);
+      setShow(Platform.OS === "ios");
+    } else {
+      const selectedTime = selectedValue || new Date();
+      setTime(selectedTime);
+      setShow(Platform.OS === 'ios');
+      setMode('date');
+    }
+
+
+    console.log("asaasasasasassa", selectedDate)
   };
 
-  const showMode = (currentMode) => {
+  const showMode = currentMode => {
     setShow(true);
     setMode(currentMode);
   };
@@ -145,13 +167,18 @@ const HomeScreen = ({ navigation }) => {
     showMode("date");
   };
 
+  const formatDate = (date, time) => {
+    return `${date.getDate()}/${date.getMonth() +
+      1}/${date.getFullYear()}`;
+  };
+
   return (
     <ScrollView style={styles.container}>
       <StatusBar barStyle="light-content" />
 
       <Text style={styles.textWelcome}>
-        Bienvenida {email} !{"\n"}
-        Estamos felices de verte por aquí
+        !Hola!
+        Gracias por estar aquí.
       </Text>
       <View style={styles.containerCards}>
         <CardChildUsers childUsers={childUsers} navigation={navigation} />
@@ -184,7 +211,7 @@ const HomeScreen = ({ navigation }) => {
 
             <View>
               <View>
-                <Text style={styles.titleModal}>Agregar niña/o</Text>
+                <Text style={styles.titleModal}>Registrar niñ@</Text>
               </View>
 
               <View
@@ -192,7 +219,7 @@ const HomeScreen = ({ navigation }) => {
               >
                 <TextInput
                   style={styles.input}
-                  placeholder="Nombre"
+                  placeholder="Nombre*"
                   autoCapitalize="none"
                   onChangeText={(name) => changeName(name)}
                   value={name}
@@ -207,7 +234,7 @@ const HomeScreen = ({ navigation }) => {
                   selectedValue={gender}
                   onValueChange={(itemValor) => setGender(itemValor)}
                 >
-                  <Picker.Item label="Sexo" value="" />
+                  <Picker.Item label="Sexo*" value="" />
                   <Picker.Item label="Niña" value="Niña" />
                   <Picker.Item label="Niño" value="Niño" />
                 </Picker>
@@ -221,7 +248,7 @@ const HomeScreen = ({ navigation }) => {
                   selectedValue={sangre}
                   onValueChange={(itemValor) => setSangre(itemValor)}
                 >
-                  <Picker.Item label="Tipo de sangre" value="" />
+                  <Picker.Item label="Tipo de sangre*" value="" />
                   <Picker.Item label="A positivo" value="A positivo" />
                   <Picker.Item label="A negativo" value="A negativo" />
                   <Picker.Item label="B positivo" value="B positivo" />
@@ -232,44 +259,70 @@ const HomeScreen = ({ navigation }) => {
                   <Picker.Item label="AB negativo" value="AB negativo" />
                 </Picker>
               </View>
-
               <View>
                 <View>
-                    <TouchableOpacity
-                      onPress={showDatepicker}
-                      style={styles.inputBirthday}>
-                      <Text style={styles.textAgregar1}
-                      >
-                        Fecha de nacimiento
-                      </Text>
-                    </TouchableOpacity>
+                  <TouchableOpacity
+                    onPress={showDatepicker}
+                    style={styles.inputBirthday}>
+                    <Text style={styles.textAgregar1}
+                    >
+                      {formatDate(date)}*
 
-
+                    </Text>
+                  </TouchableOpacity>
                   {show && (
                     <DateTimePicker
                       testID="dateTimePicker"
                       value={date}
                       mode={mode}
                       is24Hour={true}
-                      display="default"
+                      display="spinner"
                       onChange={onChange}
                     />
                   )}
+
+
                 </View>
               </View>
+              <TouchableOpacity
+                style={styles.buttonFoto}
+              >
+                <Text style={{ color: "#B0B0B0", fontWeight: "500", textAlign:"center", textDecorationLine:"underline" }}>
+                  Agregar foto
+                </Text>
+              </TouchableOpacity>
 
               <TouchableOpacity
                 style={styles.buttonModal}
                 onPress={() => buttonPressed()}
               >
                 <Text style={{ color: "#ffffff", fontWeight: "500" }}>
-                  Agregar
+                  Registrar
                 </Text>
               </TouchableOpacity>
             </View>
           </View>
         </View>
       </Modal>
+      <AwesomeAlert
+        show={showAlert}
+        showProgress={false}
+        title="Importante"
+        message="Debe llenar todos los campos para registrar a su niño."
+        closeOnTouchOutside={true}
+        closeOnHardwareBackPress={false}
+        showCancelButton={false}
+        showConfirmButton={true}
+        cancelText="Cancelar"
+        confirmText="Aceptar"
+        confirmButtonColor='#C13273'
+        onCancelPressed={() => {
+          setShowAlert(false);
+        }}
+        onConfirmPressed={() => {
+          setShowAlert(false);
+        }}
+      />
     </ScrollView>
   );
 };

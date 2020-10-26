@@ -13,9 +13,10 @@ import {
 import DateTimePicker from "@react-native-community/datetimepicker";
 import moment from "moment";
 import "moment/locale/es";
-import { MaterialIcons } from "@expo/vector-icons";
+import { MaterialIcons, Feather } from "@expo/vector-icons";
 import { firebase } from "./utils/firebase";
 import styles from "./styles/stylesPesoScreen";
+import AwesomeAlert from "react-native-awesome-alerts";
 
 
 //VISTA HOME PRINCIPAL
@@ -25,12 +26,16 @@ const PesoScreen = ({ route, navigation }) => {
   const [peso, setPeso] = useState('');
   const [weightRegister, setWeightRegister] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
+  const [modalVisibleChange, setModalVisibleChange] = useState(false);
   const [date, setDate] = useState(new Date());
   const [mode, setMode] = useState("date");
   const [show, setShow] = useState(false);
   const [selectDate, setSelectDate] = useState(false);
   const [childId, setChildId] = useState('');
   const [userId, setUserId] = useState('');
+  const [time, setTime] = useState(new Date());
+  const [showAlert, setShowAlert] = useState(false);
+
 
   const changePeso = (peso) => {
     setPeso(peso);
@@ -73,9 +78,25 @@ const PesoScreen = ({ route, navigation }) => {
   };
 
   const onChange = (event, selectedDate) => {
-    const currentDate = selectedDate || date;
     setShow(Platform.OS === "ios");
-    setDate(currentDate);
+    if (mode == "date") {
+      const currentDate = selectedDate || date;
+      setDate(currentDate);
+      setShow(Platform.OS === "ios");
+    } else {
+      const selectedTime = selectedValue || new Date();
+      setTime(selectedTime);
+      setShow(Platform.OS === 'ios');
+      setMode('date');
+    }
+
+
+    console.log("asaasasasasassa", selectedDate)
+  };
+
+  const formatDate = (date, time) => {
+    return `${date.getDate()}/${date.getMonth() +
+      1}/${date.getFullYear()}`;
   };
 
   const showMode = (currentMode) => {
@@ -99,7 +120,7 @@ const PesoScreen = ({ route, navigation }) => {
       };
       handleAddWeight(documentChildWeight)
     } else {
-      alert("Llene todo los campos");
+      setShowAlert(true);
     }
   };
 
@@ -126,9 +147,10 @@ const PesoScreen = ({ route, navigation }) => {
   };
 
   return (
-    <ScrollView style={styles.container}>
-      <StatusBar barStyle="light-content" />
-      {/* <TouchableOpacity
+    <View style={{ flex: 1 }}>
+      <ScrollView style={styles.container} >
+        <StatusBar barStyle="light-content" />
+        {/* <TouchableOpacity
         onPress={() => navigation.navigate("Nino")}
       >
         <Text
@@ -138,76 +160,74 @@ const PesoScreen = ({ route, navigation }) => {
         </Text> 
       </TouchableOpacity>*/}
 
-      <View
-        style={styles.boxTitle}
-      >
-        <Text style={styles.textWhite}>Fecha</Text>
-        <Text style={styles.textWhite}>Peso</Text>
-      </View>
+        <View
+          style={styles.boxTitle}
+        >
+          <Text style={styles.textWhite}>Fecha</Text>
+          <Text style={styles.textWhite}>Peso(kg) </Text>
+        </View>
 
-      <View style={styles.containerCards}>
-        {weightRegister.map((doc) => {
-          const { date, weight } = doc;
-          return (
-            <View style={styles.boxWeight}>
-              <Text>{date}</Text>
-              <Text>{weight} </Text>
-            </View>
-          )
-        }
-        )}
-      </View>
-
-      <View>
+        <View style={styles.containerCards}>
+          {weightRegister.map((doc) => {
+            const { date, weight } = doc;
+            return (
+              <View style={styles.boxWeight}>
+                <Text style={styles.textPeso}>{date}</Text>
+                <Text style={styles.textPeso}>{weight} </Text>
+                <TouchableOpacity onPress={() => { setModalVisibleChange(true) }}><Feather name="edit" size={24} color="#b0b0b0" /></TouchableOpacity>
+              </View>
+            )
+          }
+          )}
+        </View>
 
         <TouchableOpacity style={styles.button} onPress={() => { setModalVisible(true) }}>
           <Text style={styles.textButton}>
-            + Agregue nueva medida
+            + Agregar peso
             </Text>
         </TouchableOpacity>
-      </View>
 
-      <Modal visible={modalVisible} transparent={true} animationType="fade">
-        <View style={styles.centeredViews}>
-          <View
-            style={styles.modalView}
-          >
-            <MaterialIcons
-              name="close"
-              size={24}
-              onPress={() => { setModalVisible(!modalVisible) }}
-              style={styles.iconBox}
-            />
 
-            <View style={styles.form}>
-              <View>
-                <Text style={styles.title1}>Peso</Text>
-              </View>
-
-              <View>
-                <TextInput
-                  style={styles.input}
-                  placeholder="Peso"
-                  autoCapitalize="none"
-                  onChangeText={(peso) => changePeso(peso)}
-                  value={peso}
-                />
-              </View>
+        <Modal visible={modalVisible} transparent={true} animationType="fade">
+          <View style={styles.centeredViews}>
+            <View
+              style={styles.modalView}
+            >
+              <MaterialIcons
+                name="close"
+                size={24}
+                onPress={() => { setModalVisible(!modalVisible) }}
+                style={styles.iconBox}
+              />
 
               <View>
                 <View>
-                  <View
-                    style={{
-                      color: "#ffffff",
-                      fontWeight: "500",
-                      marginTop: 10,
-                    }}
-                  >
-                    <Button
-                      onPress={showDatepicker}
-                      title="Fecha"
-                    />
-                  </View>
+                  <Text style={styles.titleModal}>Peso </Text>
+                </View>
+
+                <View style={styles.input1}>
+                  <TextInput
+                    style={styles.input}
+                    placeholder="Peso (kg) "
+                    autoCapitalize="none"
+                    keyboardType="decimal-pad"
+                    returnKeyType="next"
+                    maxLength={6}
+                    onChangeText={(peso) => changePeso(peso)}
+                    value={peso}
+                  />
+                </View>
+
+                <View>
+                  <TouchableOpacity
+                    onPress={showDatepicker}
+                    style={styles.inputBirthday}>
+                    <Text style={styles.textAgregar1}
+                    >
+                      {formatDate(date)}
+
+                    </Text>
+                  </TouchableOpacity>
 
                   {show && (
                     <DateTimePicker
@@ -215,26 +235,47 @@ const PesoScreen = ({ route, navigation }) => {
                       value={date}
                       mode={mode}
                       is24Hour={true}
-                      display="default"
+                      display="spinner"
                       onChange={onChange}
                     />
                   )}
                 </View>
-              </View>
 
-              <TouchableOpacity
-                style={styles.buttonModal}
-                onPress={() => handleOnChange()}
-              >
-                <Text style={{ color: "#ffffff", fontWeight: "500" }}>
-                  Agregar
+                <TouchableOpacity
+                  style={styles.buttonModal}
+                  onPress={() => handleOnChange()}
+                >
+                  <Text style={{ color: "#ffffff", fontWeight: "500" }}>
+                    Agregar
                     </Text>
-              </TouchableOpacity>
+                </TouchableOpacity>
+              </View>
             </View>
           </View>
-        </View>
-      </Modal>
-    </ScrollView>
+        </Modal>
+        <AwesomeAlert
+          show={showAlert}
+          showProgress={false}
+          title="Importante"
+          message="Debe llenar todos los campos para registrar peso."
+          closeOnTouchOutside={true}
+          closeOnHardwareBackPress={false}
+          showCancelButton={false}
+          showConfirmButton={true}
+          cancelText="Cancelar"
+          confirmText="Aceptar"
+          confirmButtonColor='#C13273'
+          onCancelPressed={() => {
+            setShowAlert(false);
+          }}
+          onConfirmPressed={() => {
+            setShowAlert(false);
+          }}
+        />
+      </ScrollView>
+
+
+    </View>
   );
 }
 
