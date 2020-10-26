@@ -331,8 +331,11 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   container: {
+    marginVertical: 16,
     flex: 1,
-    alignItems: "center",
+    alignItems: "flex-start",
+    flexDirection: "row",
+    justifyContent: "center",
   },
 });
 

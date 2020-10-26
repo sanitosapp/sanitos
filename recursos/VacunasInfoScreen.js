@@ -8,17 +8,17 @@ import {
   YellowBox,
   Switch,
 } from "react-native";
-
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { MaterialIcons } from "@expo/vector-icons";
 import { firebase } from "./utils/firebase";
 import styles from "./styles/stylesVacunasInfoScreen";
 import moment from "moment";
 import "moment/locale/es";
+import { saveReminders } from "./hooks/firebase";
 
 const VacunasInfoScreen = ({ route, navigation }) => {
   const [date, setDate] = useState(new Date());
-  const [estado, setEstado] = useState("");
+  const [estado, setEstado] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
   const [vacunaInfo, setVacunaInfo] = useState({});
   const [mode, setMode] = useState("date");
@@ -27,23 +27,23 @@ const VacunasInfoScreen = ({ route, navigation }) => {
   const [childId, setChildId] = useState("");
   const [userId, setUserId] = useState("");
   const [labelDate, setLabelDate] = useState("Fecha de vacuna");
-
   const [isEnabled, setIsEnabled] = useState(false);
+  const [child, setChild] = useState("");
+  const [user, setUser] = useState("");
 
   useEffect(() => {
     YellowBox.ignoreWarnings(["Setting a timer"]);
-    const { vacunaId, childId, uid } = route.params;
+    const { vacunaId, childId, uid, nameUser, nameChild } = route.params;
     setChildId(childId);
     setUserId(uid);
+    setChild(nameChild);
+    setUser(nameUser);
     setVacunaInfo(vacunaId);
-    setIsEnabled(vacunaInfo.state);
   }, []);
 
   const changeEstado = (estado) => {
     setEstado(estado);
   };
-
-  const toggleSwitch = () => setIsEnabled((previousState) => !previousState);
 
   const onChange = (event, selectedDate) => {
     const dateFormat = moment(selectedDate).format("LL");
@@ -63,21 +63,93 @@ const VacunasInfoScreen = ({ route, navigation }) => {
     showMode("date");
   };
 
-  const handleOnChange = () => {
-    if (selectDate && estado !== "") {
+  const handleOnChange = async () => {
+    if (selectDate && estado !== null) {
       let now = new Date(date);
+      const currentDate = moment(new Date());
+
+      let firstReminder = {
+        date: null,
+        days: 15,
+      };
+
+      let SecondReminder = {
+        date: null,
+        days: 7,
+      };
+
+      let thirdReminder = {
+        date: null,
+        days: 3,
+      };
+
+      let fourthReminder = {
+        date: null,
+        days: 1,
+      };
+      if (isEnabled) {
+        const differenceDates = moment(now).diff(currentDate, "days");
+        if (differenceDates > 14) {
+          firstReminder.date = firebase.firestore.Timestamp.fromDate(
+            new Date(moment(now).subtract(15, "d"))
+          );
+          SecondReminder.date = firebase.firestore.Timestamp.fromDate(
+            new Date(moment(now).subtract(7, "d"))
+          );
+          thirdReminder.date = firebase.firestore.Timestamp.fromDate(
+            new Date(moment(now).subtract(3, "d"))
+          );
+          fourthReminder.date = firebase.firestore.Timestamp.fromDate(
+            new Date(moment(now).subtract(1, "d"))
+          );
+        } else if (differenceDates > 6) {
+          SecondReminder.date = firebase.firestore.Timestamp.fromDate(
+            new Date(moment(now).subtract(7, "d"))
+          );
+          thirdReminder.date = firebase.firestore.Timestamp.fromDate(
+            new Date(moment(now).subtract(3, "d"))
+          );
+          fourthReminder.date = firebase.firestore.Timestamp.fromDate(
+            new Date(moment(now).subtract(1, "d"))
+          );
+        } else if (differenceDates > 2) {
+          thirdReminder.date = firebase.firestore.Timestamp.fromDate(
+            new Date(moment(now).subtract(3, "d"))
+          );
+          fourthReminder.date = firebase.firestore.Timestamp.fromDate(
+            new Date(moment(now).subtract(1, "d"))
+          );
+        } else if (differenceDates > 0) {
+          fourthReminder.date = firebase.firestore.Timestamp.fromDate(
+            new Date(moment(now).subtract(1, "d"))
+          );
+        }
+      }
+
       const documentVaccine = {
-        idVaccine: vacunaInfo.id,
+        vacunaInfo,
         childId,
         userId,
         date: firebase.firestore.Timestamp.fromDate(now),
         state: estado,
+        reminder: isEnabled,
+        firstReminder,
+        SecondReminder,
+        thirdReminder,
+        fourthReminder,
+        child,
+        user,
       };
-      console.log("documentVaccine", documentVaccine);
+
+      await saveReminders(documentVaccine);
+      setModalVisible(false);
+      navigation.navigate("Vacunas");
     } else {
       alert("Llene todo los campos");
     }
   };
+
+  const toggleSwitch = () => setIsEnabled((previousState) => !previousState);
 
   return (
     <View>
@@ -94,19 +166,21 @@ const VacunasInfoScreen = ({ route, navigation }) => {
                 ? null
                 : vacunaInfo.reinforcement}{" "}
             </Text>
+
+            <Text style={{ ...styles.textVacuna }}>
+              {vacunaInfo.state ? "Vacuna aplicada" : "Vacuna pendiente"}
+            </Text>
             <View style={styles.containerStateVaccine}>
-              <Text style={{ ...styles.textVacuna, fontWeight: "bold" }}>
-                {isEnabled ? "Vacuna aplicada" : "Vacuna pendiente"}
-              </Text>
-              <View style={styles.container}>
-                <Switch
-                  trackColor={{ false: "#767577", true: "#1D96A3" }}
-                  thumbColor={isEnabled ? "#fff" : "#f4f3f4"}
-                  ios_backgroundColor="#3e3e3e"
-                  onValueChange={toggleSwitch}
-                  value={isEnabled}
-                />
-              </View>
+              {vacunaInfo.reminder ? (
+                <View>
+                  <Text style={{ ...styles.textVacuna, fontWeight: "bold" }}>
+                    Vacuna Programada
+                  </Text>
+                  <Text style={{ ...styles.textVacuna, fontWeight: "bold" }}>
+                    {vacunaInfo.date}
+                  </Text>
+                </View>
+              ) : null}
             </View>
           </View>
         </View>
@@ -191,6 +265,20 @@ const VacunasInfoScreen = ({ route, navigation }) => {
                       />
                     )}
                   </View>
+                  {estado === false ? (
+                    <View style={styles.container}>
+                      <Switch
+                        trackColor={{ false: "#767577", true: "#1D96A3" }}
+                        thumbColor={isEnabled ? "#fff" : "#f4f3f4"}
+                        ios_backgroundColor="#3e3e3e"
+                        onValueChange={toggleSwitch}
+                        value={isEnabled}
+                      />
+                      <Text style={{ marginTop: "1%" }}>
+                        Activar notificaciones
+                      </Text>
+                    </View>
+                  ) : null}
                 </View>
 
                 <TouchableOpacity
