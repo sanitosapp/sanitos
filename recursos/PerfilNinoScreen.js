@@ -14,7 +14,8 @@ import { set } from "react-native-reanimated";
 import styles from "./styles/stylesPerfilNinoScreen";
 import childDataTest from "./utils/childDataTest.json";
 import {MaterialCommunityIcons, FontAwesome5 } from "@expo/vector-icons";
-
+import { firebase } from "./utils/firebase";
+import ServiceManager from "../service/ServiceManager";
 
 //VISTA HOME PRINCIPAL
 const PerfilNinoScreen = ({ route, navigation }) => {
@@ -31,11 +32,32 @@ const PerfilNinoScreen = ({ route, navigation }) => {
 
   } */
 
-  const getRecordChild = () => {
-    let partsZero = childDataTest.fechaNacimiento.split("-");
-    let fechaZero = new Date(partsZero[2], partsZero[1] - 1, partsZero[1]);
-    let registrosEstatura = childDataTest.historialEstatura;
-    let registrosPeso = childDataTest.historialPeso;
+  const postChildDataById = () => {
+    const { uid } = firebase.auth().currentUser;
+    console.log("TEST:NINO", user);
+    console.log("TEST:id:USER", uid);
+
+    let parametros = {
+      url: "/getDataCharts",
+      data: {
+        userId: uid,
+        childId: user.id,
+      },
+    };
+
+    return ServiceManager.prototype.Post(parametros);
+  };
+
+  const getRecordChild = async () => {
+    const childData = await postChildDataById();
+    console.log("CHILDDATA:", childData);
+
+    let partsZero = childData.birthday.split("/");
+    let registrosEstatura = childData.heightHistory;
+    let registrosPeso = childData.weightHistory;
+
+    let fechaZero = new Date(partsZero[2], partsZero[1] - 1, partsZero[0]);
+
     let lastRegistroEstatura = { index: 0, value: 0 };
     let lastRegistroPeso = { index: 0, value: 0 };
 
@@ -44,42 +66,49 @@ const PerfilNinoScreen = ({ route, navigation }) => {
 
     //Conversión de Json historico estatura en formato de data para gráfico
     registrosEstatura.forEach((value) => {
-      let parts = value.fechaRegistro.split("-");
-      let fechaRegistro = new Date(parts[2], parts[1] - 1, parts[1]);
+      let parts = value.date.split("/");
+      let fechaRegistro = new Date(parts[2], parts[1] - 1, parts[0]);
 
       let Difference_In_Time = fechaRegistro.getTime() - fechaZero.getTime();
       let Difference_In_Days = Difference_In_Time / (1000 * 3600 * 24);
 
       if (lastRegistroEstatura.index <= Difference_In_Days) {
         lastRegistroEstatura.index = Difference_In_Days;
-        lastRegistroEstatura.value = value.estatura;
+        lastRegistroEstatura.value = value.height;
       }
 
-      historialEstatura[Difference_In_Days] = value.estatura;
+      historialEstatura[Difference_In_Days] = value.height;
     });
 
     //Conversión de Json historico peso en formato de data para gráfico
     registrosPeso.forEach((value) => {
-      let parts = value.fechaRegistro.split("-");
-      let fechaRegistro = new Date(parts[2], parts[1] - 1, parts[1]);
+      let parts = value.date.split("/");
+      let fechaRegistro = new Date(parts[2], parts[1] - 1, parts[0]);
 
       let Difference_In_Time = fechaRegistro.getTime() - fechaZero.getTime();
       let Difference_In_Days = Difference_In_Time / (1000 * 3600 * 24);
 
       if (lastRegistroPeso.index <= Difference_In_Days) {
         lastRegistroPeso.index = Difference_In_Days;
-        lastRegistroPeso.value = value.peso;
+        lastRegistroPeso.value = value.weight;
       }
 
-      historialPeso[Difference_In_Days] = value.peso;
+      // console.log("TEST:fechaZero:", fechaZero);
+      // console.log("TEST:fechaZero:getTime:", fechaZero.getTime());
+      // console.log("TEST:Diferencias_DIAS:", fechaRegistro.getTime());
+      // console.log("TEST:Diferencias_TIEMPO:", Difference_In_Time);
+
+      historialPeso[Difference_In_Days] = value.weight;
     });
+
+    console.log("TEST:historialPeso:", historialPeso);
 
     return {
       lastRegistroEstatura: lastRegistroEstatura,
       lastRegistroPeso: lastRegistroPeso,
       historicoEstatura: historialEstatura,
       historicoPeso: historialPeso,
-      nombre: childDataTest.nombre,
+      nombre: childData.name,
     };
   };
 
@@ -132,8 +161,8 @@ const PerfilNinoScreen = ({ route, navigation }) => {
         <View style={styles.containerIcon2}>
           <View style={styles.containerIconos}>
             <TouchableOpacity
-              onPress={() => {
-                let data = getRecordChild();
+              onPress={async () => {
+                let data = await getRecordChild();
                 navigation.navigate("ChildChart", data);
               }}
             >

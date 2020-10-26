@@ -4,7 +4,7 @@ import styles from "../styles/stylesHomeScreen";
 
 const CardChildUsers = ({ childUsers, navigation }) => {
   return childUsers.map((doc, index) => {
-    console.log(doc)
+    console.log(doc);
     const { name, birthday, bloodType, gender } = doc;
     return (
       <TouchableOpacity
@@ -34,7 +34,6 @@ const CardChildUsers = ({ childUsers, navigation }) => {
             </View>
           </View>
         </View>
-
       </TouchableOpacity>
     );
   });
