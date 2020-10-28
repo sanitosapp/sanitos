@@ -39,6 +39,7 @@ const VacunasInfoScreen = ({ route, navigation }) => {
     setChild(nameChild);
     setUser(nameUser);
     setVacunaInfo(vacunaId);
+    setEstado(vacunaId.state);
   }, []);
 
   const changeEstado = (estado) => {
@@ -176,6 +177,7 @@ const VacunasInfoScreen = ({ route, navigation }) => {
                   <Text style={{ ...styles.textVacuna, fontWeight: "bold" }}>
                     Vacuna Programada
                   </Text>
+
                   <Text style={{ ...styles.textVacuna, fontWeight: "bold" }}>
                     {vacunaInfo.date}
                   </Text>

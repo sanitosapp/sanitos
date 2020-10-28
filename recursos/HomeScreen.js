@@ -18,8 +18,8 @@ import { MaterialIcons } from "@expo/vector-icons";
 import { firebase } from "./utils/firebase";
 import styles from "./styles/stylesHomeScreen";
 import CardChildUsers from "./components/cardChildUsers";
-import { vaccines } from "./utils/const";
-
+import { newbornVaccines, vaccines } from "./utils/const";
+import { saveRemindersNewborn } from "./hooks/firebase";
 //VISTA HOME PRINCIPAL
 const HomeScreen = ({ navigation }) => {
   LayoutAnimation.easeInEaseOut();
@@ -35,13 +35,14 @@ const HomeScreen = ({ navigation }) => {
   const [selectDate, setSelectDate] = useState(false);
   const [uidUser, setUidUser] = useState("");
   const [labelDate, setLabelDate] = useState("Fecha de nacimiento");
-
+  const [nameUser, setNameUser] = useState("");
   useEffect(() => {
     YellowBox.ignoreWarnings(["Setting a timer"]);
-    const { email, uid } = firebase.auth().currentUser;
+    const { email, uid, displayName } = firebase.auth().currentUser;
     getData(uid);
     setEmail(email);
     setUidUser(uid);
+    setNameUser(displayName);
   }, []);
 
   const getData = async (uid) => {
@@ -82,19 +83,83 @@ const HomeScreen = ({ navigation }) => {
         gender,
         name,
       };
-      handleAddChildUser(documentChildUser);
-
-      const vaccinesArray = vaccines();
-      vaccinesArray.forEach((Element) => {
-        const { days } = Element;
-        const vaccinationDate = moment(now).add(days, "days");
-      });
+      handleAddChildUser(documentChildUser, now);
     } else {
       alert("Llene todo los campos");
     }
   };
 
-  const handleAddChildUser = (documentChildUser) => {
+  const handleSaveReminders = async (
+    firstReminder,
+    SecondReminder,
+    thirdReminder,
+    fourthReminder,
+    childId,
+    vaccine,
+    idVaccine,
+    vaccinationDate
+  ) => {
+    const ArrayRecordatorios = [
+      {
+        date: firebase.firestore.Timestamp.fromDate(new Date(firstReminder)),
+        days: 15,
+      },
+      {
+        date: firebase.firestore.Timestamp.fromDate(new Date(SecondReminder)),
+        days: 7,
+      },
+      {
+        date: firebase.firestore.Timestamp.fromDate(new Date(thirdReminder)),
+        days: 3,
+      },
+      {
+        date: firebase.firestore.Timestamp.fromDate(new Date(fourthReminder)),
+        days: 1,
+      },
+    ];
+
+    const doc = {
+      ArrayRecordatorios,
+      childId: childId,
+      userId: uidUser,
+      child: name,
+      user: nameUser,
+      vaccine,
+      stateReminder: true,
+      idVaccine,
+      vaccinationDate: firebase.firestore.Timestamp.fromDate(
+        new Date(vaccinationDate)
+      ),
+    };
+
+    await saveRemindersNewborn(doc);
+
+    setName("");
+    setGender("");
+    setSangre("");
+    setLabelDate("Fecha de nacimiento");
+    setSelectDate(false);
+  };
+
+  const handleReminders = (idChild, vacuna, now, idVaccine) => {
+    const { days, vaccine } = vacuna;
+    const vaccinationDate = moment(now).add(days - 1, "d");
+    const firstReminder = moment(vaccinationDate).subtract(15, "d");
+    const SecondReminder = moment(vaccinationDate).subtract(7, "d");
+    const thirdReminder = moment(vaccinationDate).subtract(3, "d");
+    const fourthReminder = moment(vaccinationDate).subtract(1, "d");
+    handleSaveReminders(
+      firstReminder,
+      SecondReminder,
+      thirdReminder,
+      fourthReminder,
+      idChild,
+      vaccine,
+      idVaccine,
+      vaccinationDate
+    );
+  };
+  const handleAddChildUser = (documentChildUser, now) => {
     const ref = firebase
       .firestore()
       .collection("usuarios")
@@ -106,31 +171,47 @@ const HomeScreen = ({ navigation }) => {
       .then((docRef) => {
         const { id } = docRef;
         setModalVisible(false);
-        setName("");
-        setGender("");
-        setSangre("");
-        setLabelDate('"Fecha de nacimiento"');
-        setSelectDate(false);
-        handleAddVaccines(ref, id);
+        handleAddVaccines(ref, id, now);
       })
       .catch(function (error) {
         console.error("Error adding document: ", error);
       });
   };
 
-  const handleAddVaccines = (ref, id) => {
+  const handleAddVaccines = (ref, id, now) => {
     const refChild = ref.doc(id).collection("vacunas");
-    const vaccinesArray = vaccines();
-    vaccinesArray.forEach((Element) => {
-      refChild
-        .add(Element)
-        .then((docRef) => {
-          const { id } = docRef;
-        })
-        .catch(function (error) {
-          console.error("Error adding document: ", error);
-        });
-    });
+    const ChildId = id;
+    const vaccinesArray = newbornVaccines();
+    const arrayUserVaccines = vaccines();
+    const formatToday = new Date();
+    const serverDate = moment(formatToday).format("L");
+    const nowDate = moment(now).format("L");
+    var x = moment(nowDate, "DD-MM-YYYY");
+    const comparisonDates = x.isAfter(moment(serverDate, "DD-MM-YYYY"));
+    if (comparisonDates) {
+      vaccinesArray.forEach((Element) => {
+        refChild
+          .add(Element)
+          .then((docRef) => {
+            const { id } = docRef;
+            handleReminders(ChildId, Element, now, id);
+          })
+          .catch(function (error) {
+            console.error("Error adding document: ", error);
+          });
+      });
+    } else {
+      arrayUserVaccines.forEach((Element) => {
+        refChild
+          .add(Element)
+          .then((docRef) => {
+            const { id } = docRef;
+          })
+          .catch(function (error) {
+            console.error("Error adding document: ", error);
+          });
+      });
+    }
   };
 
   const onChange = (event, selectedDate) => {

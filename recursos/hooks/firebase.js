@@ -112,4 +112,61 @@ const saveReminders = async (doc) => {
   }
 };
 
-export { saveTokenPhone, saveReminders };
+const saveRemindersNewborn = async (document) => {
+  let phoneTokens = [];
+  try {
+    const {
+      ArrayRecordatorios,
+      childId,
+      userId,
+      child,
+      user,
+      vaccine,
+      stateReminder,
+      idVaccine,
+      vaccinationDate,
+    } = document;
+
+    const PhoneTokenRef = await db
+      .collection("usuarios")
+      .doc(userId)
+      .collection("phoneTokens")
+      .get();
+
+    const refVaccines = db
+      .collection("usuarios")
+      .doc(userId)
+      .collection("childUsers")
+      .doc(childId)
+      .collection("vacunas")
+      .doc(idVaccine);
+
+    await refVaccines.update({
+      date: vaccinationDate,
+    });
+
+    const remindersRef = db.collection("reminders");
+
+    PhoneTokenRef.forEach((doc) => {
+      phoneTokens.push({ ...doc.data() });
+    });
+
+    for (const [i, doc] of ArrayRecordatorios.entries()) {
+      const reminder = {
+        childId,
+        userId,
+        ...doc,
+        child,
+        user,
+        vaccine,
+        phoneTokens,
+        stateReminder,
+      };
+      await remindersRef.doc(`remider-${i}-${idVaccine}`).set(reminder);
+    }
+  } catch (error) {
+    console.log("Error", error);
+  }
+};
+
+export { saveTokenPhone, saveReminders, saveRemindersNewborn };
