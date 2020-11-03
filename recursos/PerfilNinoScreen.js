@@ -28,6 +28,21 @@ const PerfilNinoScreen = ({ route, navigation }) => {
     setUser(id);
   }, []);
 
+  useEffect(() => {
+    /*  const Api = `https://us-central1-sanitosapp-d0b5f.cloudfunctions.net/getDataCharts`;
+
+    fetch(Api, {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({
+        userId: "43fxtytAfSchYvzWaDO1DKymTNz2",
+        childId: "IE0HDEuW7NeCB9b4ARUr",
+      }),
+    })
+      .then((response) => response.json())
+      .then((data) => console.log("data", data)); */
+  }, []);
+
   /* const getDataTarget {user.name}= async (id) => {
 
   } */

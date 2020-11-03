@@ -11,7 +11,6 @@ import {
   LayoutAnimation,
   Modal,
   YellowBox,
-  Button,
 } from "react-native";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import moment from "moment";
@@ -21,10 +20,10 @@ import { firebase } from "./utils/firebase";
 import styles from "./styles/stylesHomeScreen";
 import Userpermision from "./utils/Userpermision";
 import CardChildUsers from "./components/cardChildUsers";
-import { vaccines } from "./utils/const";
+import { newbornVaccines, vaccines } from "./utils/const";
+import { saveRemindersNewborn } from "./hooks/firebase";
 import AwesomeAlert from "react-native-awesome-alerts";
-import * as ImagePicker from 'expo-image-picker';
-
+import * as ImagePicker from "expo-image-picker";
 
 //VISTA HOME PRINCIPAL
 const HomeScreen = ({ navigation }) => {
@@ -41,21 +40,18 @@ const HomeScreen = ({ navigation }) => {
   const [show, setShow] = useState(false);
   const [selectDate, setSelectDate] = useState(false);
   const [uidUser, setUidUser] = useState("");
-  const [time, setTime] = useState(new Date());
+  const [labelDate, setLabelDate] = useState("Fecha de nacimiento");
+  const [nameUser, setNameUser] = useState("");
   const [showAlert, setShowAlert] = useState(false);
-  const [selectedImage, setSelectedImage] = useState(null);
   const [image, setImage] = useState(null);
-  const [progress, setProgress] = useState(0);
-  const [uploading, setUploading] = useState(false);
-
-  const storageForDefaultApp = firebase.storage();
 
   useEffect(() => {
     YellowBox.ignoreWarnings(["Setting a timer"]);
-    const { email, uid } = firebase.auth().currentUser;
+    const { email, uid, displayName } = firebase.auth().currentUser;
     getData(uid);
     setEmail(email);
     setUidUser(uid);
+    setNameUser(displayName);
   }, []);
 
   useEffect(() => {
@@ -72,13 +68,12 @@ const HomeScreen = ({ navigation }) => {
       var children = [];
       querySnapshot.forEach((doc) => {
         const { birthday } = doc.data();
-        const formatoFecha = moment(birthday.toDate()).format('DD/MM/YY');
+        const formatoFecha = moment(birthday.toDate()).format("DD/MM/YY");
         children.push({
           ...doc.data(),
           birthday: formatoFecha,
           id: doc.id,
         });
-        console.log("cumpleaños", birthday)
       });
 
       if (children.length > 0) {
@@ -102,13 +97,84 @@ const HomeScreen = ({ navigation }) => {
         name,
         image,
       };
-      handleAddChildUser(documentChildUser);
+      handleAddChildUser(documentChildUser, now);
     } else {
       setShowAlert(true);
     }
   };
 
-  const handleAddChildUser = (documentChildUser) => {
+  const handleSaveReminders = async (
+    firstReminder,
+    SecondReminder,
+    thirdReminder,
+    fourthReminder,
+    childId,
+    vaccine,
+    idVaccine,
+    vaccinationDate
+  ) => {
+    const ArrayRecordatorios = [
+      {
+        date: firebase.firestore.Timestamp.fromDate(new Date(firstReminder)),
+        days: 15,
+      },
+      {
+        date: firebase.firestore.Timestamp.fromDate(new Date(SecondReminder)),
+        days: 7,
+      },
+      {
+        date: firebase.firestore.Timestamp.fromDate(new Date(thirdReminder)),
+        days: 3,
+      },
+      {
+        date: firebase.firestore.Timestamp.fromDate(new Date(fourthReminder)),
+        days: 1,
+      },
+    ];
+
+    const doc = {
+      ArrayRecordatorios,
+      childId: childId,
+      userId: uidUser,
+      child: name,
+      user: nameUser,
+      vaccine,
+      stateReminder: true,
+      idVaccine,
+      vaccinationDate: firebase.firestore.Timestamp.fromDate(
+        new Date(vaccinationDate)
+      ),
+    };
+
+    await saveRemindersNewborn(doc);
+
+    setName("");
+    setGender("");
+    setSangre("");
+    setLabelDate("Fecha de nacimiento");
+    setSelectDate(false);
+  };
+
+  const handleReminders = (idChild, vacuna, now, idVaccine) => {
+    const { days, vaccine } = vacuna;
+    const vaccinationDate = moment(now).add(days - 1, "d");
+    const vaccinationDateRemider = moment(now).add(days, "d");
+    const firstReminder = moment(vaccinationDateRemider).subtract(15, "d");
+    const SecondReminder = moment(vaccinationDateRemider).subtract(7, "d");
+    const thirdReminder = moment(vaccinationDateRemider).subtract(3, "d");
+    const fourthReminder = moment(vaccinationDateRemider).subtract(1, "d");
+    handleSaveReminders(
+      firstReminder,
+      SecondReminder,
+      thirdReminder,
+      fourthReminder,
+      idChild,
+      vaccine,
+      idVaccine,
+      vaccinationDate
+    );
+  };
+  const handleAddChildUser = (documentChildUser, now) => {
     const ref = firebase
       .firestore()
       .collection("usuarios")
@@ -120,10 +186,12 @@ const HomeScreen = ({ navigation }) => {
       .then((docRef) => {
         const { id } = docRef;
         setModalVisible(false);
+        handleAddVaccines(ref, id, now);
         setName("");
         setGender("");
         setSangre("");
         setFoto("");
+        setLabelDate("Fecha de nacimiento");
         setSelectDate(false);
         setImage(null);
         handleAddVaccines(ref, id);
@@ -138,41 +206,53 @@ const HomeScreen = ({ navigation }) => {
             .catch(err => {
               alert(err.message)
             }) */
-
   };
 
-  const handleAddVaccines = (ref, id) => {
+  const handleAddVaccines = (ref, id, now) => {
     const refChild = ref.doc(id).collection("vacunas");
-    const vaccinesArray = vaccines();
-    vaccinesArray.forEach((Element) => {
-      refChild
-        .add(Element)
-        .then((docRef) => {
-          const { id } = docRef;
-          console.log(" adding document: ", id);
-        })
-        .catch(function (error) {
-          console.error("Error adding document: ", error);
-        });
-    });
+    const ChildId = id;
+    const vaccinesArray = newbornVaccines();
+    const arrayUserVaccines = vaccines();
+    const formatToday = new Date();
+    const serverDate = moment(formatToday).format("L");
+    const nowDate = moment(now).format("L");
+    var x = moment(nowDate, "DD-MM-YYYY");
+    const comparisonDates = x.isAfter(moment(serverDate, "DD-MM-YYYY"));
+    if (comparisonDates) {
+      vaccinesArray.forEach((Element) => {
+        refChild
+          .add(Element)
+          .then((docRef) => {
+            const { id } = docRef;
+            handleReminders(ChildId, Element, now, id);
+          })
+          .catch(function (error) {
+            console.error("Error adding document: ", error);
+          });
+      });
+    } else {
+      arrayUserVaccines.forEach((Element) => {
+        refChild
+          .add(Element)
+          .then((docRef) => {
+            const { id } = docRef;
+          })
+          .catch(function (error) {
+            console.error("Error adding document: ", error);
+          });
+      });
+    }
   };
 
   const onChange = (event, selectedDate) => {
+    const dateFormat = moment(selectedDate).format("LL");
+    const currentDate = selectedDate || date;
     setShow(Platform.OS === "ios");
-    if (mode == "date") {
-      const currentDate = selectedDate || date;
-      setDate(currentDate);
-      setShow(Platform.OS === "ios");
-    } else {
-      const selectedTime = selectedValue || new Date();
-      setTime(selectedTime);
-      setShow(Platform.OS === 'ios');
-      setMode('date');
-    }
-    console.log("asaasasasasassa", selectedDate)
+    setDate(currentDate);
+    setLabelDate(dateFormat);
   };
 
-  const showMode = currentMode => {
+  const showMode = (currentMode) => {
     setShow(true);
     setMode(currentMode);
   };
@@ -182,15 +262,8 @@ const HomeScreen = ({ navigation }) => {
     showMode("date");
   };
 
-  const formatDate = (date, time) => {
-    return `${date.getDate()}/${date.getMonth() +
-      1}/${date.getFullYear()}`;
-  };
-
-  uriToBlob = (uri) => {
-
+  const uriToBlob = (uri) => {
     return new Promise((resolve, reject) => {
-
       const xhr = new XMLHttpRequest();
 
       xhr.onload = function () {
@@ -200,86 +273,68 @@ const HomeScreen = ({ navigation }) => {
 
       xhr.onerror = function () {
         // something went wrong
-        reject(new Error('uriToBlob failed'));
+        reject(new Error("uriToBlob failed"));
       };
 
       // this helps us get a blob
-      xhr.responseType = 'blob';
+      xhr.responseType = "blob";
 
-      xhr.open('GET', uri, true);
+      xhr.open("GET", uri, true);
       xhr.send(null);
-
     });
+  };
 
-  }
-
-  uploadToFirebase = (blob) => {
-
+  const uploadToFirebase = (blob) => {
     return new Promise((resolve, reject) => {
-
       var storageRef = firebase.storage().ref();
 
-      storageRef.child('uploads/photo.jpg').put(blob, {
-        contentType: 'image/jpeg'
-      }).then((snapshot) => {
+      storageRef
+        .child("uploads/photo.jpg")
+        .put(blob, {
+          contentType: "image/jpeg",
+        })
+        .then((snapshot) => {
+          blob.close();
 
-        blob.close();
-
-        resolve(snapshot);
-
-      }).catch((error) => {
-
-        reject(error);
-
-      });
-
+          resolve(snapshot);
+        })
+        .catch((error) => {
+          reject(error);
+        });
     });
+  };
 
-
-  }
-
-
-  pickImage = () => {
-
+  const pickImage = () => {
     ImagePicker.launchImageLibraryAsync({
       mediaTypes: "Images",
       allowsEditing: true,
       aspect: [4, 3],
       quality: 1,
-    }).then((result) => {
-
-      if (!result.cancelled) {
-        // User picked an image
-        const { height, width, type, uri } = result;
-        setImage (result.uri);
-        return uriToBlob(uri);
-        
-      }
-
-    }).then((blob) => {
-
-      return uploadToFirebase(blob);
-
-    }).then((snapshot) => {
-
-      console.log("File uploaded");
-
-    }).catch((error) => {
-
-      throw error;
-
-    });
-
-  }
+    })
+      .then((result) => {
+        if (!result.cancelled) {
+          // User picked an image
+          const { height, width, type, uri } = result;
+          setImage(result.uri);
+          return uriToBlob(uri);
+        }
+      })
+      .then((blob) => {
+        return uploadToFirebase(blob);
+      })
+      .then((snapshot) => {
+        console.log("File uploaded");
+      })
+      .catch((error) => {
+        throw error;
+      });
+  };
 
   return (
     <ScrollView style={styles.container}>
       <StatusBar barStyle="light-content" />
 
-      <Text style={styles.textWelcome}>
-        !Hola!
-        Gracias por estar aquí.
-      </Text>
+      <Text style={styles.textWelcome}>!Hola! Gracias por estar aquí.</Text>
       <View style={styles.containerCards}>
         <CardChildUsers childUsers={childUsers} navigation={navigation} />
 
@@ -314,9 +369,7 @@ const HomeScreen = ({ navigation }) => {
                 <Text style={styles.titleModal}>Registrar niñ@</Text>
               </View>
 
-              <View
-                style={styles.input1}
-              >
+              <View style={styles.input1}>
                 <TextInput
                   style={styles.input}
                   placeholder="Nombre*"
@@ -326,9 +379,7 @@ const HomeScreen = ({ navigation }) => {
                 />
               </View>
 
-              <View
-                style={styles.pickerBox}
-              >
+              <View style={styles.pickerBox}>
                 <Picker
                   style={styles.picker}
                   selectedValue={gender}
@@ -340,9 +391,7 @@ const HomeScreen = ({ navigation }) => {
                 </Picker>
               </View>
 
-              <View
-                style={styles.pickerBox}
-              >
+              <View style={styles.pickerBox}>
                 <Picker
                   style={styles.picker}
                   selectedValue={sangre}
@@ -363,13 +412,11 @@ const HomeScreen = ({ navigation }) => {
                 <View>
                   <TouchableOpacity
                     onPress={showDatepicker}
-                    style={styles.inputBirthday}>
-                    <Text style={styles.textAgregar1}
-                    >
-                      {formatDate(date)}*
-
-                    </Text>
+                    style={styles.inputBirthday}
+                  >
+                    <Text style={styles.textAgregar1}>{labelDate}</Text>
                   </TouchableOpacity>
+
                   {show && (
                     <DateTimePicker
                       testID="dateTimePicker"
@@ -380,8 +427,6 @@ const HomeScreen = ({ navigation }) => {
                       onChange={onChange}
                     />
                   )}
-
-
                 </View>
               </View>
               <TouchableOpacity
@@ -389,12 +434,31 @@ const HomeScreen = ({ navigation }) => {
                 onPress={() => pickImage()}
               >
                 <View>
-                  {image === null ? <Text style={{ color: "#B0B0B0", fontWeight: "500", textAlign: "center", textDecorationLine: "underline" }}>
-                    Agregar foto
-                </Text> : <View><Image source={{ uri: image }} style={{ width: "100%", height: "100%", borderRadius: 4 }}></Image></View>}
+                  {image === null ? (
+                    <Text
+                      style={{
+                        color: "#B0B0B0",
+                        fontWeight: "500",
+                        textAlign: "center",
+                        textDecorationLine: "underline",
+                      }}
+                    >
+                      Agregar foto
+                    </Text>
+                  ) : (
+                    <View>
+                      <Image
+                        source={{ uri: image }}
+                        style={{
+                          width: "100%",
+                          height: "100%",
+                          borderRadius: 4,
+                        }}
+                      ></Image>
+                    </View>
+                  )}
                 </View>
               </TouchableOpacity>
-
 
               <TouchableOpacity
                 style={styles.buttonModal}
@@ -419,7 +483,7 @@ const HomeScreen = ({ navigation }) => {
         showConfirmButton={true}
         cancelText="Cancelar"
         confirmText="Aceptar"
-        confirmButtonColor='#C13273'
+        confirmButtonColor="#C13273"
         onCancelPressed={() => {
           setShowAlert(false);
         }}

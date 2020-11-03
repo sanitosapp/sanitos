@@ -26,7 +26,10 @@ const VacunasScreen = ({ route, navigation }) => {
   const [activeAll, setActiveAll] = useState(true);
   const [activeSlopes, setActiveSlopes] = useState(false);
   const [activeApplied, setActiveApplied] = useState(false);
-
+  const [uid, setUid] = useState("");
+  const [childId, setChildId] = useState("");
+  const [nameChild, setNameChild] = useState("");
+  const [nameUser, setNameUser] = useState("");
   const changeEstado = (estado) => {
     setEstado(estado);
   };
@@ -38,7 +41,11 @@ const VacunasScreen = ({ route, navigation }) => {
   useEffect(() => {
     YellowBox.ignoreWarnings(["Setting a timer"]);
     const { idPesos } = route.params;
-    const { uid } = firebase.auth().currentUser;
+    const { uid, displayName } = firebase.auth().currentUser;
+    setUid(uid);
+    setChildId(idPesos.id);
+    setNameChild(idPesos.name);
+    setNameUser(displayName);
     vacunas(uid, idPesos.id);
   }, []);
 
@@ -53,9 +60,16 @@ const VacunasScreen = ({ route, navigation }) => {
     querySnapshot.onSnapshot((querySnapshot) => {
       const arrayVacunas = [];
       querySnapshot.forEach((doc) => {
+        const { date } = doc.data();
+        const formatoFecha =
+          date !== "" && date !== null
+            ? moment(date.toDate()).format("LL")
+            : date;
+
         arrayVacunas.push({
           ...doc.data(),
           id: doc.id,
+          date: formatoFecha,
         });
       });
       if (arrayVacunas.length > 0) {
@@ -63,7 +77,6 @@ const VacunasScreen = ({ route, navigation }) => {
         setDataVacuna(arrayVacunas);
       }
     });
-
   };
 
   const filterVaccinesPending = () => {
@@ -138,7 +151,13 @@ const VacunasScreen = ({ route, navigation }) => {
             <TouchableOpacity
               style={{ width: "85%" }}
               onPress={() => {
-                navigation.navigate("VacunasInfo", { vacunaId: doc });
+                navigation.navigate("VacunasInfo", {
+                  vacunaId: doc,
+                  uid,
+                  childId,
+                  nameUser,
+                  nameChild,
+                });
               }}
             >
               <View style={styles.targetVacunas}>
@@ -146,21 +165,18 @@ const VacunasScreen = ({ route, navigation }) => {
                   <Text style={styles.titleStyle}>{vaccine} </Text>
                 </View>
                 <View style={styles.paddingCard}>
-                  <View style={styles.boxVacuna1}>
-                    <Text style={styles.textVacuna}>
-                      {time}
-                    </Text>
-                    <Text style={styles.textVacuna}>
-                      {dose === "no tiene" ? null : dose}
-                      {reinforcement === "no tiene" ? null : reinforcement}{" "}
-                    </Text>
-                  </View>
-                  <View style={styles.boxVacuna1}>
-                    <Text style={styles.textVacuna}>
-                      {state ? "Vacuna aplicada" : "Vacuna pendiente"}
-                    </Text>
-                    <Text style={styles.textVacuna}>
-                      {date}
+                  <Text style={styles.textVacuna}>{time}</Text>
+                  <Text style={styles.textVacuna}>
+                    {dose === "no tiene" ? null : dose}
+                    {reinforcement === "no tiene" ? null : reinforcement}{" "}
+                  </Text>
+                  <Text style={styles.textVacuna}>
+                    {state ? "Vacuna aplicada" : "Vacuna pendiente"}
+                  </Text>
+                  <View>
+                    <Text style={styles.textCard}>
+                      {" "}
+                      + Presiona aqui para ver mas{" "}
                     </Text>
                   </View>
 

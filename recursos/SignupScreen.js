@@ -1,15 +1,16 @@
 import React, { useState } from "react";
-import {
-  View,
-  Text,
-  StatusBar,
-} from "react-native";
+import { View, Text, StatusBar } from "react-native";
 import AwesomeAlert from "react-native-awesome-alerts";
-import { TouchableOpacity, TextInput, Image } from "react-native-gesture-handler"
+import {
+  TouchableOpacity,
+  TextInput,
+  Image,
+} from "react-native-gesture-handler";
 import { firebase } from "./utils/firebase";
 import styles from "./styles/stylesSignupScreen";
-import { EvilIcons,AntDesign } from '@expo/vector-icons'; 
-
+import { EvilIcons, AntDesign } from "@expo/vector-icons";
+import { saveTokenPhone } from "./hooks/firebase";
+import { getPhoneToken } from "./commons/user";
 
 const SignupScreen = ({ navigation }) => {
   const [name, setName] = useState("");
@@ -21,30 +22,27 @@ const SignupScreen = ({ navigation }) => {
   const [showAlertPassword, setShowAlertPassword] = useState(false);
   const [isLoading, setLoading] = useState(false);
 
-  const handleSignUp = () => {
-    if (email !== "" && password !== "" && cpassword !== "" && name !== "")
-      if (password === cpassword) {
-        setLoading(true);
-        firebase
+  const handleSignUp = async () => {
+    try {
+      if (email !== "" && password !== "" && cpassword !== "" && name !== "") {
+        const { user } = await firebase
           .auth()
-          .createUserWithEmailAndPassword(email, password)
-          .then((userCredentials) => {
-            return userCredentials.user.updateProfile({
-              displayName: name,
-            });
-          })
-          .catch((error) => {
-            setLoading(false);
-            setErrorMessage(error.message)
-          });
+          .createUserWithEmailAndPassword(email, password);
+        await user.updateProfile({
+          displayName: name,
+        });
+
+        await saveTokenPhone(getPhoneToken(), user.uid);
       } else {
         setShowAlertPassword(true);
       }
+    } catch (error) {
+      setErrorMessage(error.message);
+    }
   };
 
   return (
     <View style={styles.container}>
-
       <StatusBar barStyle="light-content"></StatusBar>
       <Text style={styles.textTitle}>Regístrese</Text>
       <View style={styles.errorMessage}>
@@ -52,9 +50,7 @@ const SignupScreen = ({ navigation }) => {
       </View>
 
       <View>
-        <View
-        style={styles.input1}
-        >
+        <View style={styles.input1}>
           <TextInput
             placeholder={"Nombre"}
             style={styles.input}
@@ -64,9 +60,7 @@ const SignupScreen = ({ navigation }) => {
           ></TextInput>
         </View>
 
-        <View
-        style={styles.input2}
-        >
+        <View style={styles.input2}>
           <TextInput
             placeholder={"Email"}
             style={styles.input}
@@ -75,9 +69,7 @@ const SignupScreen = ({ navigation }) => {
             value={email}
           ></TextInput>
         </View>
-        <View
-        style={styles.input3}
-        >
+        <View style={styles.input3}>
           <TextInput
             placeholder={"Contraseña"}
             style={styles.input}
@@ -87,9 +79,7 @@ const SignupScreen = ({ navigation }) => {
             value={password}
           ></TextInput>
         </View>
-        <View
-        style={styles.input4}
-        >
+        <View style={styles.input4}>
           <TextInput
             placeholder={"Repetir contraseña"}
             style={styles.input}
@@ -101,30 +91,22 @@ const SignupScreen = ({ navigation }) => {
         </View>
       </View>
 
-      <View
-      style={styles.button1}
-      >
-      <TouchableOpacity style={styles.button} onPress={() => handleSignUp()}>
-        <Text style={styles.textbutton}>Regístrate</Text>
-      </TouchableOpacity>
+      <View style={styles.button1}>
+        <TouchableOpacity style={styles.button} onPress={() => handleSignUp()}>
+          <Text style={styles.textbutton}>Regístrate</Text>
+        </TouchableOpacity>
       </View>
 
-      <View
-      style={styles.button2}
-      >
-      <TouchableOpacity style={styles.buttonFb}>
-      <EvilIcons name="sc-facebook" size={30} color="white" />
-        <Text style={styles.textbutton}>
-          Ingresar con Facebook
-        </Text>
-      </TouchableOpacity>
+      <View style={styles.button2}>
+        <TouchableOpacity style={styles.buttonFb}>
+          <EvilIcons name="sc-facebook" size={30} color="white" />
+          <Text style={styles.textbutton}>Ingresar con Facebook</Text>
+        </TouchableOpacity>
       </View>
 
-      <View
-      style={styles.button3}
-      >
+      <View style={styles.button3}>
         <TouchableOpacity style={styles.buttonGo}>
-        <AntDesign name="google" size={20} color="red" />
+          <AntDesign name="google" size={20} color="red" />
           <Text style={styles.textbutton1}>Ingresar con Google</Text>
         </TouchableOpacity>
       </View>
@@ -180,7 +162,7 @@ const SignupScreen = ({ navigation }) => {
         }}
       />
     </View>
-  )
+  );
 };
 
 export default SignupScreen;

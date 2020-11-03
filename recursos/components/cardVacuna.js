@@ -4,7 +4,6 @@ import styles from "../styles/stylesHomeScreen";
 
 const CardVacuna = ({ vacunaEstado, navigation }) => {
   return vacunaEstado.map((doc, index) => {
-    console.log(doc)
     const { vaccines, dose, reinforcement, state } = doc;
     return (
       <TouchableOpacity
@@ -35,7 +34,7 @@ const CardVacuna = ({ vacunaEstado, navigation }) => {
           </View>
         </View>
         <View>
-            <Text style={styles.textCard}> + Presiona aqui para ver mas </Text>
+          <Text style={styles.textCard}> + Presiona aqui para ver mas </Text>
         </View>
       </TouchableOpacity>
     );
