@@ -4,7 +4,6 @@ import styles from "../styles/stylesHomeScreen";
 
 const CardChildUsers = ({ childUsers, navigation }) => {
   return childUsers.map((doc, index) => {
-    console.log(doc);
     const { name, birthday, bloodType, gender, image } = doc;
     return (
       <TouchableOpacity

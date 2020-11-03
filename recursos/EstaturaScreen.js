@@ -17,7 +17,7 @@ import { MaterialIcons, Feather } from "@expo/vector-icons";
 import { firebase } from "./utils/firebase";
 import styles from "./styles/stylesEstaturaScreen";
 import AwesomeAlert from "react-native-awesome-alerts";
-import NumericInput from "@wwdrew/react-native-numeric-textinput"
+import NumericInput from "@wwdrew/react-native-numeric-textinput";
 
 //VISTA HOME PRINCIPAL
 const EstaturaScreen = ({ route, navigation }) => {
@@ -82,14 +82,13 @@ const EstaturaScreen = ({ route, navigation }) => {
     } else {
       const selectedTime = selectedValue || new Date();
       setTime(selectedTime);
-      setShow(Platform.OS === 'ios');
-      setMode('date');
+      setShow(Platform.OS === "ios");
+      setMode("date");
     }
   };
 
   const formatDate = (date, time) => {
-    return `${date.getDate()}/${date.getMonth() +
-      1}/${date.getFullYear()}`;
+    return `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
   };
 
   const showMode = (currentMode) => {
@@ -109,7 +108,7 @@ const EstaturaScreen = ({ route, navigation }) => {
         childId,
         date: firebase.firestore.Timestamp.fromDate(now),
         userId,
-        height: parseFloat(estatura)
+        height: parseFloat(estatura),
       };
       handleAddHeight(documentChildHeight);
     } else {
@@ -118,7 +117,6 @@ const EstaturaScreen = ({ route, navigation }) => {
   };
 
   const handleAddHeight = (documentChildHeight) => {
-    console.log("adding decimal: ", documentChildHeight)
     const ref = firebase
       .firestore()
       .collection("categories")
@@ -162,7 +160,9 @@ const EstaturaScreen = ({ route, navigation }) => {
             <View style={styles.boxHeight}>
               <Text>{date}</Text>
               <Text>{height} </Text>
-              <TouchableOpacity><Feather name="edit" size={24} color="#b0b0b0" /></TouchableOpacity>
+              <TouchableOpacity>
+                <Feather name="edit" size={24} color="#b0b0b0" />
+              </TouchableOpacity>
             </View>
           );
         })}
@@ -207,10 +207,10 @@ const EstaturaScreen = ({ route, navigation }) => {
                   onChangeText={(estatura) => changeEstatura(estatura)}
                   value={estatura}
                 ></TextInput> */}
-                < NumericInput
-                style={styles.input}
-                placeholder="Estatura (cm)"
-                  type='decimal'
+                <NumericInput
+                  style={styles.input}
+                  placeholder="Estatura (cm)"
+                  type="decimal"
                   decimalPlaces={3}
                   value={estatura}
                   onUpdate={(estatura) => changeEstatura(estatura)}
@@ -219,22 +219,22 @@ const EstaturaScreen = ({ route, navigation }) => {
 
               <View>
                 <View>
-                    <Button onPress={showDatepicker} title="Fecha" />
-                  </View>
-
-                  {show && (
-                    <DateTimePicker
-                      testID="dateTimePicker"
-                      value={date}
-                      mode={mode}
-                      is24Hour={true}
-                      display="default"
-                      onChange={onChange}
-                    />
-                  )}
+                  <Button onPress={showDatepicker} title="Fecha" />
                 </View>
+
+                {show && (
+                  <DateTimePicker
+                    testID="dateTimePicker"
+                    value={date}
+                    mode={mode}
+                    is24Hour={true}
+                    display="default"
+                    onChange={onChange}
+                  />
+                )}
               </View>
-<View>
+            </View>
+            <View>
               <TouchableOpacity
                 style={styles.buttonModal}
                 onPress={() => handleOnChange()}
@@ -256,7 +256,7 @@ const EstaturaScreen = ({ route, navigation }) => {
         showConfirmButton={true}
         cancelText="Cancelar"
         confirmText="Aceptar"
-        confirmButtonColor='#C13273'
+        confirmButtonColor="#C13273"
         onCancelPressed={() => {
           setShowAlert(false);
         }}
