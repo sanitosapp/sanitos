@@ -192,15 +192,6 @@ const PesoScreen = ({ route, navigation }) => {
     <View style={{ flex: 1 }}>
       <ScrollView style={styles.container} >
         <StatusBar barStyle="light-content" />
-        {/* <TouchableOpacity
-        onPress={() => navigation.navigate("Nino")}
-      >
-        <Text
-          style={styles.breadCrumb}
-        >
-          {"< Infomación < Peso"}{" "}
-        </Text> 
-      </TouchableOpacity>*/}
 
         <View
           style={styles.boxTitle}
