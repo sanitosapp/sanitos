@@ -12,6 +12,8 @@ import { firebase } from "./utils/firebase";
 import styles from "./styles/stylesLoginScreen";
 import { EvilIcons,AntDesign } from '@expo/vector-icons'; 
 
+import * as Expo from 'expo';
+
 //VISTA LOGIN
 
 const LoginScreen = ({ navigation }) => {
@@ -35,6 +37,24 @@ const LoginScreen = ({ navigation }) => {
       setShowAlert(true);
     }
   };
+
+  const signInWithGoogleAsync = async () => {
+    try {
+      const result = await Google.logInAsync({
+        androidClientId: "891797980558-7ddtuciou9g4v8hmc02il7odvg56oeh2.apps.googleusercontent.com",
+        //iosClientId: YOUR_CLIENT_ID_HERE,
+        scopes: ['profile', 'email'],
+      });
+  
+      if (result.type === 'success') {
+        return result.accessToken;
+      } else {
+        return { cancelled: true };
+      }
+    } catch (e) {
+      return { error: true };
+    }
+  }
 
   return (
     <View style={styles.container}>
@@ -93,7 +113,9 @@ const LoginScreen = ({ navigation }) => {
       <View
       style={styles.button3}
       >
-        <TouchableOpacity style={styles.buttonGo}>
+        <TouchableOpacity style={styles.buttonGo}
+        onPress={() => signInWithGoogleAsync()}
+        >
         <AntDesign name="google" size={20} color="red" />
           <Text style={styles.textbutton1}>Ingresar con Google</Text>
         </TouchableOpacity>

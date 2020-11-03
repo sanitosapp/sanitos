@@ -17,6 +17,8 @@ import { MaterialIcons, Feather } from "@expo/vector-icons";
 import { firebase } from "./utils/firebase";
 import styles from "./styles/stylesPesoScreen";
 import AwesomeAlert from "react-native-awesome-alerts";
+import NumericInput from "@wwdrew/react-native-numeric-textinput"
+
 
 
 //VISTA HOME PRINCIPAL
@@ -35,6 +37,8 @@ const PesoScreen = ({ route, navigation }) => {
   const [userId, setUserId] = useState('');
   const [time, setTime] = useState(new Date());
   const [showAlert, setShowAlert] = useState(false);
+  const [idPesoActualizar, setIdPesoActualizar] = useState("")
+  const [registroActivoActualizar,setRegistroActivoActualizar] = useState({date:"", weight:"", id:""})
 
 
   const changePeso = (peso) => {
@@ -63,7 +67,7 @@ const PesoScreen = ({ route, navigation }) => {
       const arrayPeso = [];
       querySnapshot.forEach((doc) => {
         const { date } = doc.data()
-        const formatoFecha = moment(date.toDate()).format('LL')
+        const formatoFecha = moment(date.toDate()).format('DD/MM/YY')
         arrayPeso.push({
           ...doc.data(),
           date: formatoFecha,
@@ -94,6 +98,21 @@ const PesoScreen = ({ route, navigation }) => {
     console.log("asaasasasasassa", selectedDate)
   };
 
+  const onChangeUpdate = (event, selectedDate) => {
+    setShow(Platform.OS === "ios");
+    if (mode == "date") {
+      const currentDate = selectedDate || date;
+      setDate(currentDate);
+      setShow(Platform.OS === "ios");
+    } else {
+      const selectedTime = selectedValue || new Date();
+      setTime(selectedTime);
+      setShow(Platform.OS === 'ios');
+      setMode('date');
+    }
+    console.log("asaasasasasassa", selectedDate)
+  };
+
   const formatDate = (date, time) => {
     return `${date.getDate()}/${date.getMonth() +
       1}/${date.getFullYear()}`;
@@ -116,15 +135,13 @@ const PesoScreen = ({ route, navigation }) => {
         childId,
         date: firebase.firestore.Timestamp.fromDate(now),
         userId,
-        weight: parseInt(peso)
+        weight: parseFloat(peso)
       };
-      handleAddWeight(documentChildWeight)
+      handleAddWeight(documentChildWeight);
     } else {
       setShowAlert(true);
     }
   };
-
-
 
   const handleAddWeight = (documentChildWeight) => {
     const ref = firebase
@@ -145,6 +162,31 @@ const PesoScreen = ({ route, navigation }) => {
         console.error("Error adding document: ", error);
       });
   };
+
+  const handleEditWeight = (documentChildWeight) => {
+    const ref = firebase
+      .firestore()
+      .collection("categories")
+      .doc("peso")
+      .collection("records").doc(idPesoActualizar);
+    ref
+      .update(documentChildWeight)
+      .then((docRef) => {
+        
+        console.log("cambiando doc: ", docRef)
+        setModalVisibleChange(false);
+        setPeso('');
+        setSelectDate(false);
+      })
+      .catch(function (error) {
+        console.error("Error adding document: ", error);
+      });
+  };
+
+  const openModal = (doc) => {
+    setModalVisibleChange(true)
+    setRegistroActivoActualizar(doc)
+  }
 
   return (
     <View style={{ flex: 1 }}>
@@ -169,12 +211,12 @@ const PesoScreen = ({ route, navigation }) => {
 
         <View style={styles.containerCards}>
           {weightRegister.map((doc) => {
-            const { date, weight } = doc;
+            const { date, weight} = doc;
             return (
               <View style={styles.boxWeight}>
                 <Text style={styles.textPeso}>{date}</Text>
                 <Text style={styles.textPeso}>{weight} </Text>
-                <TouchableOpacity onPress={() => { setModalVisibleChange(true) }}><Feather name="edit" size={24} color="#b0b0b0" /></TouchableOpacity>
+                <TouchableOpacity onPress={() => openModal(doc)}><Feather name="edit" size={24} color="#b0b0b0" /></TouchableOpacity>
               </View>
             )
           }
@@ -187,7 +229,7 @@ const PesoScreen = ({ route, navigation }) => {
             </Text>
         </TouchableOpacity>
 
-
+          {/* MODAL DE AGREGAR */}
         <Modal visible={modalVisible} transparent={true} animationType="fade">
           <View style={styles.centeredViews}>
             <View
@@ -206,7 +248,7 @@ const PesoScreen = ({ route, navigation }) => {
                 </View>
 
                 <View style={styles.input1}>
-                  <TextInput
+                  {/* <TextInput
                     style={styles.input}
                     placeholder="Peso (kg) "
                     autoCapitalize="none"
@@ -215,6 +257,14 @@ const PesoScreen = ({ route, navigation }) => {
                     maxLength={6}
                     onChangeText={(peso) => changePeso(peso)}
                     value={peso}
+                  /> */}
+                  < NumericInput
+                    style={styles.input}
+                    placeholder="Peso (kg)"
+                    type='decimal'
+                    decimalPlaces={3}
+                    value={peso}
+                    onUpdate={(peso) => changePeso(peso)}
                   />
                 </View>
 
@@ -253,6 +303,74 @@ const PesoScreen = ({ route, navigation }) => {
             </View>
           </View>
         </Modal>
+
+
+        {/* MODAL DE EDITAR */}
+        <Modal visible={modalVisibleChange} transparent={true} animationType="fade">
+          <View style={styles.centeredViews}>
+            <View
+              style={styles.modalView}
+            >
+              <MaterialIcons
+                name="close"
+                size={24}
+                onPress={() => { setModalVisibleChange(!modalVisibleChange) }}
+                style={styles.iconBox}
+              />
+
+              <View>
+                <View>
+                  <Text style={styles.titleModal}>Editar peso </Text>
+                </View>
+
+                <View style={styles.input1}>
+                  < NumericInput
+                    style={styles.input}
+                    placeholder="Peso (kg)"
+                    type='decimal'
+                    decimalPlaces={3}
+                    value={registroActivoActualizar.weight}
+                    onUpdate={(peso) => { setRegistroActivoActualizar((prevState) => ({
+                      ...prevState, weight:peso}))}}
+                  />
+                </View>
+
+                <View>
+                  <TouchableOpacity
+                    onPress={showDatepicker}
+                    style={styles.inputBirthday}>
+                    <Text style={styles.textAgregar1}
+                    >
+                      {registroActivoActualizar.date !== "" ?registroActivoActualizar.date: formatDate(date)}
+
+                    </Text>
+                  </TouchableOpacity>
+
+                  {show && (
+                    <DateTimePicker
+                      testID="dateTimePicker"
+                      value={date}
+                      mode={mode}
+                      is24Hour={true}
+                      display="spinner"
+                      onChange={onChangeUpdate}
+                    />
+                  )}
+                </View>
+
+                <TouchableOpacity
+                  style={styles.buttonModal}
+                  onPress={() => handleEdit()}
+                >
+                  <Text style={{ color: "#ffffff", fontWeight: "500" }}>
+                    Editar
+                    </Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </View>
+        </Modal>
+
         <AwesomeAlert
           show={showAlert}
           showProgress={false}

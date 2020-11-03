@@ -222,7 +222,7 @@ const VacunasInfoScreen = ({ route, navigation }) => {
     }
 
     return (
-        <View style={styles.container}>
+        <ScrollView style={styles.container}>
             <View>
                 <View style={styles.targetVacunas}>
                     <View style={styles.targetTitle}>
@@ -246,30 +246,22 @@ const VacunasInfoScreen = ({ route, navigation }) => {
                                 {vacunaInfo.date}
                             </Text>
                         </View>
-
-
-
                     </View>
                 </View>
-                <View>
+                <View style={{marginHorizontal:30, marginTop:12,}}>
                     <View>
                         <Text style={styles.textVacuna}>
-                            {vacunaInfo.diseases}
+                        <Text style ={styles.subtextVacuna}>Información general:{"\n"}</Text> {vacunaInfo.information}
                         </Text>
                     </View>
                     <View>
                         <Text style={styles.textVacuna}>
-                            {vacunaInfo.administration}
+                        <Text style ={styles.subtextVacuna}>Administración:{"\n"}</Text>{vacunaInfo.administration}
                         </Text>
                     </View>
                     <View>
                         <Text style={styles.textVacuna}>
-                            {vacunaInfo.vaccinebrands}
-                        </Text>
-                    </View>
-                    <View>
-                        <Text style={styles.textVacuna}>
-                            {vacunaInfo.effect}
+                        <Text style ={styles.subtextVacuna}>Efectos secundarios:{"\n"}</Text>{vacunaInfo.effect}
                         </Text>
                     </View>
                 </View>
@@ -391,7 +383,7 @@ const VacunasInfoScreen = ({ route, navigation }) => {
                     setShowAlert(false);
                 }}
             />
-        </View>
+        </ScrollView>
     );
 };
 

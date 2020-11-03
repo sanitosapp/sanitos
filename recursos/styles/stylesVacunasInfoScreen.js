@@ -87,7 +87,7 @@ const styles = StyleSheet.create({
     buttonVacuna: {
         alignItems: "center",
         justifyContent: "center",
-        marginTop: "75%",
+        marginVertical: "10%",
         marginHorizontal: 30,
         paddingHorizontal:"20%",
         backgroundColor: "#1D96A3",
@@ -159,8 +159,13 @@ const styles = StyleSheet.create({
     },
     textVacuna: {
         fontSize: 14,
-        textAlign: "center",
-        color: "#838383"
+        textAlign: "justify",
+        color: "#838383",
+        marginTop:8,
+    },
+    subtextVacuna:{
+        fontSize:14,
+        fontWeight:"bold"
     },
     titleStyle: {
         fontSize: 14,

@@ -132,7 +132,7 @@ const VacunasScreen = ({ route, navigation }) => {
       </View>
 
       {vacunaEstado.map((doc, index) => {
-        const { dose, state, vaccine, reinforcement, time, diseases, administration, vaccinebrands, effect, date } = doc;
+        const { dose, state, vaccine, reinforcement, time, administration, effect, date, information } = doc;
         return (
           <View style={styles.boxVacunas} key={index}>
             <TouchableOpacity

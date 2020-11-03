@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import {
   Picker,
   TextInput,
+  Image,
   ScrollView,
   View,
   Text,
@@ -18,9 +19,11 @@ import "moment/locale/es";
 import { MaterialIcons } from "@expo/vector-icons";
 import { firebase } from "./utils/firebase";
 import styles from "./styles/stylesHomeScreen";
+import Userpermision from "./utils/Userpermision";
 import CardChildUsers from "./components/cardChildUsers";
 import { vaccines } from "./utils/const";
 import AwesomeAlert from "react-native-awesome-alerts";
+import * as ImagePicker from 'expo-image-picker';
 
 
 //VISTA HOME PRINCIPAL
@@ -30,6 +33,7 @@ const HomeScreen = ({ navigation }) => {
   const [name, setName] = useState("");
   const [gender, setGender] = useState("");
   const [sangre, setSangre] = useState("");
+  const [foto, setFoto] = useState("");
   const [childUsers, setChildUsers] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
   const [date, setDate] = useState(new Date());
@@ -39,7 +43,12 @@ const HomeScreen = ({ navigation }) => {
   const [uidUser, setUidUser] = useState("");
   const [time, setTime] = useState(new Date());
   const [showAlert, setShowAlert] = useState(false);
+  const [selectedImage, setSelectedImage] = useState(null);
+  const [image, setImage] = useState(null);
+  const [progress, setProgress] = useState(0);
+  const [uploading, setUploading] = useState(false);
 
+  const storageForDefaultApp = firebase.storage();
 
   useEffect(() => {
     YellowBox.ignoreWarnings(["Setting a timer"]);
@@ -47,6 +56,10 @@ const HomeScreen = ({ navigation }) => {
     getData(uid);
     setEmail(email);
     setUidUser(uid);
+  }, []);
+
+  useEffect(() => {
+    Userpermision.getPermissionAsync();
   }, []);
 
   const getData = async (uid) => {
@@ -59,7 +72,7 @@ const HomeScreen = ({ navigation }) => {
       var children = [];
       querySnapshot.forEach((doc) => {
         const { birthday } = doc.data();
-        const formatoFecha = moment(birthday.toDate()).format("LL");
+        const formatoFecha = moment(birthday.toDate()).format('DD/MM/YY');
         children.push({
           ...doc.data(),
           birthday: formatoFecha,
@@ -87,6 +100,7 @@ const HomeScreen = ({ navigation }) => {
         bloodType: sangre,
         gender,
         name,
+        image,
       };
       handleAddChildUser(documentChildUser);
     } else {
@@ -109,12 +123,22 @@ const HomeScreen = ({ navigation }) => {
         setName("");
         setGender("");
         setSangre("");
+        setFoto("");
         setSelectDate(false);
+        setImage(null);
         handleAddVaccines(ref, id);
       })
       .catch(function (error) {
         console.error("Error adding document: ", error);
       });
+    /*     const upload =
+          Fire.addPhoto(image).then(() => {
+            setImage(null)
+          })
+            .catch(err => {
+              alert(err.message)
+            }) */
+
   };
 
   const handleAddVaccines = (ref, id) => {
@@ -133,13 +157,6 @@ const HomeScreen = ({ navigation }) => {
     });
   };
 
-  /* const onChange = (event, selectedDate) => {
-    const currentDate = selectedDate || date;
-    setShow(Platform.OS === "ios");
-    setDate(currentDate);
-    console.log("asaasasasasassa", selectedDate)
-  }; */
-
   const onChange = (event, selectedDate) => {
     setShow(Platform.OS === "ios");
     if (mode == "date") {
@@ -152,8 +169,6 @@ const HomeScreen = ({ navigation }) => {
       setShow(Platform.OS === 'ios');
       setMode('date');
     }
-
-
     console.log("asaasasasasassa", selectedDate)
   };
 
@@ -171,6 +186,91 @@ const HomeScreen = ({ navigation }) => {
     return `${date.getDate()}/${date.getMonth() +
       1}/${date.getFullYear()}`;
   };
+
+  uriToBlob = (uri) => {
+
+    return new Promise((resolve, reject) => {
+
+      const xhr = new XMLHttpRequest();
+
+      xhr.onload = function () {
+        // return the blob
+        resolve(xhr.response);
+      };
+
+      xhr.onerror = function () {
+        // something went wrong
+        reject(new Error('uriToBlob failed'));
+      };
+
+      // this helps us get a blob
+      xhr.responseType = 'blob';
+
+      xhr.open('GET', uri, true);
+      xhr.send(null);
+
+    });
+
+  }
+
+  uploadToFirebase = (blob) => {
+
+    return new Promise((resolve, reject) => {
+
+      var storageRef = firebase.storage().ref();
+
+      storageRef.child('uploads/photo.jpg').put(blob, {
+        contentType: 'image/jpeg'
+      }).then((snapshot) => {
+
+        blob.close();
+
+        resolve(snapshot);
+
+      }).catch((error) => {
+
+        reject(error);
+
+      });
+
+    });
+
+
+  }
+
+
+  pickImage = () => {
+
+    ImagePicker.launchImageLibraryAsync({
+      mediaTypes: "Images",
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    }).then((result) => {
+
+      if (!result.cancelled) {
+        // User picked an image
+        const { height, width, type, uri } = result;
+        setImage (result.uri);
+        return uriToBlob(uri);
+        
+      }
+
+    }).then((blob) => {
+
+      return uploadToFirebase(blob);
+
+    }).then((snapshot) => {
+
+      console.log("File uploaded");
+
+    }).catch((error) => {
+
+      throw error;
+
+    });
+
+  }
 
   return (
     <ScrollView style={styles.container}>
@@ -286,11 +386,15 @@ const HomeScreen = ({ navigation }) => {
               </View>
               <TouchableOpacity
                 style={styles.buttonFoto}
+                onPress={() => pickImage()}
               >
-                <Text style={{ color: "#B0B0B0", fontWeight: "500", textAlign:"center", textDecorationLine:"underline" }}>
-                  Agregar foto
-                </Text>
+                <View>
+                  {image === null ? <Text style={{ color: "#B0B0B0", fontWeight: "500", textAlign: "center", textDecorationLine: "underline" }}>
+                    Agregar foto
+                </Text> : <View><Image source={{ uri: image }} style={{ width: "100%", height: "100%", borderRadius: 4 }}></Image></View>}
+                </View>
               </TouchableOpacity>
+
 
               <TouchableOpacity
                 style={styles.buttonModal}

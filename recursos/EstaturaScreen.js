@@ -17,6 +17,7 @@ import { MaterialIcons, Feather } from "@expo/vector-icons";
 import { firebase } from "./utils/firebase";
 import styles from "./styles/stylesEstaturaScreen";
 import AwesomeAlert from "react-native-awesome-alerts";
+import NumericInput from "@wwdrew/react-native-numeric-textinput"
 
 
 //VISTA HOME PRINCIPAL
@@ -55,12 +56,11 @@ const EstaturaScreen = ({ route, navigation }) => {
       .collection("records")
       .where("userId", "==", uid)
       .where("childId", "==", childId);
-
     querySnapshot.onSnapshot((querySnapshot) => {
       const arrayEstatura = [];
       querySnapshot.forEach((doc) => {
         const { date } = doc.data()
-        const formatoFecha = moment(date.toDate()).format('LL')
+        const formatoFecha = moment(date.toDate()).format('DD/MM/YY')
         arrayEstatura.push({
           ...doc.data(),
           date: formatoFecha,
@@ -70,7 +70,6 @@ const EstaturaScreen = ({ route, navigation }) => {
 
       if (arrayEstatura.length > 0) {
         setEstaturaRegister(arrayEstatura)
-        console.log("arrayestatura", arrayEstatura);
       }
     });
   };
@@ -87,9 +86,6 @@ const EstaturaScreen = ({ route, navigation }) => {
       setShow(Platform.OS === 'ios');
       setMode('date');
     }
-
-
-    console.log("asaasasasasassa", selectedDate)
   };
 
   const formatDate = (date, time) => {
@@ -114,7 +110,7 @@ const EstaturaScreen = ({ route, navigation }) => {
         childId,
         date: firebase.firestore.Timestamp.fromDate(now),
         userId,
-        height: parseInt(estatura)
+        height: parseFloat(estatura)
       };
       handleAddHeight(documentChildHeight)
     } else {
@@ -123,6 +119,7 @@ const EstaturaScreen = ({ route, navigation }) => {
   };
 
   const handleAddHeight = (documentChildHeight) => {
+    console.log("adding decimal: ", documentChildHeight)
     const ref = firebase
       .firestore()
       .collection("categories")
@@ -203,16 +200,24 @@ const EstaturaScreen = ({ route, navigation }) => {
               </View>
 
               <View style={styles.input1}>
-                <TextInput
+                {/* <TextInput
                   style={styles.input}
                   placeholder="Estatura (cm)"
                   autoCapitalize="none"
-                  keyboardType="decimal-pad"
+                  keyboardType="number-pad"
                   returnKeyType="next"
                   maxLength={6}
                   onChangeText={(estatura) => changeEstatura(estatura)}
                   value={estatura}
-                ></TextInput>
+                ></TextInput> */}
+                < NumericInput
+                style={styles.input}
+                placeholder="Estatura (cm)"
+                  type='decimal'
+                  decimalPlaces={3}
+                  value={estatura}
+                  onUpdate={(estatura) => changeEstatura(estatura)}
+                />
               </View>
 
               <View>
@@ -251,24 +256,24 @@ const EstaturaScreen = ({ route, navigation }) => {
         </View>
       </Modal>
       <AwesomeAlert
-          show={showAlert}
-          showProgress={false}
-          title="Importante"
-          message="Debe llenar todos los campos para registrar estatura."
-          closeOnTouchOutside={true}
-          closeOnHardwareBackPress={false}
-          showCancelButton={false}
-          showConfirmButton={true}
-          cancelText="Cancelar"
-          confirmText="Aceptar"
-          confirmButtonColor='#C13273'
-          onCancelPressed={() => {
-            setShowAlert(false);
-          }}
-          onConfirmPressed={() => {
-            setShowAlert(false);
-          }}
-        />
+        show={showAlert}
+        showProgress={false}
+        title="Importante"
+        message="Debe llenar todos los campos para registrar estatura."
+        closeOnTouchOutside={true}
+        closeOnHardwareBackPress={false}
+        showCancelButton={false}
+        showConfirmButton={true}
+        cancelText="Cancelar"
+        confirmText="Aceptar"
+        confirmButtonColor='#C13273'
+        onCancelPressed={() => {
+          setShowAlert(false);
+        }}
+        onConfirmPressed={() => {
+          setShowAlert(false);
+        }}
+      />
     </ScrollView>
   );
 };

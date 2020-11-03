@@ -119,8 +119,8 @@ const PerfilNinoScreen = ({ route, navigation }) => {
           <View style={styles.rowCard}>
             <View>
               <Image
-                source={require("../recursos/imagenes/logoSanitos.png")}
-                style={{height:70,width:80,marginVertical:40}}
+                source={{uri:user.image}}
+                style={{height:100,width:100,marginVertical:20, borderRadius:360}}
               />
             </View>
             <View style={styles.paddingCard}>
@@ -167,7 +167,7 @@ const PerfilNinoScreen = ({ route, navigation }) => {
               }}
             >
               <MaterialCommunityIcons style={styles.iconCenter} name="chart-areaspline-variant" size={40} color="#1D96A3" />
-              <Text style={styles.textIcon}>Curva de crecimiento</Text>
+              <Text style={styles.textIcon}>Crecimiento</Text>
             </TouchableOpacity>
           </View>
 
