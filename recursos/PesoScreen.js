@@ -220,7 +220,7 @@ const PesoScreen = ({ route, navigation }) => {
             </Text>
         </TouchableOpacity>
 
-          {/* MODAL DE AGREGAR */}
+          {/* MODAL DE AGREGARRRR */}
         <Modal visible={modalVisible} transparent={true} animationType="fade">
           <View style={styles.centeredViews}>
             <View
