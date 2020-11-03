@@ -144,10 +144,11 @@ const HomeScreen = ({ navigation }) => {
   const handleReminders = (idChild, vacuna, now, idVaccine) => {
     const { days, vaccine } = vacuna;
     const vaccinationDate = moment(now).add(days - 1, "d");
-    const firstReminder = moment(vaccinationDate).subtract(15, "d");
-    const SecondReminder = moment(vaccinationDate).subtract(7, "d");
-    const thirdReminder = moment(vaccinationDate).subtract(3, "d");
-    const fourthReminder = moment(vaccinationDate).subtract(1, "d");
+    const vaccinationDateRemider = moment(now).add(days, "d");
+    const firstReminder = moment(vaccinationDateRemider).subtract(15, "d");
+    const SecondReminder = moment(vaccinationDateRemider).subtract(7, "d");
+    const thirdReminder = moment(vaccinationDateRemider).subtract(3, "d");
+    const fourthReminder = moment(vaccinationDateRemider).subtract(1, "d");
     handleSaveReminders(
       firstReminder,
       SecondReminder,
