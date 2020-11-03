@@ -1,340 +1,404 @@
-import React from 'react'
-import { Alert, Picker,TextInput, TouchableWithoutFeedback, ScrollView, Image, View, Text, StatusBar, StyleSheet, TouchableOpacity, LayoutAnimation, AsyncStorage, Modal, Button } from 'react-native'
-import DatePicker from 'react-native-datepicker'
-import { MaterialIcons,Feather } from '@expo/vector-icons'
-
-
-import * as firebase from 'firebase'
-
+import React, { useState, useEffect } from "react";
+import {
+  TextInput,
+  ScrollView,
+  View,
+  Text,
+  StatusBar,
+  TouchableOpacity,
+  LayoutAnimation,
+  Modal,
+  Button,
+} from "react-native";
+import DateTimePicker from "@react-native-community/datetimepicker";
+import moment from "moment";
+import "moment/locale/es";
+import { MaterialIcons, Feather } from "@expo/vector-icons";
+import { firebase } from "./utils/firebase";
+import styles from "./styles/stylesPesoScreen";
+import AwesomeAlert from "react-native-awesome-alerts";
+import NumericInput from "@wwdrew/react-native-numeric-textinput";
 
 //VISTA HOME PRINCIPAL
-export default class PesoScreen extends React.Component {
+const PesoScreen = ({ route, navigation }) => {
+  LayoutAnimation.easeInEaseOut();
 
-  static navigationOptions = {
-    headerShown: false
-  }
+  const [peso, setPeso] = useState("");
+  const [weightRegister, setWeightRegister] = useState([]);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [modalVisibleChange, setModalVisibleChange] = useState(false);
+  const [date, setDate] = useState(new Date());
+  const [dateUpdate, setDateUpdate] = useState(new Date());
+  const [mode, setMode] = useState("date");
+  const [show, setShow] = useState(false);
+  const [selectDate, setSelectDate] = useState(false);
+  const [childId, setChildId] = useState("");
+  const [userId, setUserId] = useState("");
+  const [time, setTime] = useState(new Date());
+  const [showAlert, setShowAlert] = useState(false);
+  const [labelDate, setLabelDate] = useState("Seleccione fecha");
+  const [registroActivoActualizar, setRegistroActivoActualizar] = useState({
+    date: "",
+    weight: "",
+    id: "",
+  });
 
-
-  state = {
-    peso: ""
-  }
-
-
-  state = {
-    data: ""
+  const changePeso = (peso) => {
+    setPeso(peso);
   };
 
-  changePeso(peso) {
-    this.setState({ peso })
-  }
+  useEffect(() => {
+    const { idPesos } = route.params;
+    const { uid } = firebase.auth().currentUser;
+    setChildId(idPesos.id);
+    setUserId(uid);
+    getDataWeight(uid, idPesos.id);
+  }, []);
 
-  changeDate = (valor) => {
-    this.setState({
-      data: valor
-    })
-  }
+  const getDataWeight = async (uid, childId) => {
+    const querySnapshot = firebase
+      .firestore()
+      .collection("categories")
+      .doc("peso")
+      .collection("records")
+      .where("userId", "==", uid)
+      .where("childId", "==", childId);
 
-  buttonPressed() {
-    const arrayDataNino = [];
-    if (this.state.peso && this.state.data) {
-      const dataNino = {
-        peso: this.state.peso,
-        data: this.state.data
+    querySnapshot.onSnapshot((querySnapshot) => {
+      const arrayPeso = [];
+      querySnapshot.forEach((doc) => {
+        const { date } = doc.data();
+        const formatoFecha = moment(date.toDate()).format("DD/MM/YY");
+        arrayPeso.push({
+          ...doc.data(),
+          date: formatoFecha,
+          id: doc.id,
+          toDate: new Date(date.toDate()),
+        });
+      });
+
+      if (arrayPeso.length > 0) {
+        setWeightRegister(arrayPeso);
       }
-      arrayDataNino.push(dataNino);
-      try {
-        AsyncStorage.getItem('database_peso').then((value) => {
-          if (value !== null) {
-            const d = JSON.parse(value);
-            d.push(dataNino)
-            AsyncStorage.setItem('database_peso', JSON.stringify(d)).then(() => {
-              this.modalHandler()
-            })
-          } else {
-            AsyncStorage.setItem('database_peso', JSON.stringify(arrayDataNino)).then(() => {
-              this.modalHandler()
-            })
-          }
-        })
-      } catch (err) {
-        console.log(err)
-      }
+    });
+  };
+
+  const onChange = (event, selectedDate) => {
+    const dateFormat = moment(selectedDate).format("DD/MM/YY");
+    setShow(Platform.OS === "ios");
+    if (mode == "date") {
+      const currentDate = selectedDate || date;
+      setDate(currentDate);
+      setLabelDate(dateFormat);
+      setShow(Platform.OS === "ios");
     } else {
-      Alert.alert('Falta completar un campo')
+      const selectedTime = selectedValue || new Date();
+      setTime(selectedTime);
+      setShow(Platform.OS === "ios");
+      setMode("date");
     }
-  }
-
-  state = {
-    isVisible: false
-  }
-
-  modalHandler = () => {
-    this.setState({ isVisible: !this.state.isVisible })
-  }
-
-  state = {
-    email: "",
-    displayName: ""
-  }
-
-  componentDidMount() {
-    const { email, displayName } = firebase.auth().currentUser;
-
-    this.setState({ email, displayName });
-  }
-
-  signOutUser = () => {
-    firebase.auth().signOut();
   };
 
-  constructor() {
-    super()
-    this.state = {
-      Nino: ""
+  const onChangeUpdate = (event, selectedDate) => {
+    const dateFormat = moment(selectedDate).format("DD/MM/YY");
+    setShow(Platform.OS === "ios");
+    if (mode == "date") {
+      const currentDate = selectedDate || date;
+      setDateUpdate(currentDate);
+      setLabelDate(dateFormat);
+      setShow(Platform.OS === "ios");
+    } else {
+      const selectedTime = selectedValue || new Date();
+      setTime(selectedTime);
+      setShow(Platform.OS === "ios");
+      setMode("date");
     }
-    try {
-      AsyncStorage.getItem('database_peso').then((value) => {
-        this.setState({
-          Nino: JSON.parse(value)
-        })
+  };
+
+  const showMode = (currentMode) => {
+    setShow(true);
+    setMode(currentMode);
+  };
+
+  const showDatepicker = () => {
+    setSelectDate(true);
+    showMode("date");
+  };
+
+  const handleOnChange = () => {
+    if (selectDate && peso !== "") {
+      let now = new Date(date);
+      const documentChildWeight = {
+        childId,
+        date: firebase.firestore.Timestamp.fromDate(now),
+        userId,
+        weight: parseFloat(peso),
+      };
+      handleAddWeight(documentChildWeight);
+    } else {
+      setShowAlert(true);
+    }
+  };
+
+  const handleOnChangeEdit = () => {
+    if (registroActivoActualizar.weight !== "") {
+      let now = new Date(dateUpdate);
+      const documentChildWeight = {
+        childId,
+        date: firebase.firestore.Timestamp.fromDate(now),
+        userId,
+        weight: parseFloat(registroActivoActualizar.weight),
+      };
+      handleEditWeight(documentChildWeight);
+    } else {
+      setShowAlert(true);
+    }
+  };
+
+  const handleAddWeight = (documentChildWeight) => {
+    const ref = firebase
+      .firestore()
+      .collection("categories")
+      .doc("peso")
+      .collection("records");
+    ref
+      .add(documentChildWeight)
+      .then((docRef) => {
+        const { id } = docRef;
+        setModalVisible(false);
+        setPeso("");
+        setSelectDate(false);
+        setLabelDate("Seleccione Fecha");
+        setDate(new Date());
       })
-    } catch (err) {
-      console.log(err)
-    }
-  }
-  parseData() {
-    if (this.state.Nino) {
-      return this.state.Nino.map((dataNino, i) => {
-        return (
-          <View
-            style={styles.infoCard}
-            key={i}>
+      .catch(function (error) {
+        console.error("Error adding document: ", error);
+      });
+  };
 
-
-
-            <View
-              style={{ padding: 10, flexDirection: 'row', alignContent:'center', alignItems:'center', justifyContent:'space-between' }}
-            >
-              <Text>{dataNino.data} </Text>
-              <Text>{dataNino.peso} kg </Text>
-              <TouchableOpacity
-                onPress={() => this.props.navigation.navigate('Nino')}
-              >
-                <Feather
-                  name='edit'
-                  size={20}
-                  color='black'
-                />
-              </TouchableOpacity>
-            </View>
-
-          </View>
-        )
+  const handleEditWeight = (documentChildWeight) => {
+    const { id } = registroActivoActualizar;
+    const ref = firebase
+      .firestore()
+      .collection("categories")
+      .doc("peso")
+      .collection("records")
+      .doc(id);
+    ref
+      .update(documentChildWeight)
+      .then(() => {
+        console.log("Document successfully updated!");
+        setModalVisibleChange(false);
+        setPeso("");
+        setSelectDate(false);
+        setLabelDate("seleeccione fecha");
+        setDateUpdate(new Date());
       })
-    }
-  }
+      .catch((error) => {
+        console.error("Error adding document: ", error);
+      });
+  };
 
-  render() {
-    const { isVisible } = this.state;
-    LayoutAnimation.easeInEaseOut();
+  const openModal = (doc) => {
+    const { toDate } = doc;
+    setModalVisibleChange(true);
+    setRegistroActivoActualizar(doc);
+    setLabelDate(doc.date);
+    setDateUpdate(toDate);
+  };
 
-    return (
+  return (
+    <View style={{ flex: 1 }}>
+      <ScrollView style={styles.container}>
+        <StatusBar barStyle="light-content" />
 
+        <View style={styles.boxTitle}>
+          <Text style={styles.textWhite}>Fecha</Text>
+          <Text style={styles.textWhite}>Peso(kg) </Text>
+        </View>
 
+        <View style={styles.containerCards}>
+          {weightRegister.map((doc) => {
+            const { date, weight } = doc;
+            return (
+              <View style={styles.boxWeight}>
+                <Text style={styles.textPeso}>{date}</Text>
+                <Text style={styles.textPeso}>{weight} </Text>
+                <TouchableOpacity onPress={() => openModal(doc)}>
+                  <Feather name="edit" size={24} color="#b0b0b0" />
+                </TouchableOpacity>
+              </View>
+            );
+          })}
+        </View>
 
-
-      <ScrollView
-        style={styles.container}
-      >
-        <StatusBar barStyle='light-content' ></StatusBar>
         <TouchableOpacity
-        onPress={() => this.props.navigation.navigate('Nino')}
+          style={styles.button}
+          onPress={() => {
+            setModalVisible(true);
+          }}
         >
-          <Text style={{ marginTop: 40, textAlign: 'left', color: '#424242', fontSize: 16, left: 30 }}>
-            {'< Infomación < Peso'} </Text>
-
+          <Text style={styles.textButton}>+ Agregar peso</Text>
         </TouchableOpacity>
 
+        {/* MODAL DE AGREGARRRR */}
+        <Modal visible={modalVisible} transparent={true} animationType="fade">
+          <View style={styles.centeredViews}>
+            <View style={styles.modalView}>
+              <MaterialIcons
+                name="close"
+                size={24}
+                onPress={() => {
+                  setModalVisible(!modalVisible);
+                  setPeso("");
+                  setSelectDate(false);
+                  setLabelDate("Seleccione Fecha");
+                }}
+                style={styles.iconBox}
+              />
 
-
-        <View
-          style={{ marginTop: 40, left: 28, flexDirection: 'row', backgroundColor: '#05A4AC', justifyContent: 'space-around', width: 304, height: 36, borderRadius: 4, alignItems: 'center' }}
-        >
-          <Text
-            style={{ color: '#fff' }}
-          >Fecha</Text>
-          <Text
-            style={{ color: '#fff' }}
-          >Peso</Text>
-        </View>
-
-        <View
-          style={styles.containerCards}
-        >
-          {this.parseData()}
-        </View>
-        <View>
-          <TouchableOpacity
-            style={styles.button}
-            onPress={this.modalHandler}
-          >
-            <Text
-              style={{ textAlign: 'center', fontSize: 16, color: '#fff' }}
-            > +  Agregue nueva medida</Text>
-          </TouchableOpacity>
-        </View>
-
-
-        <Modal
-          visible={isVisible}
-          transparent={true}
-          animationType='fade'
-        >
-          <TouchableOpacity
-            onPress={() => this.modalHandler()}
-            style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
-          >
-            <TouchableWithoutFeedback>
-
-              <View
-                style={{ height: '80%', width: '80%', backgroundColor: 'grey', padding: 10, borderRadius: 4 }}
-              >
-                <MaterialIcons
-                  name='close'
-                  size={24}
-                  onPress={() => this.modalHandler()}
-                >
-                </MaterialIcons>
-
-                <View style={styles.form}>
-
-                  <View>
-                    <Text
-                      style={styles.title1}
-                    >Agregar peso</Text>
-                  </View>
-
-                  <View>
-
-                    <TextInput
-                      style={styles.input}
-                      placeholder='Peso'
-                      autoCapitalize='none'
-                      onChangeText={(peso) => this.changePeso(peso)}
-                      value={this.state.peso}
-                    ></TextInput>
-                  </View>
-
-
-
-
-                  {/* <View>
-
-                    <Picker
-                      style={styles.pickerComponent}
-                      selectedValue={this.state.hijo}
-                      onValueChange={
-                        (itemValor, itemIndex) =>
-                          this.setState({
-                            hijo: itemValor
-                          })
-                      }
-
-                    >
-                      <Picker.Item label='Sexo' value='' />
-                      <Picker.Item label='Niña' value='Niña' />
-                      <Picker.Item label='Niño' value='Niño' />
-
-                    </Picker>
-                  </View> */}
-
-                  <View>
-                    <DatePicker
-                      format="DD/MM/YYYY"
-                      style={styles.dateComponent}
-                      date={this.state.data}
-                      onDateChange={this.changeDate}
-                    />
-                  </View>
-
-
-
-
-
-                  <TouchableOpacity
-                    style={styles.button}
-                    onPress={() => this.modalHandler()}
-                  >
-                    <Text
-                      style={{ color: '#ffffff', fontWeight: '500' }}
-                    >Agregar</Text>
-                  </TouchableOpacity>
-                  <View>
-
-                  </View>
-
-
-
-
-
-
-
+              <View>
+                <View>
+                  <Text style={styles.titleModal}>Peso </Text>
                 </View>
+
+                <View style={styles.input1}>
+                  <NumericInput
+                    style={styles.input}
+                    placeholder="Peso (kg)"
+                    type="decimal"
+                    decimalPlaces={3}
+                    value={peso}
+                    onUpdate={(peso) => changePeso(peso)}
+                  />
+                </View>
+
+                <View>
+                  <TouchableOpacity
+                    onPress={showDatepicker}
+                    style={styles.inputBirthday}
+                  >
+                    <Text style={styles.textAgregar1}>{labelDate}</Text>
+                  </TouchableOpacity>
+
+                  {show && (
+                    <DateTimePicker
+                      testID="dateTimePicker"
+                      value={date}
+                      mode={mode}
+                      is24Hour={true}
+                      display="spinner"
+                      onChange={onChange}
+                    />
+                  )}
+                </View>
+
+                <TouchableOpacity
+                  style={styles.buttonModal}
+                  onPress={() => handleOnChange()}
+                >
+                  <Text style={{ color: "#ffffff", fontWeight: "500" }}>
+                    Agregar
+                  </Text>
+                </TouchableOpacity>
               </View>
+            </View>
+          </View>
+        </Modal>
 
+        {/* MODAL DE EDITAR */}
+        <Modal
+          visible={modalVisibleChange}
+          transparent={true}
+          animationType="fade"
+        >
+          <View style={styles.centeredViews}>
+            <View style={styles.modalView}>
+              <MaterialIcons
+                name="close"
+                size={24}
+                onPress={() => {
+                  setModalVisibleChange(!modalVisibleChange);
+                }}
+                style={styles.iconBox}
+              />
 
-            </TouchableWithoutFeedback>
-          </TouchableOpacity>
-        </Modal >
+              <View>
+                <View>
+                  <Text style={styles.titleModal}>Editar peso </Text>
+                </View>
 
-      </ScrollView >
+                <View style={styles.input1}>
+                  <NumericInput
+                    style={styles.input}
+                    placeholder="Peso (kg)"
+                    type="decimal"
+                    decimalPlaces={3}
+                    value={registroActivoActualizar.weight}
+                    onUpdate={(peso) => {
+                      setRegistroActivoActualizar((prevState) => ({
+                        ...prevState,
+                        weight: peso,
+                      }));
+                    }}
+                  />
+                </View>
 
+                <View>
+                  <TouchableOpacity
+                    onPress={showDatepicker}
+                    style={styles.inputBirthday}
+                  >
+                    <Text style={styles.textAgregar1}>{labelDate}</Text>
+                  </TouchableOpacity>
 
+                  {show && (
+                    <DateTimePicker
+                      testID="dateTimePicker"
+                      value={dateUpdate}
+                      mode={mode}
+                      is24Hour={true}
+                      display="spinner"
+                      onChange={onChangeUpdate}
+                    />
+                  )}
+                </View>
 
+                <TouchableOpacity
+                  style={styles.buttonModal}
+                  onPress={() => handleOnChangeEdit()}
+                >
+                  <Text style={{ color: "#ffffff", fontWeight: "500" }}>
+                    Actualizar
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </View>
+        </Modal>
 
-    );
-  }
-}
+        <AwesomeAlert
+          show={showAlert}
+          showProgress={false}
+          title="Importante"
+          message="Debe llenar todos los campos para registrar peso."
+          closeOnTouchOutside={true}
+          closeOnHardwareBackPress={false}
+          showCancelButton={false}
+          showConfirmButton={true}
+          cancelText="Cancelar"
+          confirmText="Aceptar"
+          confirmButtonColor="#C13273"
+          onCancelPressed={() => {
+            setShowAlert(false);
+          }}
+          onConfirmPressed={() => {
+            setShowAlert(false);
+          }}
+        />
+      </ScrollView>
+    </View>
+  );
+};
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  infoCard: {
-    marginBottom: 24,
-    borderWidth: 1,
-    borderColor: '#05A4AC',
-    borderRadius: 4,
-    width: 300,
-    left: 30,
-  },
-  containerCards: {
-    marginTop: 30,
-
-  },
-  button: {
- 
-
-    height: 40,
-    width: 300,
-    left: 30,
-    backgroundColor: '#E9446A',
-    borderRadius: 4,
-
-    alignItems: 'center',
-    justifyContent: 'center',
-    
-
-  }
-  ,
-  input: {
-    borderColor: '#ccc',
-    borderWidth: 1,
-    borderRadius: 4,
-    height: 40,
-    fontSize: 15,
-    color: '#161F3D',
-    padding: 10,
-  },
-
-});
+export default PesoScreen;

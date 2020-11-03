@@ -1,175 +1,159 @@
-import React from 'react'
-import { View, Text, Button,StyleSheet, TextInput, TouchableOpacity, Image, StatusBar, LayoutAnimation } from 'react-native'
+import React, { useState } from "react";
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  StatusBar,
+  LayoutAnimation,
+} from "react-native";
+import AwesomeAlert from "react-native-awesome-alerts";
+import { firebase } from "./utils/firebase";
+import styles from "./styles/stylesLoginScreen";
+import { EvilIcons,AntDesign } from '@expo/vector-icons'; 
 
-import * as firebase from 'firebase'
-import * as Facebook from 'expo-facebook'
-import { color } from 'react-native-reanimated'
-
-
-
+import * as Expo from 'expo';
 
 //VISTA LOGIN
-export default class LoginScreen extends React.Component {
 
-  static navigationOptions = {
-    headerShown: false
+const LoginScreen = ({ navigation }) => {
+  LayoutAnimation.easeInEaseOut();
+
+
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [errorMessage, setErrorMessage] = useState(null);
+  const [showAlert, setShowAlert] = useState(false);
+
+  const handleLogin = () => {
+    if (email !== "" && password !== "") {
+      firebase
+        .auth()
+        .signInWithEmailAndPassword(email, password)
+        .catch((error) => {
+          setErrorMessage(error.message)
+        });
+    } else {
+      setShowAlert(true);
+    }
   };
 
-  state = {
-    email: "",
-    password: "",
-    errorMessage: null
-  };
-
-
-  handleLogin = () => {
-    const { email, password } = this.state
-
-    firebase
-      .auth()
-      .signInWithEmailAndPassword(email, password)
-      .catch(error => this.setState({ errorMessage: error.message }))
+  const signInWithGoogleAsync = async () => {
+    try {
+      const result = await Google.logInAsync({
+        androidClientId: "891797980558-7ddtuciou9g4v8hmc02il7odvg56oeh2.apps.googleusercontent.com",
+        //iosClientId: YOUR_CLIENT_ID_HERE,
+        scopes: ['profile', 'email'],
+      });
+  
+      if (result.type === 'success') {
+        return result.accessToken;
+      } else {
+        return { cancelled: true };
+      }
+    } catch (e) {
+      return { error: true };
+    }
   }
 
+  return (
+    <View style={styles.container}>
+      <StatusBar barStyle="light-content"></StatusBar>
+      <Text style={styles.textTitle}>Inicie sesión</Text>
+      <View style={styles.errorMessage}>
+        {errorMessage && <Text style={styles.error}>{errorMessage}</Text>}
+      </View>
 
-
-
-  render() {
-
-    LayoutAnimation.easeInEaseOut();
-
-    return (
-      <View style={styles.container}>
-        <StatusBar barStyle='light-content' ></StatusBar>
-
-
-        <Text style={styles.greeting}>
-          {'Inicie sesión'}
-        </Text>
-
-        <View style={styles.errorMessage}>
-          {this.state.errorMessage && <Text style={styles.error}>{this.state.errorMessage}</Text>}
+      <View>
+        <View
+          style={styles.input1}
+        >
+          <TextInput
+            placeholder="Email"
+            style={styles.input}
+            autoCapitalize="none"
+            onChangeText={(email) => setEmail(email)}
+            value={email}
+          />
         </View>
-
-        <View style={styles.form}>
-          <View>
-            <TextInput
-              placeholder={'Email'}
-              style={styles.input}
-              autoCapitalize='none'
-              onChangeText={email => this.setState({ email })}
-              value={this.state.email}
-            ></TextInput>
-          </View>
-          <View>
-            <TextInput
-              placeholder={'Contraseña'}
-              style={styles.input}
-              secureTextEntry
-              autoCapitalize='none'
-              onChangeText={password => this.setState({ password })}
-              value={this.state.password}
-            ></TextInput>
-          </View>
+        <View
+          style={styles.input2}
+        >
+          <TextInput
+            placeholder="Contraseña"
+            style={styles.input}
+            secureTextEntry
+            autoCapitalize="none"
+            onChangeText={(password) => setPassword(password)}
+            value={password}
+          />
         </View>
-        <TouchableOpacity
-          onPress={() => this.props.navigation.navigate('')}
-        >
-          <Text style={{ marginTop: 12, color: '#05A4AC', fontSize: 14, textAlign: 'right' }}>
-            ¿Olvido su contraseña?
-                    </Text>
-        </TouchableOpacity>
+      </View>
+      <TouchableOpacity onPress={() => navigation.push("")}>
+        <Text style={styles.textForgotPass}>¿Olvidó su contraseña?</Text>
+      </TouchableOpacity>
 
-        <TouchableOpacity
-          style={styles.button}
-          onPress={this.handleLogin}
-        >
-          <Text
-            style={{ color: '#ffffff', fontWeight: '500' }}
-          >Ingresar</Text>
-        </TouchableOpacity>
-
-
-
-        <TouchableOpacity
-          style={styles.buttonFb}
-           onPress={this.LoginFb}
-        >
-          <Text
-            style={{ color: '#ffffff', fontWeight: '500' }}
-          >Ingresar con Facebook</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          style={{ alignSelf: 'center', position: 'absolute', top: 564 }}
-          onPress={() => this.props.navigation.navigate('Register')}
-        >
-          <Text style={{ color: '#414959', fontSize: 14 }}>
-            ¿No tiene cuenta? <Text style={{ fontWeight: '500', color: '#05A4AC' }}>Registrese aquí</Text>
-          </Text>
+      <View
+      style={styles.button1}
+      >
+        <TouchableOpacity style={styles.button} onPress={() => handleLogin()}>
+          <Text style={styles.textbutton}>Ingresar</Text>
         </TouchableOpacity>
       </View>
 
-    );
-  }
-}
+      <View
+      style={styles.button2}
+      >
+        <TouchableOpacity style={styles.buttonFb}>
+        <EvilIcons name="sc-facebook" size={30} color="white" />
+          <Text style={styles.textbutton}>Ingresar con Facebook</Text>
+        </TouchableOpacity>
+      </View>
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 30
-  },
-  greeting: {
-    marginTop: 84,
-    fontSize: 20,
-    fontWeight: '400',
-    textAlign: 'center',
-    color: '#424242'
-  },
-  errorMessage: {
-    color: '#E9446A',
-    height: 30,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  error: {
-    color: '#E9446A',
-    fontSize: 13,
-    fontWeight: '600',
-    textAlign: 'center'
-  },
-  inputTitle: {
-    color: '#8A8F9E',
-    fontSize: 10,
-    textTransform: 'uppercase'
-  },
-  input: {
-    marginTop: 18,
-    borderWidth: 1,
-    borderRadius: 4,
-    borderColor: '#C4C4C4',
-    height: 40,
-    fontSize: 16,
-    color: '#161F3D',
-    padding: 10,
-  },
-  button: {
-    marginTop: 18,
-    backgroundColor: '#E9446A',
-    borderRadius: 4,
-    height: 40,
-    alignItems: 'center',
-    justifyContent: 'center'
-  },
-  buttonFb: {
-    marginTop: 18,
-    backgroundColor: '#3C609F',
-    borderRadius: 4,
-    height: 40,
-    alignItems: 'center',
-    justifyContent: 'center'
-  },
-  form: {
-    marginTop: 100,
-  }
-});
+      <View
+      style={styles.button3}
+      >
+        <TouchableOpacity style={styles.buttonGo}
+        onPress={() => signInWithGoogleAsync()}
+        >
+        <AntDesign name="google" size={20} color="red" />
+          <Text style={styles.textbutton1}>Ingresar con Google</Text>
+        </TouchableOpacity>
+      </View>
+
+      <TouchableOpacity
+        style={styles.containerTextRegister}
+        onPress={() => navigation.push("Register")}
+      >
+        <Text style={{ color: "#B0B0B0", fontSize: 12 }}>
+          ¿No tiene cuenta?{" "}
+          <Text style={{ fontWeight: "500", color: "#1D96A3" }}>
+            Regístrese aquí
+          </Text>
+        </Text>
+      </TouchableOpacity>
+
+      <AwesomeAlert
+        show={showAlert}
+        showProgress={false}
+        title="Importante"
+        message="Debe ingresar su correo y contraseña"
+        closeOnTouchOutside={true}
+        closeOnHardwareBackPress={false}
+        showCancelButton={false}
+        showConfirmButton={true}
+        cancelText="Cancelar"
+        confirmText="Aceptar"
+        confirmButtonColor="#C13273"
+        onCancelPressed={() => {
+          setShowAlert(false);
+        }}
+        onConfirmPressed={() => {
+          setShowAlert(false);
+        }}
+      />
+    </View>
+  );
+};
+
+export default LoginScreen;

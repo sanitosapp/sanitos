@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "ProbandoSanitosApp",
+    "name": "SANITOSAPP",
     "slug": "ProbandoSanitosApp",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -10,6 +10,9 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
+    "notification": { 
+    "icon": "./recursos/imagenes/sanitos.png" 
+    }, 
     "updates": {
       "fallbackToCacheTimeout": 0
     },
