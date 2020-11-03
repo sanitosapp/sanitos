@@ -16,6 +16,8 @@ import "moment/locale/es";
 import { MaterialIcons, Feather } from "@expo/vector-icons";
 import { firebase } from "./utils/firebase";
 import styles from "./styles/stylesEstaturaScreen";
+import AwesomeAlert from "react-native-awesome-alerts";
+import NumericInput from "@wwdrew/react-native-numeric-textinput"
 
 //VISTA HOME PRINCIPAL
 const EstaturaScreen = ({ route, navigation }) => {
@@ -30,6 +32,8 @@ const EstaturaScreen = ({ route, navigation }) => {
   const [userId, setUserId] = useState("");
   const [estaturaRegister, setEstaturaRegister] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
+  const [time, setTime] = useState(new Date());
+  const [showAlert, setShowAlert] = useState(false);
 
   const changeEstatura = (estatura) => {
     setEstatura(estatura);
@@ -51,7 +55,6 @@ const EstaturaScreen = ({ route, navigation }) => {
       .collection("records")
       .where("userId", "==", uid)
       .where("childId", "==", childId);
-
     querySnapshot.onSnapshot((querySnapshot) => {
       const arrayEstatura = [];
       querySnapshot.forEach((doc) => {
@@ -71,9 +74,22 @@ const EstaturaScreen = ({ route, navigation }) => {
   };
 
   const onChange = (event, selectedDate) => {
-    const currentDate = selectedDate || date;
     setShow(Platform.OS === "ios");
-    setDate(currentDate);
+    if (mode == "date") {
+      const currentDate = selectedDate || date;
+      setDate(currentDate);
+      setShow(Platform.OS === "ios");
+    } else {
+      const selectedTime = selectedValue || new Date();
+      setTime(selectedTime);
+      setShow(Platform.OS === 'ios');
+      setMode('date');
+    }
+  };
+
+  const formatDate = (date, time) => {
+    return `${date.getDate()}/${date.getMonth() +
+      1}/${date.getFullYear()}`;
   };
 
   const showMode = (currentMode) => {
@@ -93,15 +109,16 @@ const EstaturaScreen = ({ route, navigation }) => {
         childId,
         date: firebase.firestore.Timestamp.fromDate(now),
         userId,
-        height: parseInt(estatura),
+        height: parseFloat(estatura)
       };
       handleAddHeight(documentChildHeight);
     } else {
-      alert("Llene todo los campos");
+      setShowAlert(true);
     }
   };
 
   const handleAddHeight = (documentChildHeight) => {
+    console.log("adding decimal: ", documentChildHeight)
     const ref = firebase
       .firestore()
       .collection("categories")
@@ -135,7 +152,7 @@ const EstaturaScreen = ({ route, navigation }) => {
 
       <View style={styles.boxTitle}>
         <Text style={styles.textWhite}>Fecha</Text>
-        <Text style={styles.textWhite}>Estatura</Text>
+        <Text style={styles.textWhite}>Estatura(cm)</Text>
       </View>
 
       <View style={styles.containerCards}>
@@ -145,6 +162,7 @@ const EstaturaScreen = ({ route, navigation }) => {
             <View style={styles.boxHeight}>
               <Text>{date}</Text>
               <Text>{height} </Text>
+              <TouchableOpacity><Feather name="edit" size={24} color="#b0b0b0" /></TouchableOpacity>
             </View>
           );
         })}
@@ -165,6 +183,7 @@ const EstaturaScreen = ({ route, navigation }) => {
         <View style={styles.centeredViews}>
           <View style={styles.modalView}>
             <MaterialIcons
+              style={styles.iconBox}
               name="close"
               size={24}
               onPress={() => {
@@ -172,30 +191,34 @@ const EstaturaScreen = ({ route, navigation }) => {
               }}
             ></MaterialIcons>
 
-            <View style={styles.form}>
+            <View>
               <View>
-                <Text style={styles.title1}>Estatura</Text>
+                <Text style={styles.titleModal}>Estatura</Text>
               </View>
 
-              <View>
-                <TextInput
+              <View style={styles.input1}>
+                {/* <TextInput
                   style={styles.input}
-                  placeholder="Estatura"
+                  placeholder="Estatura (cm)"
                   autoCapitalize="none"
+                  keyboardType="number-pad"
+                  returnKeyType="next"
+                  maxLength={6}
                   onChangeText={(estatura) => changeEstatura(estatura)}
                   value={estatura}
-                ></TextInput>
+                ></TextInput> */}
+                < NumericInput
+                style={styles.input}
+                placeholder="Estatura (cm)"
+                  type='decimal'
+                  decimalPlaces={3}
+                  value={estatura}
+                  onUpdate={(estatura) => changeEstatura(estatura)}
+                />
               </View>
 
               <View>
                 <View>
-                  <View
-                    style={{
-                      color: "#ffffff",
-                      fontWeight: "500",
-                      marginTop: 10,
-                    }}
-                  >
                     <Button onPress={showDatepicker} title="Fecha" />
                   </View>
 
@@ -211,7 +234,7 @@ const EstaturaScreen = ({ route, navigation }) => {
                   )}
                 </View>
               </View>
-
+<View>
               <TouchableOpacity
                 style={styles.buttonModal}
                 onPress={() => handleOnChange()}
@@ -222,6 +245,25 @@ const EstaturaScreen = ({ route, navigation }) => {
           </View>
         </View>
       </Modal>
+      <AwesomeAlert
+        show={showAlert}
+        showProgress={false}
+        title="Importante"
+        message="Debe llenar todos los campos para registrar estatura."
+        closeOnTouchOutside={true}
+        closeOnHardwareBackPress={false}
+        showCancelButton={false}
+        showConfirmButton={true}
+        cancelText="Cancelar"
+        confirmText="Aceptar"
+        confirmButtonColor='#C13273'
+        onCancelPressed={() => {
+          setShowAlert(false);
+        }}
+        onConfirmPressed={() => {
+          setShowAlert(false);
+        }}
+      />
     </ScrollView>
   );
 };

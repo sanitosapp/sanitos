@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import {
   Picker,
   TextInput,
+  Image,
   ScrollView,
   View,
   Text,
@@ -17,9 +18,13 @@ import "moment/locale/es";
 import { MaterialIcons } from "@expo/vector-icons";
 import { firebase } from "./utils/firebase";
 import styles from "./styles/stylesHomeScreen";
+import Userpermision from "./utils/Userpermision";
 import CardChildUsers from "./components/cardChildUsers";
 import { newbornVaccines, vaccines } from "./utils/const";
 import { saveRemindersNewborn } from "./hooks/firebase";
+import AwesomeAlert from "react-native-awesome-alerts";
+import * as ImagePicker from "expo-image-picker";
+
 //VISTA HOME PRINCIPAL
 const HomeScreen = ({ navigation }) => {
   LayoutAnimation.easeInEaseOut();
@@ -27,6 +32,7 @@ const HomeScreen = ({ navigation }) => {
   const [name, setName] = useState("");
   const [gender, setGender] = useState("");
   const [sangre, setSangre] = useState("");
+  const [foto, setFoto] = useState("");
   const [childUsers, setChildUsers] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
   const [date, setDate] = useState(new Date());
@@ -36,6 +42,9 @@ const HomeScreen = ({ navigation }) => {
   const [uidUser, setUidUser] = useState("");
   const [labelDate, setLabelDate] = useState("Fecha de nacimiento");
   const [nameUser, setNameUser] = useState("");
+  const [showAlert, setShowAlert] = useState(false);
+  const [image, setImage] = useState(null);
+
   useEffect(() => {
     YellowBox.ignoreWarnings(["Setting a timer"]);
     const { email, uid, displayName } = firebase.auth().currentUser;
@@ -43,6 +52,10 @@ const HomeScreen = ({ navigation }) => {
     setEmail(email);
     setUidUser(uid);
     setNameUser(displayName);
+  }, []);
+
+  useEffect(() => {
+    Userpermision.getPermissionAsync();
   }, []);
 
   const getData = async (uid) => {
@@ -55,7 +68,7 @@ const HomeScreen = ({ navigation }) => {
       var children = [];
       querySnapshot.forEach((doc) => {
         const { birthday } = doc.data();
-        const formatoFecha = moment(birthday.toDate()).format("LL");
+        const formatoFecha = moment(birthday.toDate()).format("DD/MM/YY");
         children.push({
           ...doc.data(),
           birthday: formatoFecha,
@@ -82,10 +95,11 @@ const HomeScreen = ({ navigation }) => {
         bloodType: sangre,
         gender,
         name,
+        image,
       };
       handleAddChildUser(documentChildUser, now);
     } else {
-      alert("Llene todo los campos");
+      setShowAlert(true);
     }
   };
 
@@ -173,10 +187,25 @@ const HomeScreen = ({ navigation }) => {
         const { id } = docRef;
         setModalVisible(false);
         handleAddVaccines(ref, id, now);
+        setName("");
+        setGender("");
+        setSangre("");
+        setFoto("");
+        setLabelDate("Fecha de nacimiento");
+        setSelectDate(false);
+        setImage(null);
+        handleAddVaccines(ref, id);
       })
       .catch(function (error) {
         console.error("Error adding document: ", error);
       });
+    /*     const upload =
+          Fire.addPhoto(image).then(() => {
+            setImage(null)
+          })
+            .catch(err => {
+              alert(err.message)
+            }) */
   };
 
   const handleAddVaccines = (ref, id, now) => {
@@ -233,14 +262,79 @@ const HomeScreen = ({ navigation }) => {
     showMode("date");
   };
 
+  const uriToBlob = (uri) => {
+    return new Promise((resolve, reject) => {
+      const xhr = new XMLHttpRequest();
+
+      xhr.onload = function () {
+        // return the blob
+        resolve(xhr.response);
+      };
+
+      xhr.onerror = function () {
+        // something went wrong
+        reject(new Error("uriToBlob failed"));
+      };
+
+      // this helps us get a blob
+      xhr.responseType = "blob";
+
+      xhr.open("GET", uri, true);
+      xhr.send(null);
+    });
+  };
+
+  const uploadToFirebase = (blob) => {
+    return new Promise((resolve, reject) => {
+      var storageRef = firebase.storage().ref();
+
+      storageRef
+        .child("uploads/photo.jpg")
+        .put(blob, {
+          contentType: "image/jpeg",
+        })
+        .then((snapshot) => {
+          blob.close();
+
+          resolve(snapshot);
+        })
+        .catch((error) => {
+          reject(error);
+        });
+    });
+  };
+
+  const pickImage = () => {
+    ImagePicker.launchImageLibraryAsync({
+      mediaTypes: "Images",
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    })
+      .then((result) => {
+        if (!result.cancelled) {
+          // User picked an image
+          const { height, width, type, uri } = result;
+          setImage(result.uri);
+          return uriToBlob(uri);
+        }
+      })
+      .then((blob) => {
+        return uploadToFirebase(blob);
+      })
+      .then((snapshot) => {
+        console.log("File uploaded");
+      })
+      .catch((error) => {
+        throw error;
+      });
+  };
+
   return (
     <ScrollView style={styles.container}>
       <StatusBar barStyle="light-content" />
 
-      <Text style={styles.textWelcome}>
-        Bienvenida {email} !{"\n"}
-        Estamos felices de verte por aquí
-      </Text>
+      <Text style={styles.textWelcome}>!Hola! Gracias por estar aquí.</Text>
       <View style={styles.containerCards}>
         <CardChildUsers childUsers={childUsers} navigation={navigation} />
 
@@ -272,13 +366,13 @@ const HomeScreen = ({ navigation }) => {
 
             <View>
               <View>
-                <Text style={styles.titleModal}>Agregar niña/o</Text>
+                <Text style={styles.titleModal}>Registrar niñ@</Text>
               </View>
 
               <View style={styles.input1}>
                 <TextInput
                   style={styles.input}
-                  placeholder="Nombre"
+                  placeholder="Nombre*"
                   autoCapitalize="none"
                   onChangeText={(name) => changeName(name)}
                   value={name}
@@ -291,7 +385,7 @@ const HomeScreen = ({ navigation }) => {
                   selectedValue={gender}
                   onValueChange={(itemValor) => setGender(itemValor)}
                 >
-                  <Picker.Item label="Sexo" value="" />
+                  <Picker.Item label="Sexo*" value="" />
                   <Picker.Item label="Niña" value="Niña" />
                   <Picker.Item label="Niño" value="Niño" />
                 </Picker>
@@ -303,7 +397,7 @@ const HomeScreen = ({ navigation }) => {
                   selectedValue={sangre}
                   onValueChange={(itemValor) => setSangre(itemValor)}
                 >
-                  <Picker.Item label="Tipo de sangre" value="" />
+                  <Picker.Item label="Tipo de sangre*" value="" />
                   <Picker.Item label="A positivo" value="A positivo" />
                   <Picker.Item label="A negativo" value="A negativo" />
                   <Picker.Item label="B positivo" value="B positivo" />
@@ -314,7 +408,6 @@ const HomeScreen = ({ navigation }) => {
                   <Picker.Item label="AB negativo" value="AB negativo" />
                 </Picker>
               </View>
-
               <View>
                 <View>
                   <TouchableOpacity
@@ -330,25 +423,74 @@ const HomeScreen = ({ navigation }) => {
                       value={date}
                       mode={mode}
                       is24Hour={true}
-                      display="default"
+                      display="spinner"
                       onChange={onChange}
                     />
                   )}
                 </View>
               </View>
+              <TouchableOpacity
+                style={styles.buttonFoto}
+                onPress={() => pickImage()}
+              >
+                <View>
+                  {image === null ? (
+                    <Text
+                      style={{
+                        color: "#B0B0B0",
+                        fontWeight: "500",
+                        textAlign: "center",
+                        textDecorationLine: "underline",
+                      }}
+                    >
+                      Agregar foto
+                    </Text>
+                  ) : (
+                    <View>
+                      <Image
+                        source={{ uri: image }}
+                        style={{
+                          width: "100%",
+                          height: "100%",
+                          borderRadius: 4,
+                        }}
+                      ></Image>
+                    </View>
+                  )}
+                </View>
+              </TouchableOpacity>
 
               <TouchableOpacity
                 style={styles.buttonModal}
                 onPress={() => buttonPressed()}
               >
                 <Text style={{ color: "#ffffff", fontWeight: "500" }}>
-                  Agregar
+                  Registrar
                 </Text>
               </TouchableOpacity>
             </View>
           </View>
         </View>
       </Modal>
+      <AwesomeAlert
+        show={showAlert}
+        showProgress={false}
+        title="Importante"
+        message="Debe llenar todos los campos para registrar a su niño."
+        closeOnTouchOutside={true}
+        closeOnHardwareBackPress={false}
+        showCancelButton={false}
+        showConfirmButton={true}
+        cancelText="Cancelar"
+        confirmText="Aceptar"
+        confirmButtonColor="#C13273"
+        onCancelPressed={() => {
+          setShowAlert(false);
+        }}
+        onConfirmPressed={() => {
+          setShowAlert(false);
+        }}
+      />
     </ScrollView>
   );
 };

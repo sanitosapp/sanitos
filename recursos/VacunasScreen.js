@@ -145,7 +145,7 @@ const VacunasScreen = ({ route, navigation }) => {
       </View>
 
       {vacunaEstado.map((doc, index) => {
-        const { dose, state, vaccine, reinforcement, time, id } = doc;
+        const { dose, state, vaccine, reinforcement, time, administration, effect, date, information } = doc;
         return (
           <View style={styles.boxVacunas} key={index}>
             <TouchableOpacity
@@ -179,14 +179,9 @@ const VacunasScreen = ({ route, navigation }) => {
                       + Presiona aqui para ver mas{" "}
                     </Text>
                   </View>
-                </View>
 
-                {/* <TouchableOpacity
-                  onPress={() => { setModalVisible(true) }}
-                  style={styles.col3}
-                >
-                  <MaterialIcons name="add" size={20} color="black" />
-                </TouchableOpacity> */}
+
+                </View>
               </View>
             </TouchableOpacity>
           </View>

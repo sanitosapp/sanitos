@@ -19,6 +19,8 @@ const SignupScreen = ({ navigation }) => {
   const [cpassword, setCPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState(null);
   const [showAlert, setShowAlert] = useState(false);
+  const [showAlertPassword, setShowAlertPassword] = useState(false);
+  const [isLoading, setLoading] = useState(false);
 
   const handleSignUp = async () => {
     try {
@@ -32,7 +34,7 @@ const SignupScreen = ({ navigation }) => {
 
         await saveTokenPhone(getPhoneToken(), user.uid);
       } else {
-        setShowAlert(true);
+        setShowAlertPassword(true);
       }
     } catch (error) {
       setErrorMessage(error.message);
@@ -125,7 +127,7 @@ const SignupScreen = ({ navigation }) => {
         show={showAlert}
         showProgress={false}
         title="Importante"
-        message="debe ingresar todos los campos"
+        message="Debe ingresar todos los campos."
         closeOnTouchOutside={true}
         closeOnHardwareBackPress={false}
         showCancelButton={false}
@@ -138,6 +140,25 @@ const SignupScreen = ({ navigation }) => {
         }}
         onConfirmPressed={() => {
           setShowAlert(false);
+        }}
+      />
+      <AwesomeAlert
+        show={showAlertPassword}
+        showProgress={false}
+        title="Importante"
+        message="Las contraseñas no coinciden."
+        closeOnTouchOutside={true}
+        closeOnHardwareBackPress={false}
+        showCancelButton={false}
+        showConfirmButton={true}
+        cancelText="Cancelar"
+        confirmText="Aceptar"
+        confirmButtonColor="#E9446A"
+        onCancelPressed={() => {
+          setShowAlertPassword(false);
+        }}
+        onConfirmPressed={() => {
+          setShowAlertPassword(false);
         }}
       />
     </View>

@@ -4,7 +4,8 @@ import styles from "../styles/stylesHomeScreen";
 
 const CardChildUsers = ({ childUsers, navigation }) => {
   return childUsers.map((doc, index) => {
-    const { name, birthday, bloodType, gender } = doc;
+    console.log(doc);
+    const { name, birthday, bloodType, gender, image } = doc;
     return (
       <TouchableOpacity
         style={styles.infoCard}
@@ -23,8 +24,14 @@ const CardChildUsers = ({ childUsers, navigation }) => {
           <View style={{ flexDirection: "row" }}>
             <View>
               <Image
-                source={require("../../recursos/imagenes/logoSanitos.png")}
-                style={{ width: 70, height: 60, margin: 6 }}
+                source={{ uri: image }}
+                style={{
+                  width: 60,
+                  height: 60,
+                  marginHorizontal: 18,
+                  marginVertical: 6,
+                  borderRadius: 360,
+                }}
               />
             </View>
             <View style={styles.paddingCard}>
@@ -37,9 +44,6 @@ const CardChildUsers = ({ childUsers, navigation }) => {
               </Text>
               <Text style={styles.textCardChild}>Sexo: {gender} </Text>
             </View>
-          </View>
-          <View>
-            <Text style={styles.textCard}> + Presiona aqui para ver mas </Text>
           </View>
         </View>
       </TouchableOpacity>
