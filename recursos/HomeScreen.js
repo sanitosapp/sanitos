@@ -194,7 +194,6 @@ const HomeScreen = ({ navigation }) => {
         setLabelDate("Fecha de nacimiento");
         setSelectDate(false);
         setImage(null);
-        handleAddVaccines(ref, id);
       })
       .catch(function (error) {
         console.error("Error adding document: ", error);
@@ -218,6 +217,7 @@ const HomeScreen = ({ navigation }) => {
     const nowDate = moment(now).format("L");
     var x = moment(nowDate, "DD-MM-YYYY");
     const comparisonDates = x.isAfter(moment(serverDate, "DD-MM-YYYY"));
+
     if (comparisonDates) {
       vaccinesArray.forEach((Element) => {
         refChild
@@ -231,6 +231,7 @@ const HomeScreen = ({ navigation }) => {
           });
       });
     } else {
+      console.log("entrando recien fff");
       arrayUserVaccines.forEach((Element) => {
         refChild
           .add(Element)
