@@ -231,7 +231,6 @@ const HomeScreen = ({ navigation }) => {
           });
       });
     } else {
-      console.log("entrando recien fff");
       arrayUserVaccines.forEach((Element) => {
         refChild
           .add(Element)
