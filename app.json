@@ -24,15 +24,14 @@
     },
     "android": {
       "package": "com.sanitos.sanitos",
-      "versionCode": 1
+      "versionCode": 1,
+      "googleServicesFile": "./google-services.json"
     },
     "web": {
       "favicon": "./assets/favicon.png"
     },
     "facebookScheme": "fb313331253421224",
     "facebookAppId": "313331253421224",
-    "facebookDisplayName": "Sanitos",
-    "facebookAutoInitEnabled": true,
-    "description": ""
+    "facebookDisplayName": "Sanitos"
   }
 }

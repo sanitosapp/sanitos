@@ -12,6 +12,9 @@ import { EvilIcons, AntDesign } from "@expo/vector-icons";
 import { saveTokenPhone } from "./hooks/firebase";
 import { getPhoneToken } from "./commons/user";
 
+/* SOCIAL MEDIA */
+import { Facebook } from "expo";
+
 const SignupScreen = ({ navigation }) => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -21,6 +24,34 @@ const SignupScreen = ({ navigation }) => {
   const [showAlert, setShowAlert] = useState(false);
   const [showAlertPassword, setShowAlertPassword] = useState(false);
   const [isLoading, setLoading] = useState(false);
+
+  const Facebooklogin = async () => {
+    const { type, token } = await
+      Facebook.logInWithReadPermissionsAsync(
+        "313331253421224", {
+        permission: "public_profile"
+      }
+      );
+    if (type == "success") {
+      const credential =
+        firebase
+          .auth
+          .FacebookAuthProvider
+          .credential(token);
+
+      firebase
+        .auth().signInWithCredential(credential).catch(error => {
+          console.log(error);
+        });
+
+      firebase.auth().onAuthStateChanged(user => {
+        if (user != null) {
+          console.log(user);
+        }
+      });
+    }
+
+  }
 
   const handleSignUp = async () => {
     try {
@@ -98,7 +129,7 @@ const SignupScreen = ({ navigation }) => {
       </View>
 
       <View style={styles.button2}>
-        <TouchableOpacity style={styles.buttonFb}>
+        <TouchableOpacity style={styles.buttonFb} onPress={Facebooklogin}>
           <EvilIcons name="sc-facebook" size={30} color="white" />
           <Text style={styles.textbutton}>Ingresar con Facebook</Text>
         </TouchableOpacity>
