@@ -12,20 +12,25 @@ import { firebase } from "./utils/firebase";
 import styles from "./styles/stylesLoginScreen";
 import { EvilIcons, AntDesign } from '@expo/vector-icons';
 import Constants from 'expo-constants';
-import * as GoogleSignIn from 'expo-google-sign-in';
+import * as Google from 'expo-google-app-auth';
+
 
 /* SOCIAL MEDIA */
 import * as Facebook from "expo-facebook";
-const appId = Constants.facebookAppId; // "313331253421224";
-// Constants.Facebook
+const appId = Constants.manifest.facebookAppId;
+const androidClientId = Constants.manifest.facebookAppId;
 const LoginWithGoogle = async () => {
   try {
-    await GoogleSignIn.askForPlayServicesAsync();
-    const { type, user } = await GoogleSignIn.signInAsync();
-    // const data = await GoogleSignIn.GoogleAuthentication.prototype.toJSON();
+    const { type, idToken, accessToken } = await Google.logInAsync({
+      androidClientId,
+      clientId: androidClientId,
+      // iosClientId: YOUR_CLIENT_ID_HERE,
+      scopes: ['profile', 'email'],
+    });
     if (type === 'success') {
+      // return result.accessToken;
       await firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL);
-      const credential = firebase.auth.GoogleAuthProvider.credential(user.auth.idToken, user.auth.accessToken,);
+      const credential = firebase.auth.GoogleAuthProvider.credential(idToken, accessToken);
       firebase.auth().signInWithCredential(credential)
         .then(user => { // All the details about user are in here returned from firebase
           console.log('Logged in successfully', user)
@@ -33,9 +38,11 @@ const LoginWithGoogle = async () => {
         .catch((error) => {
           console.log('Error occurred ', error)
         });
+    } else {
+      return { cancelled: true };
     }
-  } catch ({ message }) {
-    alert('login: Error:' + message);
+  } catch (e) {
+    return { error: true };
   }
 }
 
@@ -68,17 +75,8 @@ const Facebooklogin = async () => {
 const LoginScreen = ({ navigation }) => {
 
   React.useEffect(() => {
-    const initAsync = async () => {
-      console.log("appId", Constants);
-      // await GoogleSignIn.initAsync({
-      //   // You may ommit the clientId when the firebase `googleServicesFile` is configured
-      //   clientId: '<YOUR_IOS_CLIENT_ID>',
-      // });
-      // this._syncUserWithStateAsync();
-    };
-    initAsync();
+    console.log("androidClientId", androidClientId);
   }, []);
-
 
   LayoutAnimation.easeInEaseOut();
 
