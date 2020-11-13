@@ -22,7 +22,7 @@ const androidClientId = Constants.manifest.facebookAppId;
 const LoginWithGoogle = async () => {
   try {
     const { type, idToken, accessToken } = await Google.logInAsync({
-      androidClientId,
+      // androidClientId,
       clientId: androidClientId,
       // iosClientId: YOUR_CLIENT_ID_HERE,
       scopes: ['profile', 'email'],
@@ -33,7 +33,7 @@ const LoginWithGoogle = async () => {
       const credential = firebase.auth.GoogleAuthProvider.credential(idToken, accessToken);
       firebase.auth().signInWithCredential(credential)
         .then(user => { // All the details about user are in here returned from firebase
-          console.log('Logged in successfully', user)
+          // console.log('Logged in successfully', user)
         })
         .catch((error) => {
           console.log('Error occurred ', error)
@@ -74,9 +74,9 @@ const Facebooklogin = async () => {
 
 const LoginScreen = ({ navigation }) => {
 
-  React.useEffect(() => {
-    console.log("androidClientId", androidClientId);
-  }, []);
+  // React.useEffect(() => {
+  //   console.log("androidClientId", androidClientId);
+  // }, []);
 
   LayoutAnimation.easeInEaseOut();
 
@@ -165,7 +165,7 @@ const LoginScreen = ({ navigation }) => {
       <View
         style={styles.button2}
       >
-        <TouchableOpacity style={styles.buttonFb} onPress={() => Facebooklogin()}>
+        <TouchableOpacity style={styles.buttonFb} onPress={Facebooklogin}>
           <EvilIcons name="sc-facebook" size={30} color="white" />
           <Text style={styles.textbutton}>Ingresar con Facebook</Text>
         </TouchableOpacity>
@@ -175,7 +175,7 @@ const LoginScreen = ({ navigation }) => {
         style={styles.button3}
       >
         <TouchableOpacity style={styles.buttonGo}
-          onPress={() => LoginWithGoogle()}
+          onPress={LoginWithGoogle}
         >
           <AntDesign name="google" size={20} color="red" />
           <Text style={styles.textbutton1}>Ingresar con Google</Text>

@@ -11,9 +11,64 @@ import styles from "./styles/stylesSignupScreen";
 import { EvilIcons, AntDesign } from "@expo/vector-icons";
 import { saveTokenPhone } from "./hooks/firebase";
 import { getPhoneToken } from "./commons/user";
+import Constants from 'expo-constants';
+import * as Google from 'expo-google-app-auth';
+import { androidClientId } from "./utils/const";
 
 /* SOCIAL MEDIA */
-import { Facebook } from "expo";
+const appId = Constants.manifest.facebookAppId;
+
+const LoginWithGoogle = async () => {
+  try {
+    const { type, idToken, accessToken } = await Google.logInAsync({
+      // androidClientId,
+      clientId: androidClientId,
+      // iosClientId: YOUR_CLIENT_ID_HERE,
+      scopes: ['profile', 'email'],
+    });
+    if (type === 'success') {
+      // return result.accessToken;
+      await firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL);
+      const credential = firebase.auth.GoogleAuthProvider.credential(idToken, accessToken);
+      firebase.auth().signInWithCredential(credential)
+        .then(user => { // All the details about user are in here returned from firebase
+          // console.log('Logged in successfully', user)
+        })
+        .catch((error) => {
+          console.log('Error occurred ', error)
+        });
+    } else {
+      return { cancelled: true };
+    }
+  } catch (e) {
+    return { error: true };
+  }
+}
+
+const Facebooklogin = async () => {
+  try {
+    await Facebook.initializeAsync(appId); // enter your Facebook App Id 
+    const { type, token } = await Facebook.logInWithReadPermissionsAsync({
+      permissions: ['public_profile', 'email'],
+    });
+    if (type === 'success') {
+      // SENDING THE TOKEN TO FIREBASE TO HANDLE AUTH
+      const credential = firebase.auth.FacebookAuthProvider.credential(token);
+      firebase.auth().signInWithCredential(credential)
+        .then(user => { // All the details about user are in here returned from firebase
+          // console.log('Logged in successfully', user)
+        })
+        .catch((error) => {
+          console.log('Error occurred ', error)
+        });
+    } else {
+      // type === 'cancel'
+    }
+  } catch ({ message }) {
+    alert(`Facebook Login Error: ${message}`);
+  }
+}
+
 
 const SignupScreen = ({ navigation }) => {
   const [name, setName] = useState("");
@@ -25,33 +80,6 @@ const SignupScreen = ({ navigation }) => {
   const [showAlertPassword, setShowAlertPassword] = useState(false);
   const [isLoading, setLoading] = useState(false);
 
-  const Facebooklogin = async () => {
-    const { type, token } = await
-      Facebook.logInWithReadPermissionsAsync(
-        "313331253421224", {
-        permission: "public_profile"
-      }
-      );
-    if (type == "success") {
-      const credential =
-        firebase
-          .auth
-          .FacebookAuthProvider
-          .credential(token);
-
-      firebase
-        .auth().signInWithCredential(credential).catch(error => {
-          console.log(error);
-        });
-
-      firebase.auth().onAuthStateChanged(user => {
-        if (user != null) {
-          console.log(user);
-        }
-      });
-    }
-
-  }
 
   const handleSignUp = async () => {
     try {
@@ -136,7 +164,8 @@ const SignupScreen = ({ navigation }) => {
       </View>
 
       <View style={styles.button3}>
-        <TouchableOpacity style={styles.buttonGo}>
+        <TouchableOpacity style={styles.buttonGo}
+          onPress={LoginWithGoogle}>
           <AntDesign name="google" size={20} color="red" />
           <Text style={styles.textbutton1}>Ingresar con Google</Text>
         </TouchableOpacity>
