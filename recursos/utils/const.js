@@ -1,5 +1,5 @@
 const enviroment = 'DEV';
-const androidClientId = "";
+const androidClientId = "891797980558-gh899km8h1nlr5mi8kkovitt7urg2k78.apps.googleusercontent.com";
 const vaccines = () => [
   {
     dose: "Única dosis",

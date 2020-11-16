@@ -13,6 +13,7 @@ import { saveTokenPhone } from "./hooks/firebase";
 import { getPhoneToken } from "./commons/user";
 import Constants from 'expo-constants';
 import * as Google from 'expo-google-app-auth';
+import * as Facebook from "expo-facebook";
 import { androidClientId } from "./utils/const";
 
 /* SOCIAL MEDIA */
@@ -21,7 +22,7 @@ const appId = Constants.manifest.facebookAppId;
 const LoginWithGoogle = async () => {
   try {
     const { type, idToken, accessToken } = await Google.logInAsync({
-      // androidClientId,
+      androidClientId,
       clientId: androidClientId,
       // iosClientId: YOUR_CLIENT_ID_HERE,
       scopes: ['profile', 'email'],
@@ -40,8 +41,8 @@ const LoginWithGoogle = async () => {
     } else {
       return { cancelled: true };
     }
-  } catch (e) {
-    return { error: true };
+  } catch ({ message }) {
+    alert(`LoginWithGoogle Login Error: ${message}`);
   }
 }
 
@@ -165,7 +166,7 @@ const SignupScreen = ({ navigation }) => {
 
       <View style={styles.button3}>
         <TouchableOpacity style={styles.buttonGo}
-          onPress={LoginWithGoogle}>
+          onPress={() => LoginWithGoogle()}>
           <AntDesign name="google" size={20} color="red" />
           <Text style={styles.textbutton1}>Ingresar con Google</Text>
         </TouchableOpacity>
