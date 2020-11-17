@@ -13,10 +13,10 @@ import DatePicker from "react-native-datepicker";
 import { MaterialIcons } from "@expo/vector-icons";
 import moment from "moment";
 import "moment/locale/es";
-import { firebase } from "./utils/firebase";
-import styles from "./styles/stylesVacunasScreen";
+import { firebase } from "../utils/firebase";
+import styles from "../styles/stylesVacunasScreen";
 
-//VISTA HOME PRINCIPAL
+//VISTA VACUNAS
 const VacunasScreen = ({ route, navigation }) => {
   const [dataVacuna, setDataVacuna] = useState([]);
   const [vacunaEstado, setVacunaEstado] = useState([]);
@@ -49,6 +49,7 @@ const VacunasScreen = ({ route, navigation }) => {
     vacunas(uid, idPesos.id);
   }, []);
 
+  //FUNCION OBTENER DATOS DE FIRESTORE
   const vacunas = async (uid, childId) => {
     const querySnapshot = firebase
       .firestore()
@@ -79,6 +80,7 @@ const VacunasScreen = ({ route, navigation }) => {
     });
   };
 
+  //FUNCION PARA FILTRAR VACUNAS POR ESTADO PENDIENTE
   const filterVaccinesPending = () => {
     const ArrayVaccinesPending = [];
     dataVacuna.forEach((element) => {
@@ -93,6 +95,7 @@ const VacunasScreen = ({ route, navigation }) => {
     setActiveApplied(false);
   };
 
+  //FUNCION PARA FILTRAR VACUNAS POR ESTADO APLICADA
   const filterVaccinesApplied = () => {
     const ArrayVaccinesApplied = [];
     dataVacuna.forEach((element) => {
@@ -107,6 +110,7 @@ const VacunasScreen = ({ route, navigation }) => {
     setActiveApplied(true);
   };
 
+  //FUNCION PARA FILTRAR  TODAS LAS VACUNAS
   const filterVaccinesAll = () => {
     const ArrayVaccinesAll = [];
     dataVacuna.forEach((element) => {
@@ -165,22 +169,21 @@ const VacunasScreen = ({ route, navigation }) => {
                   <Text style={styles.titleStyle}>{vaccine} </Text>
                 </View>
                 <View style={styles.paddingCard}>
-                  <Text style={styles.textVacuna}>{time}</Text>
-                  <Text style={styles.textVacuna}>
-                    {dose === "no tiene" ? null : dose}
-                    {reinforcement === "no tiene" ? null : reinforcement}{" "}
-                  </Text>
-                  <Text style={styles.textVacuna}>
-                    {state ? "Vacuna aplicada" : "Vacuna pendiente"}
-                  </Text>
-                  <View>
-                    <Text style={styles.textCard}>
-                      {" "}
-                      + Presiona aqui para ver mas{" "}
+                  <View style={{ flexDirection: "row", justifyContent: "space-around" }}>
+                    <Text style={styles.textVacuna}>{time}</Text>
+                    <Text style={styles.textVacuna}>
+                      {dose === "no tiene" ? null : dose}
+                      {reinforcement === "no tiene" ? null : reinforcement}{" "}
                     </Text>
                   </View>
-
-
+                  <View style={{ flexDirection: "row", justifyContent:"space-around"  }}>
+                    <Text style={styles.textVacuna}>
+                      {state ? "Vacuna aplicada" : "Vacuna pendiente"}
+                    </Text>
+                    <Text style={styles.textVacuna}>
+                      
+                    </Text>
+                  </View>
                 </View>
               </View>
             </TouchableOpacity>

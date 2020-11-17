@@ -8,13 +8,17 @@ import {
     TextInput,
     Alert,
 } from "react-native";
-import { firebase } from "./utils/firebase";
+import { firebase } from "../utils/firebase";
 import { MaterialIcons, Feather } from "@expo/vector-icons";
-import styles from "./styles/stylesProfileScreen";
+import styles from "../styles/stylesProfileScreen";
 
 //VISTA PERFIL USUARIO
 
-const CuentaScreen = () => {
+const CuentaEditScreen = () => {
+    /* state = { 
+      currentPassword: "",
+      newPassword: "",
+    }; */
     const [currentPassword, setCurrentPassword] = useState("");
     const [newPassword, setNewPassword] = useState("");
 
@@ -52,10 +56,11 @@ const CuentaScreen = () => {
 
     return (
         <View style={styles.container}>
-
+<TextInput style={styles.input}>Holssssa! </TextInput>
             <View style={styles.marginContainer}>
-                <TextInput style={styles.input} >Nombre </TextInput>
-                <TextInput style={styles.input}>Correo </TextInput>
+                <TextInput style={styles.input}>Hola! </TextInput>
+                <TextInput style={styles.input}>Hola </TextInput>
+                <TextInput style={styles.input}>Hola! </TextInput>
 
                 <TextInput
                     placeholder="Contraseña actual"
@@ -90,4 +95,4 @@ const CuentaScreen = () => {
     );
 };
 
-export default CuentaScreen;
+export default CuentaEditScreen;

@@ -11,13 +11,13 @@ import {
   YellowBox,
 } from "react-native";
 import { set } from "react-native-reanimated";
-import styles from "./styles/stylesPerfilNinoScreen";
-import childDataTest from "./utils/childDataTest.json";
+import styles from "../styles/stylesPerfilNinoScreen";
+import childDataTest from "../utils/childDataTest.json";
 import {MaterialCommunityIcons, FontAwesome5 } from "@expo/vector-icons";
-import { firebase } from "./utils/firebase";
-import ServiceManager from "../service/ServiceManager";
+import { firebase } from "../utils/firebase";
+import ServiceManager from "../../service/ServiceManager";
 
-//VISTA HOME PRINCIPAL
+//VISTA PERFIL DE NIÑO
 const PerfilNinoScreen = ({ route, navigation }) => {
   LayoutAnimation.easeInEaseOut();
   const [user, setUser] = useState({});
@@ -28,25 +28,7 @@ const PerfilNinoScreen = ({ route, navigation }) => {
     setUser(id);
   }, []);
 
-  useEffect(() => {
-    /*  const Api = `https://us-central1-sanitosapp-d0b5f.cloudfunctions.net/getDataCharts`;
-
-    fetch(Api, {
-      method: "POST",
-      headers: { "content-type": "application/json" },
-      body: JSON.stringify({
-        userId: "43fxtytAfSchYvzWaDO1DKymTNz2",
-        childId: "IE0HDEuW7NeCB9b4ARUr",
-      }),
-    })
-      .then((response) => response.json())
-      .then((data) => console.log("data", data)); */
-  }, []);
-
-  /* const getDataTarget {user.name}= async (id) => {
-
-  } */
-
+   //FUNCION PARA DATA A CHARTS
   const postChildDataById = () => {
     const { uid } = firebase.auth().currentUser;
     console.log("TEST:NINO", user);
@@ -63,6 +45,7 @@ const PerfilNinoScreen = ({ route, navigation }) => {
     return ServiceManager.prototype.Post(parametros);
   };
 
+   //FUNCION CHARTS
   const getRecordChild = async () => {
     const childData = await postChildDataById();
     console.log("CHILDDATA:", childData);

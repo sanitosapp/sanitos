@@ -8,13 +8,13 @@ import {
   LayoutAnimation,
 } from "react-native";
 import AwesomeAlert from "react-native-awesome-alerts";
-import { firebase } from "./utils/firebase";
-import styles from "./styles/stylesLoginScreen";
+import { firebase } from "../utils/firebase";
+import styles from "../styles/stylesLoginScreen";
 import { EvilIcons,AntDesign } from '@expo/vector-icons'; 
 
 import * as Expo from 'expo';
 
-//VISTA LOGIN
+//VISTA INICIO SESION USUARIO
 
 const LoginScreen = ({ navigation }) => {
   LayoutAnimation.easeInEaseOut();
@@ -25,6 +25,7 @@ const LoginScreen = ({ navigation }) => {
   const [errorMessage, setErrorMessage] = useState(null);
   const [showAlert, setShowAlert] = useState(false);
 
+   //FUNCION INICIO SESION DE USUARIO CON CORREO
   const handleLogin = () => {
     if (email !== "" && password !== "") {
       firebase
@@ -38,6 +39,7 @@ const LoginScreen = ({ navigation }) => {
     }
   };
 
+  //FUNCION INICIO SESION DE USUARIO CON GOOGLE
   const signInWithGoogleAsync = async () => {
     try {
       const result = await Google.logInAsync({
@@ -55,6 +57,8 @@ const LoginScreen = ({ navigation }) => {
       return { error: true };
     }
   }
+
+  //FUNCION INICIO SESION DE USUARIO CON FACEBOOK
 
   return (
     <View style={styles.container}>

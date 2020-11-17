@@ -16,12 +16,12 @@ import DateTimePicker from "@react-native-community/datetimepicker";
 import moment from "moment";
 import "moment/locale/es";
 import { MaterialIcons } from "@expo/vector-icons";
-import { firebase } from "./utils/firebase";
-import styles from "./styles/stylesHomeScreen";
-import Userpermision from "./utils/Userpermision";
-import CardChildUsers from "./components/cardChildUsers";
-import { newbornVaccines, vaccines } from "./utils/const";
-import { saveRemindersNewborn } from "./hooks/firebase";
+import { firebase } from "../utils/firebase";
+import styles from "../styles/stylesHomeScreen";
+import Userpermision from "../utils/Userpermision";
+import CardChildUsers from "../components/cardChildUsers";
+import { newbornVaccines, vaccines } from "../utils/const";
+import { saveRemindersNewborn } from "../hooks/firebase";
 import AwesomeAlert from "react-native-awesome-alerts";
 import * as ImagePicker from "expo-image-picker";
 
@@ -58,6 +58,7 @@ const HomeScreen = ({ navigation }) => {
     Userpermision.getPermissionAsync();
   }, []);
 
+  //FUNCION OBTENER DATOS DE FIRESTORE
   const getData = async (uid) => {
     const querySnapshot = firebase
       .firestore()
@@ -86,6 +87,7 @@ const HomeScreen = ({ navigation }) => {
     setName(name);
   };
 
+  //FUNCION AGREGAR NIÑA/O
   const buttonPressed = () => {
     if (selectDate && name !== "" && gender !== "" && sangre !== "") {
       let now = new Date(date);
@@ -103,6 +105,7 @@ const HomeScreen = ({ navigation }) => {
     }
   };
 
+  //FUNCION GUARDAR RECORDATORIOS
   const handleSaveReminders = async (
     firstReminder,
     SecondReminder,
@@ -174,6 +177,8 @@ const HomeScreen = ({ navigation }) => {
       vaccinationDate
     );
   };
+
+  //FUNCION AGREGAR NIÑO A FIRESTORE
   const handleAddChildUser = (documentChildUser, now) => {
     const ref = firebase
       .firestore()
@@ -208,6 +213,7 @@ const HomeScreen = ({ navigation }) => {
             }) */
   };
 
+  //FUNCION AGREGAR VACUNAS
   const handleAddVaccines = (ref, id, now) => {
     const refChild = ref.doc(id).collection("vacunas");
     const ChildId = id;
@@ -245,7 +251,7 @@ const HomeScreen = ({ navigation }) => {
   };
 
   const onChange = (event, selectedDate) => {
-    const dateFormat = moment(selectedDate).format("LL");
+    const dateFormat = moment(selectedDate).format("DD/MM/YY");
     const currentDate = selectedDate || date;
     setShow(Platform.OS === "ios");
     setDate(currentDate);
@@ -262,6 +268,7 @@ const HomeScreen = ({ navigation }) => {
     showMode("date");
   };
 
+  //FUNCION OBTENER URI DE IMAGEN , FOTO QUE SE AGREGA DEL NIÑO
   const uriToBlob = (uri) => {
     return new Promise((resolve, reject) => {
       const xhr = new XMLHttpRequest();
@@ -284,6 +291,7 @@ const HomeScreen = ({ navigation }) => {
     });
   };
 
+  //FUNCION ALMACENAR FOTO EN STORAGE
   const uploadToFirebase = (blob) => {
     return new Promise((resolve, reject) => {
       var storageRef = firebase.storage().ref();
@@ -304,6 +312,7 @@ const HomeScreen = ({ navigation }) => {
     });
   };
 
+  //FUNCION PARA PODER SELECCIONAR UNA FOTO DE LIBRERIA DE USUARIO 
   const pickImage = () => {
     ImagePicker.launchImageLibraryAsync({
       mediaTypes: "Images",

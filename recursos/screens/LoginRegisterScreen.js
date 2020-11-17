@@ -1,8 +1,8 @@
 import React from "react";
 import { View, Text, TouchableOpacity, Image, StatusBar } from "react-native";
-import styles from "./styles/stylesLoginRegisterScreen";
+import styles from "../styles/stylesLoginRegisterScreen";
 
-//VISTA REGISTRO USUARIO NUEVO
+//VISTA ATERRIZAJE USUARIO
 
 const LoginRegisterScreen = ({ navigation }) => {
 
@@ -11,7 +11,7 @@ const LoginRegisterScreen = ({ navigation }) => {
       <StatusBar barStyle="light-content"></StatusBar>
       <Image
         resizeMode="contain"
-        source={require("../recursos/imagenes/logoSanitos.png")}
+        source={require("../imagenes/logoSanitos.png")}
         style={styles.icon}
       />
       <View

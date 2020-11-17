@@ -14,12 +14,12 @@ import DateTimePicker from "@react-native-community/datetimepicker";
 import moment from "moment";
 import "moment/locale/es";
 import { MaterialIcons, Feather } from "@expo/vector-icons";
-import { firebase } from "./utils/firebase";
-import styles from "./styles/stylesPesoScreen";
+import { firebase } from "../utils/firebase";
+import styles from "../styles/stylesPesoScreen";
 import AwesomeAlert from "react-native-awesome-alerts";
 import NumericInput from "@wwdrew/react-native-numeric-textinput";
 
-//VISTA HOME PRINCIPAL
+//VISTA PESO
 const PesoScreen = ({ route, navigation }) => {
   LayoutAnimation.easeInEaseOut();
 
@@ -55,6 +55,7 @@ const PesoScreen = ({ route, navigation }) => {
     getDataWeight(uid, idPesos.id);
   }, []);
 
+  //FUNCION PARA OBTENER LOS DATOS DE FIRESTORE
   const getDataWeight = async (uid, childId) => {
     const querySnapshot = firebase
       .firestore()
@@ -83,6 +84,7 @@ const PesoScreen = ({ route, navigation }) => {
     });
   };
 
+  //FUNCION PARA AGREGAR FECHA
   const onChange = (event, selectedDate) => {
     const dateFormat = moment(selectedDate).format("DD/MM/YY");
     setShow(Platform.OS === "ios");
@@ -99,6 +101,7 @@ const PesoScreen = ({ route, navigation }) => {
     }
   };
 
+  //FUNCION PARA EDITAR FECHA
   const onChangeUpdate = (event, selectedDate) => {
     const dateFormat = moment(selectedDate).format("DD/MM/YY");
     setShow(Platform.OS === "ios");
@@ -125,6 +128,7 @@ const PesoScreen = ({ route, navigation }) => {
     showMode("date");
   };
 
+  //FUNCION QUE AGREGA PESO Y FECHA 1
   const handleOnChange = () => {
     if (selectDate && peso !== "") {
       let now = new Date(date);
@@ -140,6 +144,7 @@ const PesoScreen = ({ route, navigation }) => {
     }
   };
 
+  //FUNCION QUE EDITA PESO Y FECHA 1
   const handleOnChangeEdit = () => {
     if (registroActivoActualizar.weight !== "") {
       let now = new Date(dateUpdate);
@@ -155,6 +160,7 @@ const PesoScreen = ({ route, navigation }) => {
     }
   };
 
+  //FUNCION QUE AGREGA PESO
   const handleAddWeight = (documentChildWeight) => {
     const ref = firebase
       .firestore()
@@ -176,6 +182,7 @@ const PesoScreen = ({ route, navigation }) => {
       });
   };
 
+  //FUNCION QUE EDITA PESO
   const handleEditWeight = (documentChildWeight) => {
     const { id } = registroActivoActualizar;
     const ref = firebase
@@ -223,7 +230,7 @@ const PesoScreen = ({ route, navigation }) => {
             return (
               <View style={styles.boxWeight}>
                 <Text style={styles.textPeso}>{date}</Text>
-                <Text style={styles.textPeso}>{weight} </Text>
+                <Text style={styles.textPeso}>{weight} kg </Text>
                 <TouchableOpacity onPress={() => openModal(doc)}>
                   <Feather name="edit" size={24} color="#b0b0b0" />
                 </TouchableOpacity>
@@ -297,9 +304,7 @@ const PesoScreen = ({ route, navigation }) => {
                   style={styles.buttonModal}
                   onPress={() => handleOnChange()}
                 >
-                  <Text style={{ color: "#ffffff", fontWeight: "500" }}>
-                    Agregar
-                  </Text>
+                  <Text style={{ color: "#ffffff", fontWeight: "500" }}>Agregar</Text>
                 </TouchableOpacity>
               </View>
             </View>

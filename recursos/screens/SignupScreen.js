@@ -6,12 +6,13 @@ import {
   TextInput,
   Image,
 } from "react-native-gesture-handler";
-import { firebase } from "./utils/firebase";
-import styles from "./styles/stylesSignupScreen";
+import { firebase } from "../utils/firebase";
+import styles from "../styles/stylesSignupScreen";
 import { EvilIcons, AntDesign } from "@expo/vector-icons";
-import { saveTokenPhone } from "./hooks/firebase";
-import { getPhoneToken } from "./commons/user";
+import { saveTokenPhone } from "../hooks/firebase";
+import { getPhoneToken } from "../commons/user";
 
+ //VISTA REGISTRAR USUARIO
 const SignupScreen = ({ navigation }) => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -22,12 +23,13 @@ const SignupScreen = ({ navigation }) => {
   const [showAlertPassword, setShowAlertPassword] = useState(false);
   const [isLoading, setLoading] = useState(false);
 
+   //FUNCION REGISTRAR USUARIO CON FIREBASE
   const handleSignUp = async () => {
     try {
       if (email !== "" && password !== "" && cpassword !== "" && name !== "") {
         const { user } = await firebase
           .auth()
-          .createUserWithEmailAndPassword(email, password);
+          .createUserWithEmailAndPassword(email, password, name);
         await user.updateProfile({
           displayName: name,
         });

@@ -8,13 +8,15 @@ import {
   TextInput,
   Alert,
 } from "react-native";
-import { firebase } from "./utils/firebase";
-import styles from "./styles/stylesProfileScreen";
+import { firebase } from "../utils/firebase";
+import styles from "../styles/stylesProfileScreen";
 import { MaterialCommunityIcons } from '@expo/vector-icons'; 
 
 //VISTA PERFIL USUARIO
 
 const ProfileScreen = ({navigation}) => {
+
+   //FUNCION PARA CERRAR SESION
   const signOutUser = () => {
     firebase.auth().signOut();
   };

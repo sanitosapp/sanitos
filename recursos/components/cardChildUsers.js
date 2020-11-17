@@ -34,14 +34,10 @@ const CardChildUsers = ({ childUsers, navigation }) => {
               />
             </View>
             <View style={styles.paddingCard}>
-              <Text style={styles.textCardChild}>
-                Nombre: <Text style={styles.textCardChildName}>{name}</Text>{" "}
-              </Text>
               <Text style={styles.textCardChild}>Nacimiento: {birthday} </Text>
               <Text style={styles.textCardChild}>
                 Tipo de sangre: {bloodType}
               </Text>
-              <Text style={styles.textCardChild}>Sexo: {gender} </Text>
             </View>
           </View>
         </View>

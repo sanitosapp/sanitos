@@ -39,16 +39,14 @@ const styles = StyleSheet.create({
     textTransform: "uppercase",
   },
   targetVacunas: {
-    width: "85%",
-    marginTop: 50,
+    marginHorizontal:30,
+    marginTop: 20,
     height: 160,
   },
   paddingCard: {
-    paddingTop: 20,
+    paddingVertical: 10,
     marginTop: 4,
-    padding: 6,
     backgroundColor: "#fff",
-    height: 160,
     borderRadius: 4,
     elevation: 10,
     shadowOpacity: 0.5,
@@ -59,10 +57,16 @@ const styles = StyleSheet.create({
       height: -1,
     },
   },
-  boxVacunas: {
-    alignItems: "center",
-    justifyContent: "center",
-    marginVertical: 10,
+  negrita:{
+    fontWeight:"bold",
+  },
+  justificada:{
+    marginTop:6,
+    textAlign:"justify"
+  },
+  infovacuna:{
+    marginTop:20,
+    marginHorizontal:30,
   },
   buttonVacuna: {
     alignItems: "center",
@@ -128,7 +132,6 @@ const styles = StyleSheet.create({
   targetTitle: {
     backgroundColor: "#1D96A3",
     shadowColor: "#000",
-    width: "100%",
     padding: 6,
     borderRadius: 4,
     elevation: 10,
@@ -331,11 +334,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   container: {
-    marginVertical: 16,
     flex: 1,
-    alignItems: "flex-start",
-    flexDirection: "row",
-    justifyContent: "center",
   },
 });
 

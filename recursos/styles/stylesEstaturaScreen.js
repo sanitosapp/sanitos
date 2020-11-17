@@ -13,6 +13,10 @@ const styles = StyleSheet.create({
     width: 300,
     left: 30,
   },
+  textPeso:{
+    color:"#b0b0b0",
+    fontSize:14,
+  },
   inputBirthday: {
     marginTop:10,
     marginHorizontal: 30,

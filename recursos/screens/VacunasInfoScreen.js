@@ -4,18 +4,20 @@ import {
   Modal,
   Text,
   View,
+  ScrollView,
   TouchableOpacity,
   YellowBox,
   Switch,
 } from "react-native";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { MaterialIcons } from "@expo/vector-icons";
-import { firebase } from "./utils/firebase";
-import styles from "./styles/stylesVacunasInfoScreen";
+import { firebase } from "../utils/firebase";
+import styles from "../styles/stylesVacunasInfoScreen";
 import moment from "moment";
 import "moment/locale/es";
-import { saveReminders } from "./hooks/firebase";
+import { saveReminders } from "../hooks/firebase";
 
+//VISTA INFORMACION DE CADA VACUNA
 const VacunasInfoScreen = ({ route, navigation }) => {
   const [date, setDate] = useState(new Date());
   const [estado, setEstado] = useState(null);
@@ -47,7 +49,7 @@ const VacunasInfoScreen = ({ route, navigation }) => {
   };
 
   const onChange = (event, selectedDate) => {
-    const dateFormat = moment(selectedDate).format("LL");
+    const dateFormat = moment(selectedDate).format("DD/MM/YY");
     const currentDate = selectedDate || date;
     setShow(Platform.OS === "ios");
     setDate(currentDate);
@@ -64,6 +66,7 @@ const VacunasInfoScreen = ({ route, navigation }) => {
     showMode("date");
   };
 
+   //FUNCION PARA RECORDATORIO NOTIFICACIONES VACUNA
   const handleOnChange = async () => {
     if (selectDate && estado !== null) {
       let now = new Date(date);
@@ -153,16 +156,16 @@ const VacunasInfoScreen = ({ route, navigation }) => {
   const toggleSwitch = () => setIsEnabled((previousState) => !previousState);
 
   return (
-    <View>
-      <View style={styles.boxVacunas}>
+    <ScrollView style={styles.container}>
+      <View>
         <View style={styles.targetVacunas}>
           <View style={styles.targetTitle}>
             <Text style={styles.titleStyle}>{vacunaInfo.vaccine}</Text>
           </View>
           <View style={styles.paddingCard}>
-            <Text style={styles.textVacuna}>{vacunaInfo.time}</Text>
+            <Text style={styles.textVacuna}><Text style={styles.negrita}>Tiempo de aplicación:</Text> {vacunaInfo.time}</Text>
             <Text style={styles.textVacuna}>
-              {vacunaInfo.dose === "no tiene" ? null : vacunaInfo.dose}
+            <Text style={styles.negrita}>Dosis o refuerzo:</Text> {vacunaInfo.dose === "no tiene" ? null : vacunaInfo.dose}
               {vacunaInfo.reinforcement === "no tiene"
                 ? null
                 : vacunaInfo.reinforcement}{" "}
@@ -186,18 +189,15 @@ const VacunasInfoScreen = ({ route, navigation }) => {
             </View>
           </View>
         </View>
-        <View>
+        <View style={styles.infovacuna}>
           <View>
-            <Text style={styles.textVacuna}>{vacunaInfo.diseases}</Text>
+            <Text style={styles.justificada}><Text style={styles.negrita}>Información:</Text> {vacunaInfo.information}</Text>
           </View>
           <View>
-            <Text style={styles.textVacuna}>{vacunaInfo.administration}</Text>
+            <Text style={styles.justificada}><Text style={styles.negrita}>Administración:</Text> {vacunaInfo.administration}</Text>
           </View>
           <View>
-            <Text style={styles.textVacuna}>{vacunaInfo.vaccinebrands}</Text>
-          </View>
-          <View>
-            <Text style={styles.textVacuna}>{vacunaInfo.effect}</Text>
+            <Text style={styles.justificada}><Text style={styles.negrita}>Efectos adversos:</Text> {vacunaInfo.effect}</Text>
           </View>
         </View>
 
@@ -296,7 +296,7 @@ const VacunasInfoScreen = ({ route, navigation }) => {
           </View>
         </Modal>
       </View>
-    </View>
+    </ScrollView>
   );
 };
 

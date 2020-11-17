@@ -10,17 +10,15 @@ import { createDrawerNavigator } from "@react-navigation/drawer";
 
 import {MaterialCommunityIcons, Feather } from "@expo/vector-icons";
 
-import HomeScreen from "../HomeScreen";
-import LoadingScreen from "../LoadingScreen";
-import VacunasScreen from "../VacunasScreen";
-import EstaturaScreen from "../EstaturaScreen";
-import PesoScreen from "../PesoScreen";
-import PostScreen from "../PostScreen";
-import PerfilNinoScreen from "../PerfilNinoScreen";
-import ProfileScreen from "../ProfileScreen";
-import CuentaScreen from "../CuentaScreen";
-import CuentaEditScreen from "../CuentaEditScreen";
-import VacunasInfoScreen from "../VacunasInfoScreen";
+import HomeScreen from "../screens/HomeScreen";
+import VacunasScreen from "../screens/VacunasScreen";
+import EstaturaScreen from "../screens/EstaturaScreen";
+import PesoScreen from "../screens/PesoScreen";
+import PerfilNinoScreen from "../screens/PerfilNinoScreen";
+import ProfileScreen from "../screens/ProfileScreen";
+import CuentaScreen from "../screens/CuentaScreen";
+import CuentaEditScreen from "../screens/CuentaEditScreen";
+import VacunasInfoScreen from "../screens/VacunasInfoScreen";
 import ChildChartScreen from "../chart/ChildChartScreen";
 
 const Stack = createStackNavigator();
@@ -307,7 +305,7 @@ const CrecimientoStackScreen = () => {
 const PostStackScreen = () => {
   return (
     <PostStack.Navigator headerMode="none">
-      <PostStack.Screen name="Post" component={PostScreen} />
+      <PostStack.Screen name="Post" component={ProfileScreen}/>
     </PostStack.Navigator>
   );
 };
