@@ -1,0 +1,35 @@
+{
+    "idHijo":1,
+    "nombre":"Mariana",
+    "fechaNacimiento":"01-01-2020",
+    "historialPeso":[
+       {
+          "fechaRegistro":"01-08-2020",
+          "peso":9.031
+       },
+       {
+          "fechaRegistro":"01-09-2020",
+          "peso":10.031
+       },
+       {
+          "fechaRegistro":"14-10-2020",
+          "peso":11.031
+       }
+    ],
+    "historialEstatura":[
+       {
+          "fechaRegistro":"01-08-2020",
+          "estatura":73.031
+       },
+       {
+          "fechaRegistro":"01-09-2020",
+          "estatura":74.031
+       },
+       {
+          "fechaRegistro":"14-10-2020",
+          "estatura":75.031
+       }
+    ]
+ }
+ 
+ 

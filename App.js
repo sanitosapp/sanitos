@@ -1,98 +1,87 @@
-import React from "react";
-/*import logoSanitos from './recursos/imagenes/logoSanitos.png';*/
-import { createAppContainer, createSwitchNavigator } from "react-navigation";
-import { createStackNavigator } from "react-navigation-stack";
-import { createBottomTabNavigator } from "react-navigation-tabs";
-import { Ionicons } from "@expo/vector-icons";
+import React, { useState, useEffect, useRef } from "react";
+import Constants from "expo-constants";
+import * as Notifications from "expo-notifications";
+import * as Permissions from "expo-permissions";
+import AuthNavigator from "./recursos/navigation/AuthNavigator";
+import { setPhoneToken } from "./recursos/commons/user";
 
-import LoadingScreen from "./recursos/LoadingScreen";
-import LoginRegisterScreen from "./recursos/LoginRegisterScreen";
-import LoginScreen from "./recursos/LoginScreen";
-import SignupScreen from "./recursos/SignupScreen";
-import VacunasScreen from "./recursos/VacunasScreen";
-import VacunasInfoScreen from "./recursos/VacunasInfoScreen";
-import EstaturaScreen from "./recursos/EstaturaScreen";
-import PesoScreen from "./recursos/PesoScreen";
-import PostScreen from "./recursos/PostScreen";
-import PerfilNinoScreen from "./recursos/PerfilNinoScreen";
-import HomeScreen from "./recursos/HomeScreen";
-import ProfileScreen from "./recursos/ProfileScreen";
-import AgregarNinoScreen from "./recursos/AgregarNinoScreen";
-import ForgotPasswordScreen from "./recursos/ForgotPasswordScreen";
-
-const AppTabNavigator = createBottomTabNavigator(
-  {
-    Home: {
-      screen: HomeScreen,
-      navigationOptions: {
-        tabBarIcon: ({ tintColor }) => (
-          <Ionicons name="ios-home" size={24} color={tintColor} />
-        ),
-      },
-    },
-    Post: {
-      screen: PostScreen,
-      navigationOptions: {
-        tabBarIcon: ({ tintColor }) => (
-          <Ionicons
-            name="ios-add-circle"
-            size={48}
-            color={"#E9446A"}
-            style={{
-              shadowColor: "#E9446A",
-              shadowOffset: {
-                width: 0,
-                height: 0,
-                shadowRadius: 10,
-                shadowOpacity: 0.3,
-              },
-            }}
-          />
-        ),
-      },
-    },
-    Profile: {
-      screen: ProfileScreen,
-      navigationOptions: {
-        tabBarIcon: ({ tintColor }) => (
-          <Ionicons name="ios-person" size={24} color={tintColor} />
-        ),
-      },
-    },
-  },
-  {
-    tabBarOptions: {
-      activeTintColor: "#161F3D",
-      inactiveTintColor: "#B8BBC4",
-      showLabel: false,
-    },
-  }
-);
-
-const AuthStack = createStackNavigator({
-  LoginRegister: LoginRegisterScreen,
-  Login: LoginScreen,
-  Register: SignupScreen,
-  Home: HomeScreen,
-  App: AppTabNavigator,
-  Nino: PerfilNinoScreen,
-  ForgotPassword: ForgotPasswordScreen,
-  Vacunas: VacunasScreen,
-  VacunasInfo: VacunasInfoScreen,
-  Peso: PesoScreen,
-  Estatura: EstaturaScreen,
-  AgregarNino: AgregarNinoScreen,
+Notifications.setNotificationHandler({
+  handleNotification: async () => ({
+    shouldShowAlert: true,
+    shouldPlaySound: false,
+    shouldSetBadge: false,
+  }),
 });
 
-export default createAppContainer(
-  createSwitchNavigator(
-    {
-      Loading: LoadingScreen,
-      App: AppTabNavigator,
-      Auth: AuthStack,
-    },
-    {
-      initialRouteName: "Loading",
+const App = () => {
+  const [notification, setNotification] = useState(false);
+  const notificationListener = useRef();
+  const responseListener = useRef();
+
+  useEffect(() => {
+    registerForPushNotificationsAsync().then((token) => {
+      setPhoneToken(token);
+    });
+
+    // This listener is fired whenever a notification is received while the app is foregrounded
+    notificationListener.current = Notifications.addNotificationReceivedListener(
+      (notification) => {
+        setNotification(notification);
+      }
+    );
+
+    // This listener is fired whenever a user taps on or interacts with a notification (works when app is foregrounded, backgrounded, or killed)
+    responseListener.current = Notifications.addNotificationResponseReceivedListener(
+      (response) => {
+        console.log(response);
+      }
+    );
+
+    return () => {
+      Notifications.removeNotificationSubscription(notificationListener);
+      Notifications.removeNotificationSubscription(responseListener);
+    };
+  }, []);
+
+  const registerForPushNotificationsAsync = async () => {
+    let token;
+    try {
+      if (Constants.isDevice) {
+        const { status: existingStatus } = await Permissions.getAsync(
+          Permissions.NOTIFICATIONS
+        );
+        let finalStatus = existingStatus;
+        if (existingStatus !== "granted") {
+          const { status } = await Permissions.askAsync(
+            Permissions.NOTIFICATIONS
+          );
+          finalStatus = status;
+        }
+        if (finalStatus !== "granted") {
+          alert("Failed to get push token for push notification!");
+          return;
+        }
+        token = (await Notifications.getExpoPushTokenAsync()).data;
+      } else {
+        alert("Must use physical device for Push Notifications");
+      }
+
+      if (Platform.OS === "android") {
+        Notifications.setNotificationChannelAsync("default", {
+          name: "Recordatorios",
+          importance: Notifications.AndroidImportance.MAX,
+          vibrationPattern: [0, 250, 250, 250],
+          lightColor: "#FF231F7C",
+        });
+      }
+    } catch (error) {
+      console.log("error", error);
     }
-  )
-);
+
+    return token;
+  };
+
+  return <AuthNavigator />;
+};
+
+export default App;

@@ -3,72 +3,41 @@ import { StyleSheet } from "react-native";
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 30,
+    backgroundColor: '#F4F4F4'
   },
-  greeting: {
-    marginTop: 18,
-    fontSize: 20,
-    fontWeight: "400",
-    textAlign: "center",
-    color: "#424242",
-  },
-  errorMessage: {
-    color: "#E9446A",
-    height: 30,
+  button: {
+    backgroundColor: '#C13273',
+    width: "85%",
     alignItems: "center",
     justifyContent: "center",
-  },
-  error: {
-    color: "#E9446A",
-    fontSize: 13,
-    fontWeight: "600",
-    textAlign: "center",
-  },
-  inputTitle: {
-    color: "#8A8F9E",
-    fontSize: 10,
-    textTransform: "uppercase",
-  },
-  input: {
-    marginTop: 18,
-    borderWidth: 1,
-    borderRadius: 4,
-    borderColor: "#C4C4C4",
+    marginHorizontal: 30,
     height: 40,
-    fontSize: 16,
-    color: "#161F3D",
-    padding: 10,
-  },
-  buttonL: {
-    position: "absolute",
-    top: 482,
-    left: 30,
-    backgroundColor: "#E9446A",
     borderRadius: 4,
-    height: 40,
-    width: "100%",
-    alignItems: "center",
-    justifyContent: "center",
+    elevation: 16,
+    shadowOpacity: 1,
+    shadowRadius: 50,
+    shadowColor: "#000",
+    shadowOffset: {
+      widht: 1,
+      height: 1
+    }
   },
-  buttonR: {
-    position: "absolute",
-    top: 540,
-    left: 30,
-    backgroundColor: "#E9446A",
-    borderRadius: 4,
-    height: 40,
-    width: "100%",
-    alignItems: "center",
-    justifyContent: "center",
+  textButton: {
+    fontSize: 14,
+    color: "#fff",
   },
   icon: {
-    width: 205,
-    height: 205,
-    marginTop: 40,
+    width: 134,
+    height: 113,
+    marginTop: 132,
     alignSelf: "center",
   },
-  textButtonL: { color: "#ffffff", fontWeight: "500", fontSize: 16 },
-  textButtonR: { color: "#ffffff", fontWeight: "500", fontSize: 16 },
+  containerButton1:{
+    marginTop:237,
+  },
+  containerButton2:{
+    marginTop:18,
+  },
 });
 
 export default styles;

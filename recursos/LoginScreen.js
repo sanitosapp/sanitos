@@ -10,10 +10,15 @@ import {
 import AwesomeAlert from "react-native-awesome-alerts";
 import { firebase } from "./utils/firebase";
 import styles from "./styles/stylesLoginScreen";
+import { EvilIcons,AntDesign } from '@expo/vector-icons'; 
+
+import * as Expo from 'expo';
+
 //VISTA LOGIN
 
-const LoginScreen = (props) => {
+const LoginScreen = ({ navigation }) => {
   LayoutAnimation.easeInEaseOut();
+
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -25,22 +30,44 @@ const LoginScreen = (props) => {
       firebase
         .auth()
         .signInWithEmailAndPassword(email, password)
-        .catch((error) => setErrorMessage(error.message));
+        .catch((error) => {
+          setErrorMessage(error.message)
+        });
     } else {
       setShowAlert(true);
     }
   };
 
+  const signInWithGoogleAsync = async () => {
+    try {
+      const result = await Google.logInAsync({
+        androidClientId: "891797980558-7ddtuciou9g4v8hmc02il7odvg56oeh2.apps.googleusercontent.com",
+        //iosClientId: YOUR_CLIENT_ID_HERE,
+        scopes: ['profile', 'email'],
+      });
+  
+      if (result.type === 'success') {
+        return result.accessToken;
+      } else {
+        return { cancelled: true };
+      }
+    } catch (e) {
+      return { error: true };
+    }
+  }
+
   return (
     <View style={styles.container}>
       <StatusBar barStyle="light-content"></StatusBar>
-      <Text style={styles.greeting}>"Inicie sesión"</Text>
+      <Text style={styles.textTitle}>Inicie sesión</Text>
       <View style={styles.errorMessage}>
         {errorMessage && <Text style={styles.error}>{errorMessage}</Text>}
       </View>
 
-      <View style={styles.form}>
-        <View>
+      <View>
+        <View
+          style={styles.input1}
+        >
           <TextInput
             placeholder="Email"
             style={styles.input}
@@ -49,7 +76,9 @@ const LoginScreen = (props) => {
             value={email}
           />
         </View>
-        <View>
+        <View
+          style={styles.input2}
+        >
           <TextInput
             placeholder="Contraseña"
             style={styles.input}
@@ -60,26 +89,46 @@ const LoginScreen = (props) => {
           />
         </View>
       </View>
-      <TouchableOpacity onPress={() => props.navigation.navigate("")}>
-        <Text style={styles.textRecoverpassword}>¿Olvido su contraseña?</Text>
+      <TouchableOpacity onPress={() => navigation.push("")}>
+        <Text style={styles.textForgotPass}>¿Olvidó su contraseña?</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity style={styles.button} onPress={() => handleLogin()}>
-        <Text style={styles.textbutton}>Ingresar</Text>
-      </TouchableOpacity>
+      <View
+      style={styles.button1}
+      >
+        <TouchableOpacity style={styles.button} onPress={() => handleLogin()}>
+          <Text style={styles.textbutton}>Ingresar</Text>
+        </TouchableOpacity>
+      </View>
 
-      <TouchableOpacity style={styles.buttonFb}>
-        <Text style={styles.textbutton}>Ingresar con Facebook</Text>
-      </TouchableOpacity>
+      <View
+      style={styles.button2}
+      >
+        <TouchableOpacity style={styles.buttonFb}>
+        <EvilIcons name="sc-facebook" size={30} color="white" />
+          <Text style={styles.textbutton}>Ingresar con Facebook</Text>
+        </TouchableOpacity>
+      </View>
+
+      <View
+      style={styles.button3}
+      >
+        <TouchableOpacity style={styles.buttonGo}
+        onPress={() => signInWithGoogleAsync()}
+        >
+        <AntDesign name="google" size={20} color="red" />
+          <Text style={styles.textbutton1}>Ingresar con Google</Text>
+        </TouchableOpacity>
+      </View>
 
       <TouchableOpacity
-        style={styles.buttonRegister}
-        onPress={() => props.navigation.navigate("Register")}
+        style={styles.containerTextRegister}
+        onPress={() => navigation.push("Register")}
       >
-        <Text style={{ color: "#414959", fontSize: 14 }}>
+        <Text style={{ color: "#B0B0B0", fontSize: 12 }}>
           ¿No tiene cuenta?{" "}
-          <Text style={{ fontWeight: "500", color: "#05A4AC" }}>
-            Registrese aquí
+          <Text style={{ fontWeight: "500", color: "#1D96A3" }}>
+            Regístrese aquí
           </Text>
         </Text>
       </TouchableOpacity>
@@ -88,14 +137,14 @@ const LoginScreen = (props) => {
         show={showAlert}
         showProgress={false}
         title="Importante"
-        message="debe ingresar su correo y contraseña"
+        message="Debe ingresar su correo y contraseña"
         closeOnTouchOutside={true}
         closeOnHardwareBackPress={false}
         showCancelButton={false}
         showConfirmButton={true}
         cancelText="Cancelar"
         confirmText="Aceptar"
-        confirmButtonColor="#E9446A"
+        confirmButtonColor="#C13273"
         onCancelPressed={() => {
           setShowAlert(false);
         }}

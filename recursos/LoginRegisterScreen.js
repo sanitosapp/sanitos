@@ -4,7 +4,8 @@ import styles from "./styles/stylesLoginRegisterScreen";
 
 //VISTA REGISTRO USUARIO NUEVO
 
-const LoginRegisterScreen = (props) => {
+const LoginRegisterScreen = ({ navigation }) => {
+
   return (
     <View style={styles.container}>
       <StatusBar barStyle="light-content"></StatusBar>
@@ -13,19 +14,26 @@ const LoginRegisterScreen = (props) => {
         source={require("../recursos/imagenes/logoSanitos.png")}
         style={styles.icon}
       />
-
-      <TouchableOpacity
-        style={styles.buttonL}
-        onPress={() => props.navigation.navigate("Login")}
+      <View
+      style={styles.containerButton1}
       >
-        <Text style={styles.textButtonL}>Inicia sesión</Text>
-      </TouchableOpacity>
-      <TouchableOpacity
-        style={styles.buttonR}
-        onPress={() => props.navigation.navigate("Register")}
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => navigation.push("Login")}
+        >
+          <Text style={styles.textButton}>Inicia sesión</Text>
+        </TouchableOpacity>
+      </View>
+      <View
+      style={styles.containerButton2}
       >
-        <Text style={styles.textButtonR}>Regístrate</Text>
-      </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => navigation.push("Register")}
+        >
+          <Text style={styles.textButton}>Regístrate</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 };
