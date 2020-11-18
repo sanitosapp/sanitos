@@ -26,6 +26,7 @@ const VacunasScreen = ({ route, navigation }) => {
   const [activeAll, setActiveAll] = useState(true);
   const [activeSlopes, setActiveSlopes] = useState(false);
   const [activeApplied, setActiveApplied] = useState(false);
+  const [vacunaApplied, setVacunaApplied] = useState(false);
   const [uid, setUid] = useState("");
   const [childId, setChildId] = useState("");
   const [nameChild, setNameChild] = useState("");
@@ -177,11 +178,10 @@ const VacunasScreen = ({ route, navigation }) => {
                     </Text>
                   </View>
                   <View style={{ flexDirection: "row", justifyContent:"space-around"  }}>
-                    <Text style={styles.textVacuna}>
+                    <Text 
+                    style={state === "Vacuna aplicada" ? styles.vacunaAplicada: styles.vacunaPendiente}
+                    >
                       {state ? "Vacuna aplicada" : "Vacuna pendiente"}
-                    </Text>
-                    <Text style={styles.textVacuna}>
-                      
                     </Text>
                   </View>
                 </View>

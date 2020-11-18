@@ -26,6 +26,12 @@ const styles = StyleSheet.create({
     width: "33.3%",
 
   },
+  vacunaAplicada: {
+    color: "green"
+  },
+  vacunaPendiente: {
+    color: "red"
+  },
   infoCard: {
     marginBottom: 24,
     borderWidth: 1,
