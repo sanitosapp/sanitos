@@ -10,13 +10,73 @@ import {
 import AwesomeAlert from "react-native-awesome-alerts";
 import { firebase } from "../utils/firebase";
 import styles from "../styles/stylesLoginScreen";
-import { EvilIcons,AntDesign } from '@expo/vector-icons'; 
+import { EvilIcons, AntDesign } from '@expo/vector-icons';
+import Constants from 'expo-constants';
+import * as Google from 'expo-google-app-auth';
+import * as Facebook from "expo-facebook";
+import { androidClientId } from "../utils/const";
+/* SOCIAL MEDIA */
+const appId = Constants.manifest.facebookAppId;
 
-import * as Expo from 'expo';
+const LoginWithGoogle = async () => {
+  try {
+    const { type, idToken, accessToken } = await Google.logInAsync({
+      androidClientId,
+      clientId: androidClientId,
+      // iosClientId: YOUR_CLIENT_ID_HERE,
+      scopes: ['profile', 'email'],
+    });
+    if (type === 'success') {
+      // return result.accessToken;
+      await firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL);
+      const credential = firebase.auth.GoogleAuthProvider.credential(idToken, accessToken);
+      firebase.auth().signInWithCredential(credential)
+        .then(user => { // All the details about user are in here returned from firebase
+          // console.log('Logged in successfully', user)
+        })
+        .catch((error) => {
+          console.log('Error occurred ', error)
+        });
+    } else {
+      return { cancelled: true };
+    }
+  } catch ({ message }) {
+    alert(`Facebook Login Error: ${message}`);
+  }
+}
+
+const Facebooklogin = async () => {
+  try {
+    await Facebook.initializeAsync(appId); // enter your Facebook App Id 
+    const { type, token } = await Facebook.logInWithReadPermissionsAsync({
+      permissions: ['public_profile', 'email'],
+    });
+    if (type === 'success') {
+      // SENDING THE TOKEN TO FIREBASE TO HANDLE AUTH
+      const credential = firebase.auth.FacebookAuthProvider.credential(token);
+      firebase.auth().signInWithCredential(credential)
+        .then(user => { // All the details about user are in here returned from firebase
+          // console.log('Logged in successfully', user)
+        })
+        .catch((error) => {
+          console.log('Error occurred ', error)
+        });
+    } else {
+      // type === 'cancel'
+    }
+  } catch ({ message }) {
+    alert(`Facebook Login Error: ${message}`);
+  }
+}
 
 //VISTA INICIO SESION USUARIO
 
 const LoginScreen = ({ navigation }) => {
+
+  // React.useEffect(() => {
+  //   console.log("androidClientId", androidClientId);
+  // }, []);
+
   LayoutAnimation.easeInEaseOut();
 
 
@@ -47,7 +107,7 @@ const LoginScreen = ({ navigation }) => {
         //iosClientId: YOUR_CLIENT_ID_HERE,
         scopes: ['profile', 'email'],
       });
-  
+
       if (result.type === 'success') {
         return result.accessToken;
       } else {
@@ -98,7 +158,7 @@ const LoginScreen = ({ navigation }) => {
       </TouchableOpacity>
 
       <View
-      style={styles.button1}
+        style={styles.button1}
       >
         <TouchableOpacity style={styles.button} onPress={() => handleLogin()}>
           <Text style={styles.textbutton}>Ingresar</Text>
@@ -106,21 +166,21 @@ const LoginScreen = ({ navigation }) => {
       </View>
 
       <View
-      style={styles.button2}
+        style={styles.button2}
       >
-        <TouchableOpacity style={styles.buttonFb}>
-        <EvilIcons name="sc-facebook" size={30} color="white" />
+        <TouchableOpacity style={styles.buttonFb} onPress={Facebooklogin}>
+          <EvilIcons name="sc-facebook" size={30} color="white" />
           <Text style={styles.textbutton}>Ingresar con Facebook</Text>
         </TouchableOpacity>
       </View>
 
       <View
-      style={styles.button3}
+        style={styles.button3}
       >
         <TouchableOpacity style={styles.buttonGo}
-        onPress={() => signInWithGoogleAsync()}
+          onPress={() => LoginWithGoogle()}
         >
-        <AntDesign name="google" size={20} color="red" />
+          <AntDesign name="google" size={20} color="red" />
           <Text style={styles.textbutton1}>Ingresar con Google</Text>
         </TouchableOpacity>
       </View>

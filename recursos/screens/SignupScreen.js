@@ -4,13 +4,71 @@ import AwesomeAlert from "react-native-awesome-alerts";
 import {
   TouchableOpacity,
   TextInput,
-  Image,
 } from "react-native-gesture-handler";
 import { firebase } from "../utils/firebase";
 import styles from "../styles/stylesSignupScreen";
 import { EvilIcons, AntDesign } from "@expo/vector-icons";
 import { saveTokenPhone } from "../hooks/firebase";
 import { getPhoneToken } from "../commons/user";
+import Constants from 'expo-constants';
+import * as Google from 'expo-google-app-auth';
+import * as Facebook from "expo-facebook";
+import { androidClientId } from "../utils/const";
+
+/* SOCIAL MEDIA */
+const appId = Constants.manifest.facebookAppId;
+
+const LoginWithGoogle = async () => {
+  try {
+    const { type, idToken, accessToken } = await Google.logInAsync({
+      androidClientId,
+      clientId: androidClientId,
+      // iosClientId: YOUR_CLIENT_ID_HERE,
+      scopes: ['profile', 'email'],
+    });
+    if (type === 'success') {
+      // return result.accessToken;
+      await firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL);
+      const credential = firebase.auth.GoogleAuthProvider.credential(idToken, accessToken);
+      firebase.auth().signInWithCredential(credential)
+        .then(user => { // All the details about user are in here returned from firebase
+          // console.log('Logged in successfully', user)
+        })
+        .catch((error) => {
+          console.log('Error occurred ', error)
+        });
+    } else {
+      return { cancelled: true };
+    }
+  } catch ({ message }) {
+    alert(`LoginWithGoogle Login Error: ${message}`);
+  }
+}
+
+const Facebooklogin = async () => {
+  try {
+    await Facebook.initializeAsync(appId); // enter your Facebook App Id 
+    const { type, token } = await Facebook.logInWithReadPermissionsAsync({
+      permissions: ['public_profile', 'email'],
+    });
+    if (type === 'success') {
+      // SENDING THE TOKEN TO FIREBASE TO HANDLE AUTH
+      const credential = firebase.auth.FacebookAuthProvider.credential(token);
+      firebase.auth().signInWithCredential(credential)
+        .then(user => { // All the details about user are in here returned from firebase
+          // console.log('Logged in successfully', user)
+        })
+        .catch((error) => {
+          console.log('Error occurred ', error)
+        });
+    } else {
+      // type === 'cancel'
+    }
+  } catch ({ message }) {
+    alert(`Facebook Login Error: ${message}`);
+  }
+}
+
 
  //VISTA REGISTRAR USUARIO
 const SignupScreen = ({ navigation }) => {
@@ -23,7 +81,6 @@ const SignupScreen = ({ navigation }) => {
   const [showAlertPassword, setShowAlertPassword] = useState(false);
   const [isLoading, setLoading] = useState(false);
 
-   //FUNCION REGISTRAR USUARIO CON FIREBASE
   const handleSignUp = async () => {
     try {
       if (email !== "" && password !== "" && cpassword !== "" && name !== "") {
@@ -100,14 +157,15 @@ const SignupScreen = ({ navigation }) => {
       </View>
 
       <View style={styles.button2}>
-        <TouchableOpacity style={styles.buttonFb}>
+        <TouchableOpacity style={styles.buttonFb} onPress={Facebooklogin}>
           <EvilIcons name="sc-facebook" size={30} color="white" />
           <Text style={styles.textbutton}>Ingresar con Facebook</Text>
         </TouchableOpacity>
       </View>
 
       <View style={styles.button3}>
-        <TouchableOpacity style={styles.buttonGo}>
+        <TouchableOpacity style={styles.buttonGo}
+          onPress={() => LoginWithGoogle()}>
           <AntDesign name="google" size={20} color="red" />
           <Text style={styles.textbutton1}>Ingresar con Google</Text>
         </TouchableOpacity>

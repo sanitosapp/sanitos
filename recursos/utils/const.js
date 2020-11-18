@@ -1,4 +1,5 @@
 const enviroment = 'DEV';
+const androidClientId = "891797980558-gh899km8h1nlr5mi8kkovitt7urg2k78.apps.googleusercontent.com";
 const vaccines = () => [
   {
     dose: "Única dosis",
@@ -8,15 +9,15 @@ const vaccines = () => [
     time: "Recién nacido",
     days: 1,
     reminder: false,
-    date: "",    
-    information:"Esta vacuna previene la tuberculosis, enfermedad infecciosa producida por una bacteria. Se contagia por el contacto con enfermos que diseminan el microbio a través de la tos. La enfermedad se previene evitando el contacto próximo y mantenido con enfermos tuberculosos no tratados.",
+    date: "",
+    information: "Esta vacuna previene la tuberculosis, enfermedad infecciosa producida por una bacteria. Se contagia por el contacto con enfermos que diseminan el microbio a través de la tos. La enfermedad se previene evitando el contacto próximo y mantenido con enfermos tuberculosos no tratados.",
     diseases:
-    "",
-  administration: "Se inyecta por vía intradérmica, en la zona del hombro.",
-  vaccinebrands:
-    "",
-  effect:
-    "Es bastante frecuente que la vacunación produzca una reacción en el sitio de la inyección, se puede ulcerar y curar lentamente, y finalmente deja una pequeña cicatriz.",
+      "",
+    administration: "Se inyecta por vía intradérmica, en la zona del hombro.",
+    vaccinebrands:
+      "",
+    effect:
+      "Es bastante frecuente que la vacunación produzca una reacción en el sitio de la inyección, se puede ulcerar y curar lentamente, y finalmente deja una pequeña cicatriz.",
   },
   {
     dose: "Única dosis",
@@ -27,14 +28,14 @@ const vaccines = () => [
     date: "",
     days: 2,
     reminder: false,
-    information:"Esta vacuna previene la hepatitis B, que es una enfermedad infecciosa vírica que afecta al hígado y que provoca su inflamación. El causante es el virus de la hepatitis B y la transmisión es sobre todo por la vía sexual, aunque el recién nacido hijo de madre portadora del virus puede resultar contagiado durante el embarazo o en el momento del parto. También puede transmitirse a través del contacto con sangre de un portador.",
+    information: "Esta vacuna previene la hepatitis B, que es una enfermedad infecciosa vírica que afecta al hígado y que provoca su inflamación. El causante es el virus de la hepatitis B y la transmisión es sobre todo por la vía sexual, aunque el recién nacido hijo de madre portadora del virus puede resultar contagiado durante el embarazo o en el momento del parto. También puede transmitirse a través del contacto con sangre de un portador.",
     diseases:
-    "",
-  administration: "Se inyecta por vía intramuscular en el muslo o el brazo, según la edad. La pauta completa son 3 dosis.",
-  vaccinebrands:
-    "",
-  effect:
-    "Los efectos adversos son poco frecuentes y leves. Al estar incluida en vacunas combinadas deben ser tenidas también en cuenta otras reacciones secundarias debidas a los otros componentes. Las más frecuentes son fiebre, leve hinchazón o enrojecimiento en la zona de la inyección, o ligera irritabilidad o somnolencia en los días siguientes a su administración.",
+      "",
+    administration: "Se inyecta por vía intramuscular en el muslo o el brazo, según la edad. La pauta completa son 3 dosis.",
+    vaccinebrands:
+      "",
+    effect:
+      "Los efectos adversos son poco frecuentes y leves. Al estar incluida en vacunas combinadas deben ser tenidas también en cuenta otras reacciones secundarias debidas a los otros componentes. Las más frecuentes son fiebre, leve hinchazón o enrojecimiento en la zona de la inyección, o ligera irritabilidad o somnolencia en los días siguientes a su administración.",
   },
   {
     dose: "1ra dosis",
@@ -45,14 +46,14 @@ const vaccines = () => [
     date: "",
     days: 3,
     reminder: false,
-    information:"Vacuna que previene la difteria, tos convulsiva, tétanos, hepatitis B e Influenza tipo B.",
+    information: "Vacuna que previene la difteria, tos convulsiva, tétanos, hepatitis B e Influenza tipo B.",
     diseases:
-    "",
-  administration: "",
-  vaccinebrands:
-    "",
-  effect:
-    "",
+      "",
+    administration: "",
+    vaccinebrands:
+      "",
+    effect:
+      "",
   },
   {
     dose: "1ra dosis",
@@ -63,14 +64,14 @@ const vaccines = () => [
     time: "2 meses",
     date: "",
     reminder: false,
-    information:"Vacuna que previene de la poliomielitis, que es una enfermedad infecciosa vírica muy contagiosa, que habitualmente se pasa sin síntomas o como una gripe leve, pero que si afecta al sistema nervioso da lugar a una parálisis permanente de las piernas y a veces incluso a la muerte, por fallo de los músculos que nos ayudan a respirar.",
+    information: "Vacuna que previene de la poliomielitis, que es una enfermedad infecciosa vírica muy contagiosa, que habitualmente se pasa sin síntomas o como una gripe leve, pero que si afecta al sistema nervioso da lugar a una parálisis permanente de las piernas y a veces incluso a la muerte, por fallo de los músculos que nos ayudan a respirar.",
     diseases:
-    "",
-  administration: "Inyectable.",
-  vaccinebrands:
-    "",
-  effect:
-    "Los efectos adversos son poco frecuentes y leves. ",
+      "",
+    administration: "Inyectable.",
+    vaccinebrands:
+      "",
+    effect:
+      "Los efectos adversos son poco frecuentes y leves. ",
   },
   {
     dose: "1ra dosis",
@@ -81,14 +82,14 @@ const vaccines = () => [
     days: 5,
     reminder: false,
     date: "",
-    information:"Esta vacuna previene la gastroenteritis aguda por rotavirus, cuya complicación más común es la deshidratación. Suele presentarse con más frecuencia a bebés y niños pequeños. Este virus se trasmite de forma fecal-oral. El contagio se produce por contacto con personas enfermas, generalmente a través de las manos.",
+    information: "Esta vacuna previene la gastroenteritis aguda por rotavirus, cuya complicación más común es la deshidratación. Suele presentarse con más frecuencia a bebés y niños pequeños. Este virus se trasmite de forma fecal-oral. El contagio se produce por contacto con personas enfermas, generalmente a través de las manos.",
     diseases:
-    "",
-  administration: "Vía oral.",
-  vaccinebrands:
-    "",
-  effect:
-    "Se ha demostrado que son vacunas seguras tras amplios estudios buscando posibles efectos secundarios graves. Los efectos adversos más frecuentes son vómitos, diarrea y fiebre moderada, todos ellos leves. ",
+      "",
+    administration: "Vía oral.",
+    vaccinebrands:
+      "",
+    effect:
+      "Se ha demostrado que son vacunas seguras tras amplios estudios buscando posibles efectos secundarios graves. Los efectos adversos más frecuentes son vómitos, diarrea y fiebre moderada, todos ellos leves. ",
   },
   {
     dose: "1ra dosis",
@@ -99,14 +100,14 @@ const vaccines = () => [
     date: "",
     days: 6,
     reminder: false,
-    information:"Vacuna que previene la otitis, sepsis, meningitis y neumonías graves. Este microbio se encuentra habitualmente en la nariz y en la garganta, sobre todo de niños pequeños. Los signos y los síntomas incluyen fiebre, escalofríos, tos y dolor en el pecho.",
+    information: "Vacuna que previene la otitis, sepsis, meningitis y neumonías graves. Este microbio se encuentra habitualmente en la nariz y en la garganta, sobre todo de niños pequeños. Los signos y los síntomas incluyen fiebre, escalofríos, tos y dolor en el pecho.",
     diseases:
-    "",
-  administration: "",
-  vaccinebrands:
-    "",
-  effect:
-    "Las reacciones más frecuentes son leves, como dolor, enrojecimiento e hinchazón en la zona de la inyección, somnolencia, irritabilidad, disminución del apetito o fiebre moderada en las horas siguientes a su administración.",
+      "",
+    administration: "",
+    vaccinebrands:
+      "",
+    effect:
+      "Las reacciones más frecuentes son leves, como dolor, enrojecimiento e hinchazón en la zona de la inyección, somnolencia, irritabilidad, disminución del apetito o fiebre moderada en las horas siguientes a su administración.",
   },
   {
     dose: "2da dosis",
@@ -117,14 +118,14 @@ const vaccines = () => [
     days: 7,
     reminder: false,
     date: "",
-    information:"Vacuna que previene la difteria, tos convulsiva, tétanos, hepatitis B e Influenza tipo B.",
+    information: "Vacuna que previene la difteria, tos convulsiva, tétanos, hepatitis B e Influenza tipo B.",
     diseases:
-    "",
-  administration: "",
-  vaccinebrands:
-    "",
-  effect:
-    "",
+      "",
+    administration: "",
+    vaccinebrands:
+      "",
+    effect:
+      "",
   },
   {
     dose: "2da dosis",
@@ -134,14 +135,14 @@ const vaccines = () => [
     time: "4 meses",
     days: 8,
     date: "",
-    information:"Vacuna que previene de la poliomielitis, que es una enfermedad infecciosa vírica muy contagiosa, que habitualmente se pasa sin síntomas o como una gripe leve, pero que si afecta al sistema nervioso da lugar a una parálisis permanente de las piernas y a veces incluso a la muerte, por fallo de los músculos que nos ayudan a respirar.",
+    information: "Vacuna que previene de la poliomielitis, que es una enfermedad infecciosa vírica muy contagiosa, que habitualmente se pasa sin síntomas o como una gripe leve, pero que si afecta al sistema nervioso da lugar a una parálisis permanente de las piernas y a veces incluso a la muerte, por fallo de los músculos que nos ayudan a respirar.",
     diseases:
-    "",
-  administration: "Inyectable.",
-  vaccinebrands:
-    "",
-  effect:
-    "Los efectos adversos son poco frecuentes y leves. ",
+      "",
+    administration: "Inyectable.",
+    vaccinebrands:
+      "",
+    effect:
+      "Los efectos adversos son poco frecuentes y leves. ",
   },
   {
     dose: "2da dosis",
@@ -152,14 +153,14 @@ const vaccines = () => [
     days: 9,
     reminder: false,
     date: "",
-    information:"Esta vacuna previene la gastroenteritis aguda por rotavirus, cuya complicación más común es la deshidratación. Suele presentarse con más frecuencia a bebés y niños pequeños. Este virus se trasmite de forma fecal-oral. El contagio se produce por contacto con personas enfermas, generalmente a través de las manos.",
+    information: "Esta vacuna previene la gastroenteritis aguda por rotavirus, cuya complicación más común es la deshidratación. Suele presentarse con más frecuencia a bebés y niños pequeños. Este virus se trasmite de forma fecal-oral. El contagio se produce por contacto con personas enfermas, generalmente a través de las manos.",
     diseases:
-    "",
-  administration: "Vía oral.",
-  vaccinebrands:
-    "",
-  effect:
-    "Se ha demostrado que son vacunas seguras tras amplios estudios buscando posibles efectos secundarios graves. Los efectos adversos más frecuentes son vómitos, diarrea y fiebre moderada, todos ellos leves. ",
+      "",
+    administration: "Vía oral.",
+    vaccinebrands:
+      "",
+    effect:
+      "Se ha demostrado que son vacunas seguras tras amplios estudios buscando posibles efectos secundarios graves. Los efectos adversos más frecuentes son vómitos, diarrea y fiebre moderada, todos ellos leves. ",
 
   },
   {
@@ -171,14 +172,14 @@ const vaccines = () => [
     days: 10,
     reminder: false,
     date: "",
-    information:"Vacuna que previene la otitis, sepsis, meningitis y neumonías graves. Este microbio se encuentra habitualmente en la nariz y en la garganta, sobre todo de niños pequeños. Los signos y los síntomas incluyen fiebre, escalofríos, tos y dolor en el pecho.",
+    information: "Vacuna que previene la otitis, sepsis, meningitis y neumonías graves. Este microbio se encuentra habitualmente en la nariz y en la garganta, sobre todo de niños pequeños. Los signos y los síntomas incluyen fiebre, escalofríos, tos y dolor en el pecho.",
     diseases:
-    "",
-  administration: "",
-  vaccinebrands:
-    "",
-  effect:
-    "Las reacciones más frecuentes son leves, como dolor, enrojecimiento e hinchazón en la zona de la inyección, somnolencia, irritabilidad, disminución del apetito o fiebre moderada en las horas siguientes a su administración.",
+      "",
+    administration: "",
+    vaccinebrands:
+      "",
+    effect:
+      "Las reacciones más frecuentes son leves, como dolor, enrojecimiento e hinchazón en la zona de la inyección, somnolencia, irritabilidad, disminución del apetito o fiebre moderada en las horas siguientes a su administración.",
 
   },
   {
@@ -189,14 +190,14 @@ const vaccines = () => [
     time: "6 meses",
     days: 11,
     date: "",
-    information:"Vacuna que previene la difteria, tos convulsiva, tétanos, hepatitis B e Influenza tipo B.",
+    information: "Vacuna que previene la difteria, tos convulsiva, tétanos, hepatitis B e Influenza tipo B.",
     diseases:
-    "",
-  administration: "",
-  vaccinebrands:
-    "",
-  effect:
-    "",
+      "",
+    administration: "",
+    vaccinebrands:
+      "",
+    effect:
+      "",
   },
   {
     dose: "3ra dosis",
@@ -217,14 +218,14 @@ const vaccines = () => [
     days: 13,
     reminder: false,
     date: "",
-    information:"Previene la Influenza tipo B, que es una bacteria que produce infecciones graves, sobre todo en niños menores de 5 años, que pueden afectar fundamentalmente al pulmón (neumonía), la laringe (epiglotitis) y particularmente a las meninges, que son las membranas que envuelven el cerebro y la médula espinal, produciendo meningitis. Los signos y los síntomas pueden incluir problemas para respirar. Es posible que no haya signos ni síntomas en los casos leves. ",
+    information: "Previene la Influenza tipo B, que es una bacteria que produce infecciones graves, sobre todo en niños menores de 5 años, que pueden afectar fundamentalmente al pulmón (neumonía), la laringe (epiglotitis) y particularmente a las meninges, que son las membranas que envuelven el cerebro y la médula espinal, produciendo meningitis. Los signos y los síntomas pueden incluir problemas para respirar. Es posible que no haya signos ni síntomas en los casos leves. ",
     diseases:
-    "",
-  administration: "Se inyecta por vía intramuscular en el muslo o el brazo, según la edad. Puede administrarse el mismo día que se reciben otras vacunas diferentes o bien con cualquier intervalo con ellas, sin ninguna excepción.",
-  vaccinebrands:
-    "",
-  effect:
-    "Las reacciones más frecuentes son poco frecuentes y leves.",
+      "",
+    administration: "Se inyecta por vía intramuscular en el muslo o el brazo, según la edad. Puede administrarse el mismo día que se reciben otras vacunas diferentes o bien con cualquier intervalo con ellas, sin ninguna excepción.",
+    vaccinebrands:
+      "",
+    effect:
+      "Las reacciones más frecuentes son poco frecuentes y leves.",
   },
   {
     dose: "2da dosis",
@@ -234,14 +235,14 @@ const vaccines = () => [
     time: "7 meses",
     days: 14,
     date: "",
-    information:"Previene la Influenza tipo B, que es una bacteria que produce infecciones graves, sobre todo en niños menores de 5 años, que pueden afectar fundamentalmente al pulmón (neumonía), la laringe (epiglotitis) y particularmente a las meninges, que son las membranas que envuelven el cerebro y la médula espinal, produciendo meningitis. Los signos y los síntomas pueden incluir problemas para respirar. Es posible que no haya signos ni síntomas en los casos leves. ",
+    information: "Previene la Influenza tipo B, que es una bacteria que produce infecciones graves, sobre todo en niños menores de 5 años, que pueden afectar fundamentalmente al pulmón (neumonía), la laringe (epiglotitis) y particularmente a las meninges, que son las membranas que envuelven el cerebro y la médula espinal, produciendo meningitis. Los signos y los síntomas pueden incluir problemas para respirar. Es posible que no haya signos ni síntomas en los casos leves. ",
     diseases:
-    "",
-  administration: "Se inyecta por vía intramuscular en el muslo o el brazo, según la edad. Puede administrarse el mismo día que se reciben otras vacunas diferentes o bien con cualquier intervalo con ellas, sin ninguna excepción.",
-  vaccinebrands:
-    "",
-  effect:
-    "Las reacciones más frecuentes son poco frecuentes y leves.",
+      "",
+    administration: "Se inyecta por vía intramuscular en el muslo o el brazo, según la edad. Puede administrarse el mismo día que se reciben otras vacunas diferentes o bien con cualquier intervalo con ellas, sin ninguna excepción.",
+    vaccinebrands:
+      "",
+    effect:
+      "Las reacciones más frecuentes son poco frecuentes y leves.",
   },
   {
     dose: "3ra dosis",
@@ -252,14 +253,14 @@ const vaccines = () => [
     days: 15,
     reminder: false,
     date: "",
-    information:"Vacuna que previene la otitis, sepsis, meningitis y neumonías graves. Este microbio se encuentra habitualmente en la nariz y en la garganta, sobre todo de niños pequeños. Los signos y los síntomas incluyen fiebre, escalofríos, tos y dolor en el pecho.",
+    information: "Vacuna que previene la otitis, sepsis, meningitis y neumonías graves. Este microbio se encuentra habitualmente en la nariz y en la garganta, sobre todo de niños pequeños. Los signos y los síntomas incluyen fiebre, escalofríos, tos y dolor en el pecho.",
     diseases:
-    "",
-  administration: "",
-  vaccinebrands:
-    "",
-  effect:
-    "Las reacciones más frecuentes son leves, como dolor, enrojecimiento e hinchazón en la zona de la inyección, somnolencia, irritabilidad, disminución del apetito o fiebre moderada en las horas siguientes a su administración.",
+      "",
+    administration: "",
+    vaccinebrands:
+      "",
+    effect:
+      "Las reacciones más frecuentes son leves, como dolor, enrojecimiento e hinchazón en la zona de la inyección, somnolencia, irritabilidad, disminución del apetito o fiebre moderada en las horas siguientes a su administración.",
 
   },
   {
@@ -271,14 +272,14 @@ const vaccines = () => [
     days: 16,
     reminder: false,
     date: "",
-    information:"Previene del sarampión, la rubeola y paperas.",
+    information: "Previene del sarampión, la rubeola y paperas.",
     diseases:
-    "",
-  administration: "Se inyecta por vía intramuscular en el muslo o el brazo, según la edad. Puede administrarse el mismo día que se reciben otras vacunas diferentes o bien con cualquier intervalo con ellas, sin ninguna excepción.",
-  vaccinebrands:
-    "",
-  effect:
-    "Las reacciones más frecuentes son poco frecuentes y leves.",
+      "",
+    administration: "Se inyecta por vía intramuscular en el muslo o el brazo, según la edad. Puede administrarse el mismo día que se reciben otras vacunas diferentes o bien con cualquier intervalo con ellas, sin ninguna excepción.",
+    vaccinebrands:
+      "",
+    effect:
+      "Las reacciones más frecuentes son poco frecuentes y leves.",
   },
   {
     dose: "1ra dosis",
@@ -289,14 +290,14 @@ const vaccines = () => [
     reminder: false,
     days: 17,
     date: "",
-    information:"La varicela es una enfermedad infecciosa vírica muy frecuente en los niños. Se manifiesta fundamentalmente con fiebre moderada y una erupción característica en la piel, que provoca picor. Se contagia por el aire o por contacto directo.",
+    information: "La varicela es una enfermedad infecciosa vírica muy frecuente en los niños. Se manifiesta fundamentalmente con fiebre moderada y una erupción característica en la piel, que provoca picor. Se contagia por el aire o por contacto directo.",
     diseases:
-    "",
-  administration: "Se inyecta por vía subcutánea en el muslo o en el brazo, según la edad.",
-  vaccinebrands:
-    "",
-  effect:
-    "Las reacciones asociadas a la vacunación son poco frecuentes y todavía menos en la segunda dosis. Las más habituales son: dolor, picor y enrojecimiento en el lugar de la inyección y fiebre escasa entre 5 y 12 días después de recibirla. ",
+      "",
+    administration: "Se inyecta por vía subcutánea en el muslo o en el brazo, según la edad.",
+    vaccinebrands:
+      "",
+    effect:
+      "Las reacciones asociadas a la vacunación son poco frecuentes y todavía menos en la segunda dosis. Las más habituales son: dolor, picor y enrojecimiento en el lugar de la inyección y fiebre escasa entre 5 y 12 días después de recibirla. ",
   },
   {
     dose: "Única dosis",
@@ -317,14 +318,14 @@ const vaccines = () => [
     days: 19,
     reminder: false,
     date: "",
-    information:"La fiebre amarilla es una enfermedad aguda hemorrágica ocasionada por un virus transmitido por mosquitos. Se denomina “amarilla” por el color amarillento (ictericia) que presentan algunos enfermos. Se manifiesta por fiebre, escalofríos, dolores musculares y de cabeza a los 3-6 días de la picadura del mosquito infectado.",
+    information: "La fiebre amarilla es una enfermedad aguda hemorrágica ocasionada por un virus transmitido por mosquitos. Se denomina “amarilla” por el color amarillento (ictericia) que presentan algunos enfermos. Se manifiesta por fiebre, escalofríos, dolores musculares y de cabeza a los 3-6 días de la picadura del mosquito infectado.",
     diseases:
-    "",
-  administration: "Se inyecta por vía subcutánea en el muslo o en el brazo, según la edad.Por inyección subcutánea o intramuscular. La vacunación comprende una única dosis. No precisa refuerzos, puesto que protege de por vida.",
-  vaccinebrands:
-    "",
-  effect:
-    "Las más comunes son leves en el punto de inyección: dolor, enrojecimiento o tumefacción. También dolor de cabeza.",
+      "",
+    administration: "Se inyecta por vía subcutánea en el muslo o en el brazo, según la edad.Por inyección subcutánea o intramuscular. La vacunación comprende una única dosis. No precisa refuerzos, puesto que protege de por vida.",
+    vaccinebrands:
+      "",
+    effect:
+      "Las más comunes son leves en el punto de inyección: dolor, enrojecimiento o tumefacción. También dolor de cabeza.",
 
   },
   {
@@ -346,14 +347,14 @@ const vaccines = () => [
     days: 21,
     reminder: false,
     date: "",
-    information:"Previene la difteria, tos convulsiva y tétanos.",
+    information: "Previene la difteria, tos convulsiva y tétanos.",
     diseases:
-    "",
-  administration: "",
-  vaccinebrands:
-    "",
-  effect:
-    "",
+      "",
+    administration: "",
+    vaccinebrands:
+      "",
+    effect:
+      "",
 
   },
   {
@@ -375,14 +376,14 @@ const vaccines = () => [
     days: 23,
     reminder: false,
     date: "",
-    information:"Previene la difteria, tos convulsiva y tétanos.",
+    information: "Previene la difteria, tos convulsiva y tétanos.",
     diseases:
-    "",
-  administration: "",
-  vaccinebrands:
-    "",
-  effect:
-    "",
+      "",
+    administration: "",
+    vaccinebrands:
+      "",
+    effect:
+      "",
   },
   {
     dose: "no tiene",
@@ -19251,5 +19252,6 @@ export {
   pesoSD0,
   pesoSD2,
   pesoSD3,
-  enviroment
+  enviroment,
+  androidClientId
 };
