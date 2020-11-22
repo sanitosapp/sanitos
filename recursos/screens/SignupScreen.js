@@ -86,7 +86,7 @@ const SignupScreen = ({ navigation }) => {
       if (email !== "" && password !== "" && cpassword !== "" && name !== "") {
         const { user } = await firebase
           .auth()
-          .createUserWithEmailAndPassword(email, password, name);
+          .createUserWithEmailAndPassword(email, password);
         await user.updateProfile({
           displayName: name,
         });
@@ -176,7 +176,7 @@ const SignupScreen = ({ navigation }) => {
         onPress={() => navigation.push("Login")}
       >
         <Text style={{ color: "#B0B0B0", fontSize: 12 }}>
-          Ya tienes cuenta?{" "}
+          ¿Ya tiene cuenta?{" "}
           <Text style={{ fontWeight: "500", color: "#1D96A3" }}>
             Inicia sesión
           </Text>

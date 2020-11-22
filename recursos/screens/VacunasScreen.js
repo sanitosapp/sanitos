@@ -26,7 +26,6 @@ const VacunasScreen = ({ route, navigation }) => {
   const [activeAll, setActiveAll] = useState(true);
   const [activeSlopes, setActiveSlopes] = useState(false);
   const [activeApplied, setActiveApplied] = useState(false);
-  const [vacunaApplied, setVacunaApplied] = useState(false);
   const [uid, setUid] = useState("");
   const [childId, setChildId] = useState("");
   const [nameChild, setNameChild] = useState("");
@@ -65,7 +64,7 @@ const VacunasScreen = ({ route, navigation }) => {
         const { date } = doc.data();
         const formatoFecha =
           date !== "" && date !== null
-            ? moment(date.toDate()).format("LL")
+            ? moment(date.toDate()).format("DD-MM-YYYY")
             : date;
 
         arrayVacunas.push({
@@ -162,6 +161,7 @@ const VacunasScreen = ({ route, navigation }) => {
                   childId,
                   nameUser,
                   nameChild,
+                  
                 });
               }}
             >
@@ -179,10 +179,11 @@ const VacunasScreen = ({ route, navigation }) => {
                   </View>
                   <View style={{ flexDirection: "row", justifyContent:"space-around"  }}>
                     <Text 
-                    style={state === "Vacuna aplicada" ? styles.vacunaAplicada: styles.vacunaPendiente}
+                    style={state === "Vacuna pendiente" ? styles.vacunaAplicada : styles.vacunaPendiente}
                     >
                       {state ? "Vacuna aplicada" : "Vacuna pendiente"}
                     </Text>
+                    <Text style={styles.textVacuna}>{date}</Text>
                   </View>
                 </View>
               </View>

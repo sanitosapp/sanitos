@@ -172,7 +172,7 @@ const VacunasInfoScreen = ({ route, navigation }) => {
             </Text>
 
             <Text style={{ ...styles.textVacuna }}>
-              {vacunaInfo.state ? "Vacuna aplicada" : "Vacuna pendiente"}
+            <Text style={styles.negrita}>Estado: </Text>{vacunaInfo.state ? "Vacuna aplicada" : "Vacuna pendiente"}
             </Text>
             <View style={styles.containerStateVaccine}>
               {vacunaInfo.reminder ? (
@@ -268,7 +268,10 @@ const VacunasInfoScreen = ({ route, navigation }) => {
                     )}
                   </View>
                   {estado === false ? (
-                    <View style={styles.container}>
+                    <View style={styles.containerSwitch}>
+                      <Text style={{ marginTop: "1%", color:"#B0B0B0", fontSize:14 }}>
+                        Activar notificaciones
+                      </Text>
                       <Switch
                         trackColor={{ false: "#767577", true: "#1D96A3" }}
                         thumbColor={isEnabled ? "#fff" : "#f4f3f4"}
@@ -276,9 +279,7 @@ const VacunasInfoScreen = ({ route, navigation }) => {
                         onValueChange={toggleSwitch}
                         value={isEnabled}
                       />
-                      <Text style={{ marginTop: "1%" }}>
-                        Activar notificaciones
-                      </Text>
+                      
                     </View>
                   ) : null}
                 </View>
