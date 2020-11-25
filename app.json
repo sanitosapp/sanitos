@@ -25,7 +25,7 @@
     "android": {
       "package": "com.sanitos.sanitos",
       "versionCode": 1,
-      "googleServicesFile": "/Users/Casa/Desktop/SA/APPSANITOS1/google-services.json"
+      "googleServicesFile": "./google-services.json"
     },
     "web": {
       "favicon": "./assets/favicon.png"
