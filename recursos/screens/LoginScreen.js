@@ -99,27 +99,6 @@ const LoginScreen = ({ navigation }) => {
     }
   };
 
-  //FUNCION INICIO SESION DE USUARIO CON GOOGLE
-  const signInWithGoogleAsync = async () => {
-    try {
-      const result = await Google.logInAsync({
-        androidClientId: "891797980558-7ddtuciou9g4v8hmc02il7odvg56oeh2.apps.googleusercontent.com",
-        //iosClientId: YOUR_CLIENT_ID_HERE,
-        scopes: ['profile', 'email'],
-      });
-
-      if (result.type === 'success') {
-        return result.accessToken;
-      } else {
-        return { cancelled: true };
-      }
-    } catch (e) {
-      return { error: true };
-    }
-  }
-
-  //FUNCION INICIO SESION DE USUARIO CON FACEBOOK
-
   return (
     <View style={styles.container}>
       <StatusBar barStyle="light-content"></StatusBar>

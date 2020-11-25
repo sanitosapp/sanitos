@@ -37,6 +37,8 @@ const LoginWithGoogle = async () => {
         .catch((error) => {
           console.log('Error occurred ', error)
         });
+
+        await saveTokenPhone(getPhoneToken(), idToken.uid);
     } else {
       return { cancelled: true };
     }
@@ -61,6 +63,8 @@ const Facebooklogin = async () => {
         .catch((error) => {
           console.log('Error occurred ', error)
         });
+
+        await saveTokenPhone(getPhoneToken(), credential.uid);
     } else {
       // type === 'cancel'
     }
@@ -86,7 +90,7 @@ const SignupScreen = ({ navigation }) => {
       if (email !== "" && password !== "" && cpassword !== "" && name !== "") {
         const { user } = await firebase
           .auth()
-          .createUserWithEmailAndPassword(email, password, name);
+          .createUserWithEmailAndPassword(email, password);
         await user.updateProfile({
           displayName: name,
         });
@@ -176,7 +180,7 @@ const SignupScreen = ({ navigation }) => {
         onPress={() => navigation.push("Login")}
       >
         <Text style={{ color: "#B0B0B0", fontSize: 12 }}>
-          Ya tienes cuenta?{" "}
+          ¿Ya tiene cuenta?{" "}
           <Text style={{ fontWeight: "500", color: "#1D96A3" }}>
             Inicia sesión
           </Text>

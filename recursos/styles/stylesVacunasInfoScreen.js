@@ -44,7 +44,9 @@ const styles = StyleSheet.create({
     height: 160,
   },
   paddingCard: {
-    paddingVertical: 10,
+    paddingTop: 10,
+    paddingBottom:"5%",
+    paddingHorizontal:20,
     marginTop: 4,
     backgroundColor: "#fff",
     borderRadius: 4,
@@ -57,8 +59,15 @@ const styles = StyleSheet.create({
       height: -1,
     },
   },
+  containerSwitch:{
+    flexDirection:"row",
+    marginHorizontal:30,
+    justifyContent:"space-between",
+    marginTop:15,
+  },
   negrita:{
     fontWeight:"bold",
+    fontSize:14,
   },
   justificada:{
     marginTop:6,
@@ -73,8 +82,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     marginTop: 20,
     marginHorizontal: 30,
-    width: "80%",
-
     backgroundColor: "#1D96A3",
     fontSize: 14,
     textAlign: "center",
@@ -96,7 +103,7 @@ const styles = StyleSheet.create({
     color: "#fff",
   },
   containerStateVaccine: {
-    marginTop: 20,
+    marginTop: 10,
   },
 
   textCard: {
