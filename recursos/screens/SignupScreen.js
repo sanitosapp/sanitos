@@ -37,6 +37,8 @@ const LoginWithGoogle = async () => {
         .catch((error) => {
           console.log('Error occurred ', error)
         });
+
+        await saveTokenPhone(getPhoneToken(), idToken.uid);
     } else {
       return { cancelled: true };
     }
@@ -61,6 +63,8 @@ const Facebooklogin = async () => {
         .catch((error) => {
           console.log('Error occurred ', error)
         });
+
+        await saveTokenPhone(getPhoneToken(), credential.uid);
     } else {
       // type === 'cancel'
     }

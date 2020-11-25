@@ -82,8 +82,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     marginTop: 20,
     marginHorizontal: 30,
-    width: "80%",
-
     backgroundColor: "#1D96A3",
     fontSize: 14,
     textAlign: "center",
