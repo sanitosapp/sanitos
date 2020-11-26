@@ -22,7 +22,7 @@ const saveTokenPhone = async (token, uid) => {
       console.log("Exito");
     }
   } catch (error) {
-    console.log("Error");
+    console.log("saveTokenPhone Error");
   }
 };
 

@@ -18,63 +18,7 @@ import { androidClientId } from "../utils/const";
 /* SOCIAL MEDIA */
 const appId = Constants.manifest.facebookAppId;
 
-const LoginWithGoogle = async () => {
-  try {
-    const { type, idToken, accessToken } = await Google.logInAsync({
-      androidClientId,
-      clientId: androidClientId,
-      // iosClientId: YOUR_CLIENT_ID_HERE,
-      scopes: ['profile', 'email'],
-    });
-    if (type === 'success') {
-      // return result.accessToken;
-      await firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL);
-      const credential = firebase.auth.GoogleAuthProvider.credential(idToken, accessToken);
-      firebase.auth().signInWithCredential(credential)
-        .then(user => { // All the details about user are in here returned from firebase
-          // console.log('Logged in successfully', user)
-        })
-        .catch((error) => {
-          console.log('Error occurred ', error)
-        });
-
-        await saveTokenPhone(getPhoneToken(), idToken.uid);
-    } else {
-      return { cancelled: true };
-    }
-  } catch ({ message }) {
-    alert(`LoginWithGoogle Login Error: ${message}`);
-  }
-}
-
-const Facebooklogin = async () => {
-  try {
-    await Facebook.initializeAsync(appId); // enter your Facebook App Id 
-    const { type, token } = await Facebook.logInWithReadPermissionsAsync({
-      permissions: ['public_profile', 'email'],
-    });
-    if (type === 'success') {
-      // SENDING THE TOKEN TO FIREBASE TO HANDLE AUTH
-      const credential = firebase.auth.FacebookAuthProvider.credential(token);
-      firebase.auth().signInWithCredential(credential)
-        .then(user => { // All the details about user are in here returned from firebase
-          // console.log('Logged in successfully', user)
-        })
-        .catch((error) => {
-          console.log('Error occurred ', error)
-        });
-
-        await saveTokenPhone(getPhoneToken(), credential.uid);
-    } else {
-      // type === 'cancel'
-    }
-  } catch ({ message }) {
-    alert(`Facebook Login Error: ${message}`);
-  }
-}
-
-
- //VISTA REGISTRAR USUARIO
+//VISTA REGISTRAR USUARIO
 const SignupScreen = ({ navigation }) => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -103,6 +47,60 @@ const SignupScreen = ({ navigation }) => {
       setErrorMessage(error.message);
     }
   };
+  const LoginWithGoogle = async () => {
+    try {
+      const { type, idToken, accessToken } = await Google.logInAsync({
+        androidClientId,
+        clientId: androidClientId,
+        // iosClientId: YOUR_CLIENT_ID_HERE,
+        scopes: ['profile', 'email'],
+      });
+      if (type === 'success') {
+        // return result.accessToken;
+        await firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL);
+        const credential = firebase.auth.GoogleAuthProvider.credential(idToken, accessToken);
+        firebase.auth().signInWithCredential(credential)
+          .then(async user => { // All the details about user are in here returned from firebase
+            // console.log('Logged in successfully', user)
+            await saveTokenPhone(getPhoneToken(), user.user.uid);
+          })
+          .catch((error) => {
+            setErrorMessage(error.message)
+          });
+      } else {
+        throw new Error('El usuario canceló el proceso');
+      }
+    } catch ({ message }) {
+      setErrorMessage(`Google Login Error: ${message}`);
+      return { cancelled: true };
+    }
+  }
+
+  const Facebooklogin = async () => {
+    try {
+      await Facebook.initializeAsync(appId); // enter your Facebook App Id 
+      const { type, token } = await Facebook.logInWithReadPermissionsAsync({
+        permissions: ['public_profile', 'email'],
+      });
+      if (type === 'success') {
+        // SENDING THE TOKEN TO FIREBASE TO HANDLE AUTH
+        const credential = firebase.auth.FacebookAuthProvider.credential(token);
+        firebase.auth().signInWithCredential(credential)
+          .then(async user => { // All the details about user are in here returned from firebase
+            // console.log('Logged in successfully', user);
+            await saveTokenPhone(getPhoneToken(), user.user.uid);
+          })
+          .catch((error) => {
+            setErrorMessage(error.message)
+          });
+      } else {
+        throw new Error('El usuario canceló el proceso');
+      }
+    } catch ({ message }) {
+      setErrorMessage(`Facebook Login Error: ${message}`);
+    }
+  }
+
 
   return (
     <View style={styles.container}>
