@@ -5,6 +5,7 @@ import {
   TouchableOpacity,
   TextInput,
 } from "react-native-gesture-handler";
+import SpinnerCustom from '../components/SpinnerCustom';
 import { firebase } from "../utils/firebase";
 import styles from "../styles/stylesSignupScreen";
 import { EvilIcons, AntDesign } from "@expo/vector-icons";
@@ -49,6 +50,7 @@ const SignupScreen = ({ navigation }) => {
   };
   const LoginWithGoogle = async () => {
     try {
+      setLoading(true);
       const { type, idToken, accessToken } = await Google.logInAsync({
         androidClientId,
         clientId: androidClientId,
@@ -71,13 +73,15 @@ const SignupScreen = ({ navigation }) => {
         throw new Error('El usuario canceló el proceso');
       }
     } catch ({ message }) {
-      setErrorMessage(`Google Login Error: ${message}`);
+      setLoading(false);
+      setErrorMessage(`Google Login: ${message}`);
       return { cancelled: true };
     }
   }
 
   const Facebooklogin = async () => {
     try {
+      setLoading(true);
       await Facebook.initializeAsync(appId); // enter your Facebook App Id 
       const { type, token } = await Facebook.logInWithReadPermissionsAsync({
         permissions: ['public_profile', 'email'],
@@ -97,13 +101,15 @@ const SignupScreen = ({ navigation }) => {
         throw new Error('El usuario canceló el proceso');
       }
     } catch ({ message }) {
-      setErrorMessage(`Facebook Login Error: ${message}`);
+      setLoading(false);
+      setErrorMessage(`Facebook Login: ${message}`);
     }
   }
 
 
   return (
     <View style={styles.container}>
+      <SpinnerCustom visible={isLoading} ></SpinnerCustom>
       <StatusBar barStyle="light-content"></StatusBar>
       <Text style={styles.textTitle}>Regístrese</Text>
       <View style={styles.errorMessage}>

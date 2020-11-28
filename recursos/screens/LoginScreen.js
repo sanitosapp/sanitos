@@ -8,6 +8,7 @@ import {
   LayoutAnimation,
 } from "react-native";
 import AwesomeAlert from "react-native-awesome-alerts";
+import SpinnerCustom from '../components/SpinnerCustom';
 import { firebase } from "../utils/firebase";
 import styles from "../styles/stylesLoginScreen";
 import { EvilIcons, AntDesign } from '@expo/vector-icons';
@@ -33,10 +34,12 @@ const LoginScreen = ({ navigation }) => {
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState(null);
   const [showAlert, setShowAlert] = useState(false);
+  const [isLoading, setLoading] = useState(false);
 
   //FUNCION INICIO SESION DE USUARIO CON CORREO
   const LoginWithGoogle = async () => {
     try {
+      setLoading(true);
       const { type, idToken, accessToken } = await Google.logInAsync({
         androidClientId,
         clientId: androidClientId,
@@ -58,12 +61,14 @@ const LoginScreen = ({ navigation }) => {
         throw new Error('El usuario canceló el proceso');
       }
     } catch ({ message }) {
-      setErrorMessage(`Google Login Error: ${message}`);
+      setLoading(false);
+      setErrorMessage(`Google Login: ${message}`);
     }
   }
 
   const Facebooklogin = async () => {
     try {
+      setLoading(true);
       await Facebook.initializeAsync(appId); // enter your Facebook App Id 
       const { type, token } = await Facebook.logInWithReadPermissionsAsync({
         permissions: ['public_profile', 'email'],
@@ -82,7 +87,8 @@ const LoginScreen = ({ navigation }) => {
         throw new Error('El usuario canceló el proceso');
       }
     } catch ({ message }) {
-      setErrorMessage(`Facebook Login Error: ${message}`);
+      setLoading(false);
+      setErrorMessage(`Facebook Login: ${message}`);
     }
   }
 
@@ -101,6 +107,7 @@ const LoginScreen = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
+      <SpinnerCustom visible={isLoading} ></SpinnerCustom>
       <StatusBar barStyle="light-content"></StatusBar>
       <Text style={styles.textTitle}>Inicie sesión</Text>
       <View style={styles.errorMessage}>
