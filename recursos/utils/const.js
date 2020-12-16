@@ -1,7 +1,7 @@
-const enviroment = 'DEV';
-const androidClientId = enviroment == 'DEV' ?
-  "891797980558-6gosaull8ttk5v6scnfqrul41f76qp0e.apps.googleusercontent.com"
-  : "891797980558-gh899km8h1nlr5mi8kkovitt7urg2k78.apps.googleusercontent.com";
+const enviroment = 'PROD';
+const androidClientIdPROD = "891797980558-gh899km8h1nlr5mi8kkovitt7urg2k78.apps.googleusercontent.com";
+const androidClientIdDEV = "891797980558-6gosaull8ttk5v6scnfqrul41f76qp0e.apps.googleusercontent.com";
+const androidClientId = enviroment == 'DEV' ? androidClientIdDEV : androidClientIdPROD;
 const vaccines = () => [
   {
     dose: "Única dosis",
