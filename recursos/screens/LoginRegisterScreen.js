@@ -21,7 +21,7 @@ const LoginRegisterScreen = ({ navigation }) => {
           style={styles.button}
           onPress={() => navigation.push("Login")}
         >
-          <Text style={styles.textButton}>Inicia sesión</Text>
+          <Text style={styles.textButton}>Inicie sesión</Text>
         </TouchableOpacity>
       </View>
       <View
@@ -31,7 +31,7 @@ const LoginRegisterScreen = ({ navigation }) => {
           style={styles.button}
           onPress={() => navigation.push("Register")}
         >
-          <Text style={styles.textButton}>Regístrate</Text>
+          <Text style={styles.textButton}>Regístrese</Text>
         </TouchableOpacity>
       </View>
     </View>

@@ -8,6 +8,20 @@ const styles = StyleSheet.create({
   infoCard:{
     width:"85%",
   },
+  nameContainer:{
+    flexDirection:"row",
+    justifyContent:"space-around",
+    backgroundColor: "#1D96A3",
+    elevation: 16,
+    shadowOpacity: 1,
+    shadowRadius: 50,
+    shadowColor: "#000",
+    shadowOffset: {
+      widht: 1,
+      height: 1
+    },
+    borderRadius: 4,
+  },  
   buttonFoto:{
     marginTop:10,
     backgroundColor:"#fff",
@@ -75,20 +89,17 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     height:40,
   },
-  textWelcome: {
+  buttonModalDelete: {
+    alignItems: "center",
+    justifyContent: "center",
     marginTop: 30,
     marginHorizontal: 30,
-    fontSize: 15,
-    color: '#838383',
-  },
-  textName: {
+    backgroundColor: '#C13273',
     fontSize: 14,
     textAlign: "center",
-    backgroundColor: "#1D96A3",
-    padding: 6,
     color: "#fff",
     textTransform: "uppercase",
-    elevation: 16,
+    elevation: 5,
     shadowOpacity: 1,
     shadowRadius: 50,
     shadowColor: "#000",
@@ -97,6 +108,22 @@ const styles = StyleSheet.create({
       height: 1
     },
     borderRadius: 4,
+    height:40,
+  },
+  textWelcome: {
+    marginTop: 30,
+    marginHorizontal: 30,
+    fontSize: 15,
+    color: '#838383',
+  },
+  textName: {
+    fontSize: 14,
+    padding: 6,
+    color: "#fff",
+    textTransform: "uppercase",
+  },
+  iconName:{
+    justifyContent:"center"
   },
   rowCard: {
     flexDirection: "column",
@@ -162,6 +189,20 @@ const styles = StyleSheet.create({
   modalView: {
     width: "85%",
     height: "78%",
+    backgroundColor: "white",
+    borderRadius: 4,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 16,
+  },
+  modalViewDelete: {
+    width: "85%",
+    height: "30%",
     backgroundColor: "white",
     borderRadius: 4,
     shadowColor: "#000",

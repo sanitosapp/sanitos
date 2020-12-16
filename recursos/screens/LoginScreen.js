@@ -94,10 +94,23 @@ const LoginScreen = ({ navigation }) => {
         .catch((error) => {
           setErrorMessage(error.message)
         });
+        forgotPassword(email);
     } else {
       setShowAlert(true);
     }
   };
+
+ /*  const forgotPassword = () => {
+    navigation.push('Forgot')}; */
+
+  const forgotPassword = (email) => {
+      firebase.auth().sendPasswordResetEmail(email)
+        .then(function (email) {
+          alert('Please check your email...')
+        }).catch(function (e) {
+          console.log(e, "ERROR")
+        })
+    }  
 
   return (
     <View style={styles.container}>
@@ -132,7 +145,7 @@ const LoginScreen = ({ navigation }) => {
           />
         </View>
       </View>
-      <TouchableOpacity onPress={() => navigation.push("")}>
+      <TouchableOpacity onPress={() => forgotPassword()}>
         <Text style={styles.textForgotPass}>¿Olvidó su contraseña?</Text>
       </TouchableOpacity>
 

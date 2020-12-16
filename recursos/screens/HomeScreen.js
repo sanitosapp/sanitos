@@ -35,6 +35,7 @@ const HomeScreen = ({ navigation }) => {
   const [foto, setFoto] = useState("");
   const [childUsers, setChildUsers] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
+  const [openModal, setOpenModal] = useState(false);
   const [date, setDate] = useState(new Date());
   const [mode, setMode] = useState("date");
   const [show, setShow] = useState(false);
@@ -178,8 +179,8 @@ const HomeScreen = ({ navigation }) => {
     );
   };
 
-  //FUNCION AGREGAR NIÑO A FIRESTORE
-  const handleAddChildUser = (documentChildUser, now) => {
+  //FUNCION ELIMINAR NIÑO DE FIRESTORE
+  const handleDeleteChildUser = () => {
     const ref = firebase
       .firestore()
       .collection("usuarios")
@@ -187,11 +188,10 @@ const HomeScreen = ({ navigation }) => {
       .collection("childUsers");
 
     ref
-      .add(documentChildUser)
+      .delete()
       .then((docRef) => {
         const { id } = docRef;
-        setModalVisible(false);
-        handleAddVaccines(ref, id, now);
+        setOpenModal(false);
         setName("");
         setGender("");
         setSangre("");
@@ -203,14 +203,48 @@ const HomeScreen = ({ navigation }) => {
       .catch(function (error) {
         console.error("Error adding document: ", error);
       });
-    /*     const upload =
+         const upload =
           Fire.addPhoto(image).then(() => {
             setImage(null)
           })
             .catch(err => {
               alert(err.message)
-            }) */
+            }) 
   };
+
+    //FUNCION AGREGAR NIÑO A FIRESTORE
+    const handleAddChildUser = (documentChildUser, now) => {
+      const ref = firebase
+        .firestore()
+        .collection("usuarios")
+        .doc(uidUser)
+        .collection("childUsers");
+  
+      ref
+        .add(documentChildUser)
+        .then((docRef) => {
+          const { id } = docRef;
+          setModalVisible(false);
+          handleAddVaccines(ref, id, now);
+          setName("");
+          setGender("");
+          setSangre("");
+          setFoto("");
+          setLabelDate("Fecha de nacimiento");
+          setSelectDate(false);
+          setImage(null);
+        })
+        .catch(function (error) {
+          console.error("Error adding document: ", error);
+        });
+      /*     const upload =
+            Fire.addPhoto(image).then(() => {
+              setImage(null)
+            })
+              .catch(err => {
+                alert(err.message)
+              }) */
+    };
 
   //FUNCION AGREGAR VACUNAS
   const handleAddVaccines = (ref, id, now) => {
@@ -339,13 +373,63 @@ const HomeScreen = ({ navigation }) => {
       });
   };
 
+  /* const openModal = (doc) => {
+    const {} = doc;
+    
+  }; */
+
   return (
     <ScrollView style={styles.container}>
       <StatusBar barStyle="light-content" />
 
-      <Text style={styles.textWelcome}>!Hola! Gracias por estar aquí.</Text>
+      <Text style={styles.textWelcome}>Hola. Gracias por estar aquí.</Text>
       <View style={styles.containerCards}>
-        <CardChildUsers childUsers={childUsers} navigation={navigation} />
+        <View>
+          {childUsers.map((doc, index) => {
+            const { name, birthday, bloodType, gender, image } = doc;
+            return (
+              <TouchableOpacity
+                style={styles.infoCard}
+                key={index}
+                onPress={() => {
+                  navigation.navigate("Nino", {
+                    id: doc,
+                  });
+                }}
+              >
+                <View style={styles.nameContainer} >
+                  <Text style={styles.textName}>{name}</Text>
+                  <TouchableOpacity style={styles.iconName} onPress={() => setOpenModal(true)}>
+                    <MaterialIcons name="delete" size={24} color="white" />
+                  </TouchableOpacity>
+                </View>
+
+                <View style={styles.rowCard}>
+                  <View style={{ flexDirection: "row" }}>
+                    <View>
+                      <Image
+                        source={{ uri: image }}
+                        style={{
+                          width: 60,
+                          height: 60,
+                          marginHorizontal: 18,
+                          marginVertical: 6,
+                          borderRadius: 360,
+                        }}
+                      />
+                    </View>
+                    <View style={styles.paddingCard}>
+                      <Text style={styles.textCardChild}>Nacimiento: {birthday} </Text>
+                      <Text style={styles.textCardChild}>
+                        Tipo de sangre: {bloodType}
+                      </Text>
+                    </View>
+                  </View>
+                </View>
+              </TouchableOpacity>
+            );
+          })}
+        </View>
 
         <View style={styles.infoCard1}>
           <TouchableOpacity
@@ -412,7 +496,7 @@ const HomeScreen = ({ navigation }) => {
                   <Picker.Item label="B positivo" value="B positivo" />
                   <Picker.Item label="B negativo" value="B negativo" />
                   <Picker.Item label="O negativo" value="O negativo" />
-                  <Picker.Item label="O negativo" value="O negativo" />
+                  <Picker.Item label="O positivo" value="O positivo" />
                   <Picker.Item label="AB positivo" value="AB positivo" />
                   <Picker.Item label="AB negativo" value="AB negativo" />
                 </Picker>
@@ -455,17 +539,17 @@ const HomeScreen = ({ navigation }) => {
                       Agregar foto
                     </Text>
                   ) : (
-                    <View>
-                      <Image
-                        source={{ uri: image }}
-                        style={{
-                          width: "100%",
-                          height: "100%",
-                          borderRadius: 4,
-                        }}
-                      ></Image>
-                    </View>
-                  )}
+                      <View>
+                        <Image
+                          source={{ uri: image }}
+                          style={{
+                            width: "100%",
+                            height: "100%",
+                            borderRadius: 4,
+                          }}
+                        ></Image>
+                      </View>
+                    )}
                 </View>
               </TouchableOpacity>
 
@@ -475,6 +559,38 @@ const HomeScreen = ({ navigation }) => {
               >
                 <Text style={{ color: "#ffffff", fontWeight: "500" }}>
                   Registrar
+                </Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </Modal>
+
+      {/* ELIMINAR NIÑO MODAL */}
+      <Modal visible={openModal} transparent={true} animationType="fade">
+        <View style={styles.centeredViews}>
+          <View style={styles.modalViewDelete}>
+            <View >
+            <MaterialIcons
+              name="close"
+              size={24}
+              onPress={() => {
+                setOpenModal(!openModal);
+              }}
+              style={styles.iconBox}
+            />
+              <View >
+                <Text style={{ color: "#B0B0B0", fontWeight: "500", fontSize:15,marginHorizontal:30, textAlign:"center" }}>
+                  ¿Esta seguro que desea eliminar este registro?
+                </Text>
+              </View >
+
+              <TouchableOpacity
+                style={styles.buttonModalDelete}
+                onPress={() => handleDeleteChildUser()}
+              >
+                <Text style={{ color: "#ffffff", fontWeight: "500" }}>
+                  Eliminar
                 </Text>
               </TouchableOpacity>
             </View>

@@ -399,6 +399,9 @@ const vaccines = () => [
   },
 ];
 
+const sortBy = fn => (a, b) => -(fn(a) < fn(b)) || +(fn(a) > fn(b));
+const sortByDays = sortBy(o => o.days)
+
 const newbornVaccines = () => [
   {
     dose: "Única dosis",

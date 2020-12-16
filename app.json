@@ -1,18 +1,18 @@
 {
   "expo": {
-    "name": "SANITOSAPP",
+    "name": "Sanitos",
     "slug": "ProbandoSanitosApp",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./recursos/imagenes/logoSanitos.png",
     "splash": {
       "image": "./recursos/imagenes/logoSanitos.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
-    "notification": { 
-    "icon": "./recursos/imagenes/sanitos.png" 
-    }, 
+    "notification": {
+      "icon": "./recursos/imagenes/sanitos.png"
+    },
     "updates": {
       "fallbackToCacheTimeout": 0
     },
@@ -32,6 +32,7 @@
     },
     "facebookScheme": "fb313331253421224",
     "facebookAppId": "313331253421224",
-    "facebookDisplayName": "Sanitos"
+    "facebookDisplayName": "Sanitos",
+    "description": ""
   }
 }

@@ -154,14 +154,14 @@ const SignupScreen = ({ navigation }) => {
 
       <View style={styles.button1}>
         <TouchableOpacity style={styles.button} onPress={() => handleSignUp()}>
-          <Text style={styles.textbutton}>Regístrate</Text>
+          <Text style={styles.textbutton}>Regístrese</Text>
         </TouchableOpacity>
       </View>
 
       <View style={styles.button2}>
         <TouchableOpacity style={styles.buttonFb} onPress={Facebooklogin}>
           <EvilIcons name="sc-facebook" size={30} color="white" />
-          <Text style={styles.textbutton}>Ingresar con Facebook</Text>
+          <Text style={styles.textbutton}>Regístrese con Facebook</Text>
         </TouchableOpacity>
       </View>
 
@@ -169,7 +169,7 @@ const SignupScreen = ({ navigation }) => {
         <TouchableOpacity style={styles.buttonGo}
           onPress={() => LoginWithGoogle()}>
           <AntDesign name="google" size={20} color="red" />
-          <Text style={styles.textbutton1}>Ingresar con Google</Text>
+          <Text style={styles.textbutton1}>Regístrese con Google</Text>
         </TouchableOpacity>
       </View>
 
@@ -180,7 +180,7 @@ const SignupScreen = ({ navigation }) => {
         <Text style={{ color: "#B0B0B0", fontSize: 12 }}>
           ¿Ya tiene cuenta?{" "}
           <Text style={{ fontWeight: "500", color: "#1D96A3" }}>
-            Inicia sesión
+            Inicie sesión
           </Text>
         </Text>
       </TouchableOpacity>

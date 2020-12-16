@@ -17,6 +17,12 @@ if (!firebase.apps.length) {
   firebase.initializeApp(firebaseConfig);
 };
 
+passwordReset: email => {
+  return firebase.auth().sendPasswordResetEmail(email)
+};
+
+
+
 export { firebase };
 /* 
 Fire.shared = new Fire()

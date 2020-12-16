@@ -179,10 +179,10 @@ const VacunasScreen = ({ route, navigation }) => {
                   </View>
                   <View style={{ flexDirection: "row", justifyContent:"space-around"  }}>
                     <Text 
-                    style={state === "Vacuna pendiente" ? styles.vacunaAplicada : styles.vacunaPendiente}
+                    style={ state == "Vacuna aplicada" ? styles.vacunaPendiente : styles.vacunaAplicada}
                     >
-                      {state ? "Vacuna aplicada" : "Vacuna pendiente"}
-                    </Text>
+                      {state ? "Vacuna aplicada" : "Vacuna pendiente" }
+                    </Text> 
                     <Text style={styles.textVacuna}>{date}</Text>
                   </View>
                 </View>

@@ -321,8 +321,8 @@ const PesoScreen = ({ route, navigation }) => {
             <View style={styles.modalView}>
               <MaterialIcons
                 name="close"
-                size={24}
-                onPress={() => {
+                size= {24}
+                onPress= {() => {
                   setModalVisibleChange(!modalVisibleChange);
                 }}
                 style={styles.iconBox}

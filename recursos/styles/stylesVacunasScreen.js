@@ -27,7 +27,7 @@ const styles = StyleSheet.create({
 
   },
   vacunaAplicada: {
-    color: "black"
+    color: "green"
   },
   vacunaPendiente: {
     color: "red"
