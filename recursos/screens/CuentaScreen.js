@@ -17,6 +17,7 @@ import styles from "../styles/stylesProfileScreen";
 const CuentaScreen = () => {
     const [currentPassword, setCurrentPassword] = useState("");
     const [newPassword, setNewPassword] = useState("");
+    const [newPasswordR, setNewPasswordR] = useState("");
 
 
     const reauthenticate = () => {
@@ -50,8 +51,6 @@ const CuentaScreen = () => {
         <View style={styles.container}>
 
             <View style={styles.marginContainer}>
-                <TextInput style={styles.input} >Nombre </TextInput>
-                <TextInput style={styles.input}>Correo </TextInput>
 
                 <TextInput
                     placeholder="Contraseña actual"
@@ -60,7 +59,7 @@ const CuentaScreen = () => {
                     autoCapitalize="none"
                     secureTextEntry={true}
                     onChangeText={(text) => {
-                        setState({ currentPassword: text });
+                        ({ currentPassword: text });
                     }}
                 ></TextInput>
                 <TextInput
@@ -70,7 +69,17 @@ const CuentaScreen = () => {
                     autoCapitalize="none"
                     secureTextEntry={true}
                     onChangeText={(text) => {
-                        setState({ newPassword: text });
+                        ({ newPassword: text });
+                    }}
+                ></TextInput>
+                <TextInput
+                    placeholder="Repetir contraseña"
+                    style={styles.input}
+                    value={newPasswordR}
+                    autoCapitalize="none"
+                    secureTextEntry={true}
+                    onChangeText={(text) => {
+                        ({ newPasswordR: text });
                     }}
                 ></TextInput>
             </View>
